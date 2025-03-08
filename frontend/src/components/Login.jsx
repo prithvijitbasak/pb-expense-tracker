@@ -1,20 +1,16 @@
 import { useState } from "react";
-import "../assets/styles/Login.css"
-// import { useNavigate } from "react-router-dom";
-// import { useAuth } from "../store/auth";
-// import { toast } from "react-toastify";
+import "../assets/styles/Login.css";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [user, setUser] = useState({
-    email: "",
+    identifier: "", // Can be email, phone, or username
     password: "",
   });
 
-  // const navigate = useNavigate();
-  // const { storeTokenInLS, API } = useAuth();
-
   const API = import.meta.env.VITE_APP_API_URI;
 
+  const navigate = useNavigate();
   const URL = `${API}/api/auth/login`;
 
   const handleInput = (e) => {
@@ -31,7 +27,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const requestData = {
-        identifier: user.email, // Use 'email' as the identifier
+        identifier: user.identifier, // Accepts email, phone, or username
         password: user.password,
       };
 
@@ -48,47 +44,18 @@ const Login = () => {
       const res_data = await response.json();
       if (response.ok) {
         console.log("Response from server", res_data);
-        // storeTokenInLS(res_data.token);
-        // toast.success("Login successful");
+
         console.log("Login successful");
-        setUser({ email: "", password: "" });
-        // navigate("/");
+        setUser({ identifier: "", password: "" });
+        navigate("/");
       } else {
-        // toast.error(
-        //   res_data.extraDetails ? res_data.extraDetails : res_data.message
-        // );
         console.log("Invalid credentials");
-        setUser({ email: "", password: "" });
+        setUser({ identifier: "", password: "" });
       }
     } catch (error) {
       console.error("Login failed", error);
     }
   };
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const requestData = {
-  //       identifier: user.email, // Use 'email' as the identifier
-  //       password: user.password,
-  //     };
-
-  //     console.log("Request Data:", requestData);
-
-  //     const response = await fetch(`${URL}`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(requestData),
-  //     });
-
-  //     const res_data = await response.json();
-  //     console.log("Response Data:", res_data);
-  //   } catch (error) {
-  //     console.error("Login failed:", error);
-  //   }
-  // };
 
   return (
     <>
@@ -96,14 +63,27 @@ const Login = () => {
         <div className="container">
           <div className="login-form-contents">
             <h3>Are you already a previous user?</h3>
-            <p>Enter you details below</p>
-            <form action="" className="expense-login-form">
+            <p>Enter your details below</p>
+            <form action="" className="expense-login-form" onSubmit={handleSubmit}>
               <input
                 type="text"
-                placeholder="Enter your email/username/phone number"
+                name="identifier"
+                placeholder="Email/Username/Phone"
+                value={user.identifier}
+                onChange={handleInput}
+                required
               />
-              <input type="text" placeholder="Password" />
-              <button type="submit" className="submit-btn">Login</button>
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={user.password}
+                onChange={handleInput}
+                required
+              />
+              <button type="submit" className="submit-btn">
+                Login
+              </button>
             </form>
           </div>
         </div>
