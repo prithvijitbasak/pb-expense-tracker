@@ -6,12 +6,18 @@ import Dashboard from "./pages/Dashboard";
 // import Login from "./components/Login";
 import AddExpenseDetailsPopUp from "./components/AddExpenseDetailsPopUp";
 import Login from "./components/Login";
+import ProtectedRoute from "./utils/ProtectedRoute";
 
 const App = () => {
   return (
     // <h1>testing</h1>
     <BrowserRouter>
       <Routes>
+      <Route
+          path="/login"
+          element={<Login />}
+        />
+        <Route element={<ProtectedRoute />}>
         <Route path="/" element={<Dashboard />} />
         {/* <Route path="/login" element={<Login />} /> */}
         <Route path="/year-details" element={<YearDetails />} />
@@ -26,10 +32,7 @@ const App = () => {
           path="/add-expense-pop-up-details"
           element={<AddExpenseDetailsPopUp />}
         />
-        <Route
-          path="/login"
-          element={<Login />}
-        />
+        </Route>
         <Route path="*" element={<div>No matching route</div>} />
       </Routes>
     </BrowserRouter>
