@@ -1,7 +1,9 @@
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "../assets/styles/Login.css";
 import { useNavigate } from "react-router-dom";
-import { isAuthenticated } from "../utils/auth"; // Import the function
+import { API, isAuthenticated } from "../utils/auth"; // Import the function
+
 
 const Login = () => {
   const [user, setUser] = useState({
@@ -9,7 +11,6 @@ const Login = () => {
     password: "",
   });
 
-  const API = import.meta.env.VITE_APP_API_URI;
   const navigate = useNavigate();
   const URL = `${API}/api/auth/login`;
 
@@ -78,6 +79,15 @@ const Login = () => {
             <button type="submit" className="submit-btn">
               Login
             </button>
+            <div className="signup-div">
+              <p className="signup-text">
+                Don&apos;t have an account? 
+                <Link to="/register" className="signup-link">
+                  {" "}
+                  Register
+                </Link>
+              </p>
+            </div>
           </form>
         </div>
       </div>

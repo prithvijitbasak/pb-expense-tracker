@@ -14,7 +14,7 @@ const home = async (req, res) => {
 // for register purpose
 const register = async (req, res) => {
   try {
-    const { fullName, username, email, phone, password, dateOfBirth } =
+    const { fullName, username, email, phone, password } =
       req.body;
 
     // Check if a user exists with either the username or email
@@ -51,8 +51,9 @@ const register = async (req, res) => {
       email,
       phone,
       password: hashPassword,
-      dateOfBirth,
     });
+
+    
 
     // Respond with success message and token
     res.status(200).send({
@@ -65,6 +66,11 @@ const register = async (req, res) => {
     res.status(500).send({ message: "Server error, please try again later." });
   }
 };
+
+
+
+
+
 
 const login = async (req, res) => {
   try {

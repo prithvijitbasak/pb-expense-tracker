@@ -49,11 +49,6 @@ const signupSchema = z.object({
           "Password must have at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character",
       }
     ),
-  dateOfBirth: z
-    .string({ required_error: "Please enter your date of birth" })
-    .regex(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/, {
-      message: "Date of birth must be in dd/mm/yyyy format",
-    }), // Validates date format as dd/mm/yyyy
 });
 
 module.exports = { signupSchema, loginSchema };

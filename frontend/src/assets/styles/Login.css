@@ -11,7 +11,7 @@
 }
 
 .login-form-wrapper::before {
-  content: '';
+  content: "";
   position: absolute;
   height: 100%;
   width: 100%;
@@ -27,7 +27,7 @@
   z-index: 0;
   width: 700px;
   max-width: 90%;
-  margin: 0 auto; 
+  margin: 0 auto;
 }
 
 .login-form-contents h3 {
@@ -72,11 +72,29 @@
   font-weight: 700;
   transition: all 0.3s ease-in-out;
   cursor: pointer;
+  margin-bottom: 20px;
 }
 
 .expense-login-form .submit-btn:hover {
-    background-color: #ffffff;
-    color: var(--top-color);
+  background-color: #ffffff;
+  color: var(--top-color);
+}
+
+.signup-text {
+  color: #000000;
+  font-weight: 500 !important;
+  font-size: 18px !important;
+}
+
+.signup-link {
+  color: var(--top-color);
+  text-decoration: underline;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  padding-top: 5px;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 2px;
 }
 
 @media (max-width: 767px) {

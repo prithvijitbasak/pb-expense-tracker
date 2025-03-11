@@ -23,10 +23,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  dateOfBirth: {
-    type: String,
-    
-  },
   isAdmin: {
     type: Boolean,
     default: false,
