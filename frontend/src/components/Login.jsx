@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import "../assets/styles/Login.css";
 import { useNavigate } from "react-router-dom";
 import { API, isAuthenticated } from "../utils/auth"; // Import the function
-import { toast, Bounce } from "react-toastify";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [user, setUser] = useState({
