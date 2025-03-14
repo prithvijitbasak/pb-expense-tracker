@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import "../assets/styles/Login.css";
 import { useNavigate } from "react-router-dom";
 import { API, isAuthenticated } from "../utils/auth"; // Import the function
-
+import { toast, Bounce } from "react-toastify";
 
 const Login = () => {
   const [user, setUser] = useState({
@@ -44,12 +44,16 @@ const Login = () => {
         localStorage.setItem("token", res_data.token); // Store token in localStorage
         setUser({ identifier: "", password: "" });
         navigate("/"); // Redirect to home
+        toast.success("Logged in successfully");
       } else {
         console.log("Invalid credentials");
+        toast.error("Invalid credentials");
         setUser({ identifier: "", password: "" });
       }
     } catch (error) {
       console.error("Login failed", error);
+      console.log("server error");
+      toast.error("Incorrect login format entered");
     }
   };
 
@@ -81,7 +85,7 @@ const Login = () => {
             </button>
             <div className="signup-div">
               <p className="signup-text">
-                Don&apos;t have an account? 
+                Don&apos;t have an account? <br />
                 <Link to="/register" className="signup-link">
                   {" "}
                   Register

@@ -7,7 +7,7 @@ import { logout } from "../utils/auth";
 const Dashboard = () => {
   const [showAddExpense, setShowAddExpense] = useState(false);
   const [isUserImgClicked, setIsUserImgClicked] = useState(false);
-  
+
   // Refs for tracking the dropdown and button
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
@@ -52,13 +52,23 @@ const Dashboard = () => {
         <div className="container">
           <div className="user-logo-div">
             {/* Assign the ref to button */}
-            <span className="user-logo-span" ref={buttonRef} onClick={handleUserImgClicked}>
+            <span
+              className="user-logo-span"
+              ref={buttonRef}
+              onClick={handleUserImgClicked}
+            >
               <img src="/images/account.png" alt="" />
             </span>
             {isUserImgClicked && (
               <div className="user-dropdown" ref={dropdownRef}>
                 <p>Profile</p>
-                <p onClick={logout}>Logout</p>
+                <p
+                  onClick={() => {
+                    logout();
+                  }}
+                >
+                  Logout
+                </p>
               </div>
             )}
           </div>

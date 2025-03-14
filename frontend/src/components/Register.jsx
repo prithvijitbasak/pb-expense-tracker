@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import "../assets/styles/Login.css";
 import { useNavigate } from "react-router-dom";
 import { API } from "../utils/auth"; // Import the function
+import { toast } from "react-toastify";
 
 const Register = () => {
   const [user, setUser] = useState({
@@ -45,14 +47,17 @@ const Register = () => {
           password: "",
         });
         console.log("Registration successful");
-        navigate("/login");
+        toast.success("Registration successful");
+        navigate("/");
       } else {
         console.error("Error response:", res_data); // ✅ Log error response
         setError(res_data.message || "Registration failed. Try again.");
+        toast(error);
       }
     } catch (error) {
       console.error("Registration failed", error);
       setError("Something went wrong. Please try again.");
+      toast(error);
     }
   };
 
@@ -63,19 +68,64 @@ const Register = () => {
           <h3>Create an account</h3>
           <p>Enter your details below</p>
           <form className="expense-login-form" onSubmit={handleSubmit}>
-            <input type="text" name="fullName" placeholder="Full Name" value={user.fullName} onChange={handleInput} required />
-            <input type="text" name="username" placeholder="Choose a username" value={user.username} onChange={handleInput} required />
-            <input type="email" name="email" placeholder="Email" value={user.email} onChange={handleInput} required />
-            <input type="text" name="phone" placeholder="Phone" value={user.phone} onChange={handleInput} required />
-            <input type="password" name="password" placeholder="Password" value={user.password} onChange={handleInput} required />
-            <button type="submit" className="submit-btn">Sign Up</button>
+            <input
+              type="text"
+              name="fullName"
+              placeholder="Full Name"
+              value={user.fullName}
+              onChange={handleInput}
+              required
+            />
+            <input
+              type="text"
+              name="username"
+              placeholder="Choose a username"
+              value={user.username}
+              onChange={handleInput}
+              required
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={user.email}
+              onChange={handleInput}
+              required
+            />
+            <input
+              type="text"
+              name="phone"
+              placeholder="Phone"
+              value={user.phone}
+              onChange={handleInput}
+              required
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={user.password}
+              onChange={handleInput}
+              required
+            />
+            <button type="submit" className="submit-btn">
+              Sign Up
+            </button>
+            <div className="signup-div">
+              <p className="signup-text">
+                Are you having an account? <br />
+                <Link to="/login" className="signup-link">
+                  {" "}
+                  Login
+                </Link>
+              </p>
+            </div>
           </form>
-          {error && <p className="error-message">{error}</p>}
+          {/* {error && <p className="error-message">{error}</p>} */}
         </div>
       </div>
     </div>
   );
 };
-
 
 export default Register;

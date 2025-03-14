@@ -90,8 +90,8 @@
   color: var(--top-color);
   text-decoration: underline;
   cursor: pointer;
-  display: block;
-  width: 100%;
+  display: inline-block;
+  margin: 0 auto;
   padding-top: 5px;
   text-underline-offset: 2px;
   text-decoration-thickness: 2px;
