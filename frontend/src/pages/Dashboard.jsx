@@ -61,7 +61,7 @@ const Dashboard = () => {
             </span>
             {isUserImgClicked && (
               <div className="user-dropdown" ref={dropdownRef}>
-                <p>Profile</p>
+                <p><Link to="/profile">Profile</Link></p>
                 <p
                   onClick={() => {
                     logout();

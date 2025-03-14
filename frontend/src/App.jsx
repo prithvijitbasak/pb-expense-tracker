@@ -8,7 +8,7 @@ import AddExpenseDetailsPopUp from "./components/AddExpenseDetailsPopUp";
 import Login from "./components/Login";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import Register from "./components/Register";
-
+import Profile from "./pages/Profile";
 
 const App = () => {
   return (
@@ -19,6 +19,7 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<Dashboard />} />
+          <Route path="/profile" element={<Profile />} />
           {/* <Route path="/login" element={<Login />} /> */}
           <Route path="/year-details" element={<YearDetails />} />
           {/* Custom route for MonthDetails */}
