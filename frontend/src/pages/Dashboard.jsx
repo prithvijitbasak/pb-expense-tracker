@@ -102,7 +102,7 @@ const Dashboard = () => {
             <div className="month-expenses">
               <h2>This month expenses</h2>
               <p>Total = {}</p>
-              <button>See Details</button>
+              <button><Link to="/month-details">See Details</Link></button>
             </div>
             <div className="year-expenses">
               <h2>This year expenses</h2>
