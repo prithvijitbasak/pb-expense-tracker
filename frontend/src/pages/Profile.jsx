@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { API } from "../utils/auth";
+import "../assets/styles/Profile.css";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -40,16 +41,17 @@ const Profile = () => {
       <div className="profile-wrapper">
         <div className="container">
           <div className="profile-contents">
+          <h2 className="profile-heading">My Profile</h2>
             {user ? (
               <>
-                <p>Name - {user.fullName}</p>
-                <p>Email - {user.email}</p>
-                <p>Username - {user.username}</p>
-                <p>Phone - {user.phone}</p>
-                <p>Are you an admin - {user.isAdmin ? "Yes" : "No"}</p>
+                <p className="profile-data"><span className="bold-font">Full name</span> - {user.fullName}</p>
+                <p className="profile-data"><span className="bold-font">Username</span> - {user.username}</p>
+                <p className="profile-data"><span className="bold-font">Email</span> - {user.email}</p>
+                <p className="profile-data"><span className="bold-font">Phone</span> - {user.phone}</p>
+                <p className="profile-data"><span className="bold-font">Are you an admin</span> - {user.isAdmin ? "Yes" : "No"}</p>
               </>
             ) : (
-              <p>Loading user data...</p>
+              <p className="fetching-text">Loading user data...</p>
             )}
           </div>
         </div>
