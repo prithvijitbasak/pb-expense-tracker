@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../assets/styles/AddExpense.css";
 import { toast } from "react-toastify";
 import { API } from "../utils/auth";
@@ -7,6 +7,8 @@ const AddExpense = () => {
   const [inputFields, setInputFields] = useState([
     { id: 1, title: "", amount: "", category: "", date: "", note: "" },
   ]);
+
+  const [categories, setCategories] = useState([]);
 
   // Function to handle input changes
   const handleChange = (id, field, value) => {
@@ -90,6 +92,35 @@ const AddExpense = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch(`${API}/api/expenses/categories`);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+  
+        const data = await response.json();
+        console.log("Fetched Categories from API:", data); // Debugging API response
+  
+        // Extract the categories array from the object
+        if (Array.isArray(data.categories)) {
+          setCategories(data.categories); // ✅ Correct way
+        } else {
+          console.error("API returned unexpected format:", data);
+          setCategories([]); // Prevents issues
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        setCategories([]); // Prevents app crash
+      }
+    };
+  
+    fetchCategories();
+  }, []);
+  
+
   return (
     <div className="popup-wrapper">
       <div className="popup-card">
@@ -120,12 +151,23 @@ const AddExpense = () => {
               type="text"
               placeholder="Category"
               required
-              className="input-field"
+              className="input-field category-field"
               value={field.category}
               onChange={(e) =>
                 handleChange(field.id, "category", e.target.value)
               }
             />
+            <div className="category-dropdown">
+              {categories.length > 0 ? (
+                categories.map((value, index) => (
+                  <p key={index} className="category-dropdown-items">
+                    {value}
+                  </p>
+                ))
+              ) : (
+                <p>Loading categories...</p>
+              )}
+            </div>
             <input
               type="date"
               required
