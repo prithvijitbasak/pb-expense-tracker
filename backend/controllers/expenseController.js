@@ -5,39 +5,54 @@ const addExpense = async (req, res) => {
   try {
     const userId = req.user.id; // Assuming `req.user` is set from authMiddleware
 
-    // Validate request data
-    const validationResult = validateExpense(req.body);
-    if (!validationResult.success) {
-      return res.status(400).json({
-        success: false,
-        message: "Validation failed",
-        errors: validationResult.error.format(),
-      });
+    let expenses = req.body;
+
+    // Ensure expenses is an array
+    if (!Array.isArray(expenses)) {
+      expenses = [expenses]; // Convert single object to array
     }
 
-    // Extract validated data
-    const { title, amount, category, date, notes } = validationResult.data;
+    // Validate each expense and filter out invalid ones
+    const validExpenses = [];
+    const invalidExpenses = [];
 
-    // Create new expense
-    const newExpense = new Expense({
-      user: userId,
-      title,
-      amount,
-      category,
-      date: new Date(date), // Ensure date is properly formatted
-      notes: notes || "", // Default to empty string if notes are not provided
+    expenses.forEach((expense) => {
+      const validationResult = validateExpense(expense);
+      if (validationResult.success) {
+        validExpenses.push({
+          user: userId,
+          title: validationResult.data.title,
+          amount: validationResult.data.amount,
+          category: validationResult.data.category,
+          date: new Date(validationResult.data.date), // Convert date to Date object
+          notes: validationResult.data.notes || "",
+        });
+      } else {
+        invalidExpenses.push({
+          expense,
+          errors: validationResult.error.format(),
+        });
+      }
     });
 
-    // Save to database
-    await newExpense.save();
+    // Insert valid expenses into the database
+    let insertedExpenses = [];
+    if (validExpenses.length > 0) {
+      insertedExpenses = await Expense.insertMany(validExpenses);
+    }
 
+    // Prepare response
     res.status(201).json({
-      success: true,
-      message: "Expense added successfully",
-      expense: newExpense,
+      success: invalidExpenses.length === 0, // Partial success if some expenses failed
+      message:
+        invalidExpenses.length > 0
+          ? "Some expenses were not added due to validation errors"
+          : "Expenses added successfully",
+      addedExpenses: insertedExpenses,
+      failedExpenses: invalidExpenses,
     });
   } catch (error) {
-    console.error("Error adding expense:", error);
+    console.error("Error adding expenses:", error);
     res.status(500).json({
       success: false,
       message: "Internal Server Error",
