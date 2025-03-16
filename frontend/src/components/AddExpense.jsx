@@ -10,6 +10,10 @@ const AddExpense = () => {
 
   const [categories, setCategories] = useState([]);
 
+  // const [isCategoryClicked, setIsCategoryClicked] = useState(false);
+
+  const [openCategoryDropdown, setOpenCategoryDropdown] = useState(null);
+
   // Function to handle input changes
   const handleChange = (id, field, value) => {
     setInputFields((prevFields) =>
@@ -92,18 +96,22 @@ const AddExpense = () => {
     }
   };
 
+  const handleCategoryClick = (id) => {
+    setOpenCategoryDropdown((prevId) => (prevId === id ? null : id)); // Toggle dropdown
+  };
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const response = await fetch(`${API}/api/expenses/categories`);
-        
+
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-  
+
         const data = await response.json();
         console.log("Fetched Categories from API:", data); // Debugging API response
-  
+
         // Extract the categories array from the object
         if (Array.isArray(data.categories)) {
           setCategories(data.categories); // ✅ Correct way
@@ -116,10 +124,9 @@ const AddExpense = () => {
         setCategories([]); // Prevents app crash
       }
     };
-  
+
     fetchCategories();
   }, []);
-  
 
   return (
     <div className="popup-wrapper">
@@ -147,27 +154,39 @@ const AddExpense = () => {
               value={field.amount}
               onChange={(e) => handleChange(field.id, "amount", e.target.value)}
             />
-            <input
-              type="text"
-              placeholder="Category"
-              required
-              className="input-field category-field"
-              value={field.category}
-              onChange={(e) =>
-                handleChange(field.id, "category", e.target.value)
-              }
-            />
-            <div className="category-dropdown">
-              {categories.length > 0 ? (
-                categories.map((value, index) => (
-                  <p key={index} className="category-dropdown-items">
-                    {value}
-                  </p>
-                ))
-              ) : (
-                <p>Loading categories...</p>
+
+            <div className="category-field">
+              <input
+                type="text"
+                placeholder="Select Category"
+                required
+                className="input-field"
+                value={field.category}
+                readOnly
+                onClick={() => handleCategoryClick(field.id)} // Toggle dropdown on click
+              />
+              {openCategoryDropdown === field.id && ( // Show dropdown only for the clicked row
+                <div className="category-dropdown">
+                  {categories.length > 0 ? (
+                    categories.map((value, index) => (
+                      <p
+                        key={index}
+                        className="category-dropdown-items"
+                        onClick={() => {
+                          handleChange(field.id, "category", value);
+                          setOpenCategoryDropdown(null); // Close dropdown after selection
+                        }}
+                      >
+                        {value}
+                      </p>
+                    ))
+                  ) : (
+                    <p>Loading categories...</p>
+                  )}
+                </div>
               )}
             </div>
+
             <input
               type="date"
               required
