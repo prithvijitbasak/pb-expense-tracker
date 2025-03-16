@@ -2,23 +2,27 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 
 const authMiddleware = async (req, res, next) => {
-  const token = req.header("Authorization");
-
-  if (!token) {
-    return res
-      .status(401)
-      .json({ message: "Unauthorized HTTP, Token not provided!" });
-  }
-
-  const jwtToken = token.replace("PB-expense-tracker-bearer", "").trim();
-
   try {
-    const isVerified = jwt.verify(jwtToken, process.env.JWT_KEY);
+    const authHeader = req.header("Authorization");
 
-    // Change from email to username for user lookup
-    const userData = await User.findOne({ username: isVerified.username }).select({
-      password: 0,
-    });
+    if (!authHeader) {
+      return res.status(401).json({ message: "Unauthorized: Token not provided!" });
+    }
+
+    let token = authHeader.trim();
+
+    // Check if the token starts with "Bearer" and remove it
+    if (token.startsWith("Bearer")) {
+      token = token.replace("Bearer", "").trim();
+    } else {
+      return res.status(401).json({ message: "Unauthorized: Invalid token format!" });
+    }
+
+    // Verify JWT
+    const decoded = jwt.verify(token, process.env.JWT_KEY);
+
+    // Use `_id` instead of `username` for database lookup
+    const userData = await User.findById(decoded.userId).select("-password");
 
     if (!userData) {
       return res.status(401).json({ message: "Unauthorized: User not found!" });
@@ -26,11 +30,12 @@ const authMiddleware = async (req, res, next) => {
 
     req.user = userData;
     req.token = token;
-    req.userId = userData._id;
+    req.userId = userData._id; // Ensure correct userId is passed
 
     next();
   } catch (error) {
-    return res.status(401).json({ message: "Unauthorized: Invalid token!" });
+    console.error("Auth Error:", error.message);
+    return res.status(401).json({ message: "Unauthorized: Invalid or expired token!" });
   }
 };
 
