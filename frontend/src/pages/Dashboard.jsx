@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
-import AddExpenseDetailsPopUp from "../components/AddExpenseDetailsPopUp";
+import AddExpense from "../components/AddExpense";
 import "../assets/styles/Dashboard.css";
 import { logout } from "../utils/auth";
 
@@ -82,7 +82,7 @@ const Dashboard = () => {
           <section className="add-expenses">
             <p>Spent money on something!!</p>
             <Link
-              to="/add-expense-pop-up-details"
+              to="/add-expense"
               onClick={handleAddExpenseClick}
             >
               <button>Add Expense</button>
@@ -90,7 +90,7 @@ const Dashboard = () => {
           </section>
 
           {showAddExpense && (
-            <AddExpenseDetailsPopUp onClose={handleCloseAddExpense} />
+            <AddExpense onClose={handleCloseAddExpense} />
           )}
 
           <section className="info-section">

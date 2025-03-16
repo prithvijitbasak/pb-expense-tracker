@@ -6,6 +6,7 @@ const addExpense = async (req, res) => {
     const userId = req.user.id; // Assuming `req.user` is set from authMiddleware
 
     let expenses = req.body;
+    // console.log("Request Body Received:", req.body);
 
     // Ensure expenses is an array
     if (!Array.isArray(expenses)) {

@@ -4,7 +4,7 @@ import DayDetails from "./pages/DayDetails";
 import YearDetails from "./pages/YearDetails";
 import Dashboard from "./pages/Dashboard";
 // import Login from "./components/Login";
-import AddExpenseDetailsPopUp from "./components/AddExpenseDetailsPopUp";
+import AddExpense from "./components/AddExpense";
 import Login from "./components/Login";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import Register from "./components/Register";
@@ -30,8 +30,8 @@ const App = () => {
             element={<DayDetails />}
           />
           <Route
-            path="/add-expense-pop-up-details"
-            element={<AddExpenseDetailsPopUp />}
+            path="/add-expense"
+            element={<AddExpense />}
           />
         </Route>
         <Route path="*" element={<div>No matching route</div>} />
