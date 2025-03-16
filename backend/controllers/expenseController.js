@@ -62,4 +62,14 @@ const addExpense = async (req, res) => {
   }
 };
 
-module.exports = { addExpense };
+// Controller to fetch expense categories
+const getExpenseCategories = (req, res) => {
+  try {
+    const categories = Expense.schema.path("category").enumValues;
+    res.json({ categories });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch categories", error });
+  }
+};
+
+module.exports = { addExpense, getExpenseCategories };
