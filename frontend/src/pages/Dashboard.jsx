@@ -3,6 +3,9 @@ import { useState, useRef, useEffect } from "react";
 import AddExpense from "../components/AddExpense";
 import "../assets/styles/Dashboard.css";
 import { logout } from "../utils/auth";
+import DayDetailsCard from "../components/DayDetailsCard";
+import MonthDetailsCard from "../components/MonthDetailsCard";
+import YearDetailsCard from "../components/YearDetailsCard";
 
 const Dashboard = () => {
   const [showAddExpense, setShowAddExpense] = useState(false);
@@ -61,7 +64,9 @@ const Dashboard = () => {
             </span>
             {isUserImgClicked && (
               <div className="user-dropdown" ref={dropdownRef}>
-                <p><Link to="/profile">Profile</Link></p>
+                <p>
+                  <Link to="/profile">Profile</Link>
+                </p>
                 <p
                   onClick={() => {
                     logout();
@@ -81,37 +86,18 @@ const Dashboard = () => {
 
           <section className="add-expenses">
             <p>Spent money on something!!</p>
-            <Link
-              to="/add-expense"
-              onClick={handleAddExpenseClick}
-            >
+            <Link to="/add-expense" onClick={handleAddExpenseClick}>
               <button>Add Expense</button>
             </Link>
           </section>
 
-          {showAddExpense && (
-            <AddExpense onClose={handleCloseAddExpense} />
-          )}
+          {showAddExpense && <AddExpense onClose={handleCloseAddExpense} />}
 
-          <section className="info-section">
-            <div className="day-expenses">
-              <h2>This day expenses</h2>
-              <p>Total = {}</p>
-              <button>See Details</button>
-            </div>
-            <div className="month-expenses">
-              <h2>This month expenses</h2>
-              <p>Total = {}</p>
-              <button><Link to="/month-details">See Details</Link></button>
-            </div>
-            <div className="year-expenses">
-              <h2>This year expenses</h2>
-              <p>Total = {}</p>
-              <Link to="/year-details">
-                <button>See Details</button>
-              </Link>
-            </div>
-          </section>
+          <div className="info-section">
+            <DayDetailsCard />
+            <MonthDetailsCard />
+            <YearDetailsCard/>
+          </div>
         </div>
       </div>
     </>
