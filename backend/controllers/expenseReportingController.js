@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 const Expense = require("../models/expenseModel");
 
-const getTotalExpensesByDate = async (req, res) => {
+
+const getExpensesByDate = async (req, res) => {
   try {
     const { date } = req.query;
     const userId = req.user.id; // Extract userId from authMiddleware
@@ -20,23 +21,18 @@ const getTotalExpensesByDate = async (req, res) => {
     const endDate = new Date(date);
     endDate.setHours(23, 59, 59, 999);
 
-    const result = await Expense.aggregate([
-      {
-        $match: {
-          user: new mongoose.Types.ObjectId(userId),
-          date: { $gte: startDate, $lte: endDate },
-        },
-      },
-      {
-        $group: {
-          _id: null,
-          totalExpenses: { $sum: "$amount" },
-        },
-      },
-    ]);
+    // Fetch total expenses and expense details
+    const expenses = await Expense.find({
+      user: userId,
+      date: { $gte: startDate, $lte: endDate },
+    }).select("-_id title amount category date notes createdAt");
+
+    // Calculate total expenses
+    const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
 
     return res.status(200).json({
-      totalExpenses: result.length > 0 ? result[0].totalExpenses : 0,
+      totalExpenses,
+      expenses, // Return all expense details
     });
   } catch (error) {
     console.error("Error fetching expenses:", error);
@@ -44,4 +40,5 @@ const getTotalExpensesByDate = async (req, res) => {
   }
 };
 
-module.exports = { getTotalExpensesByDate };
+
+module.exports = { getExpensesByDate };

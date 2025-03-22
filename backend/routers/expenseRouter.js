@@ -12,7 +12,7 @@ const router = express.Router();
 router.route("/").post(authMiddleware, addExpense);
 router.route("/categories").get(getExpenseCategories);
 router
-  .route("/total-expenses-by-date")
-  .get(authMiddleware, expenseReportingController.getTotalExpensesByDate);
+  .route("/get-expenses-by-date")
+  .get(authMiddleware, expenseReportingController.getExpensesByDate);
 
 module.exports = router;
