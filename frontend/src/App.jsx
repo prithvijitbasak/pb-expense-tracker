@@ -29,10 +29,7 @@ const App = () => {
             path="/month-details-:monthName-:year/day-details"
             element={<DayDetails />}
           />
-          <Route
-            path="/add-expense"
-            element={<AddExpense />}
-          />
+          <Route path="/add-expense" element={<AddExpense />} />
         </Route>
         <Route path="*" element={<div>No matching route</div>} />
       </Routes>
