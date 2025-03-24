@@ -4,13 +4,13 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
 }
 
 :root {
   --global-box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px,
     rgba(0, 0, 0, 0.23) 0px 3px 6px;
   --top-color: #4caf50;
-  --global-font-family: "Montserrat", sans-serif;
 }
 
 .container {
@@ -21,7 +21,6 @@
 
 body {
   background-color: #f4f4f4;
-  font-family: "Montserrat", sans-serif;
 }
 
 /* css for year details page starts*/
@@ -93,5 +92,3 @@ body {
   cursor: pointer;
 }
 /* CSS for month-details page ends */
-
-

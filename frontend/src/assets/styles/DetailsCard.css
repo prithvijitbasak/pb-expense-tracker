@@ -25,7 +25,7 @@
 
 .details-btn {
   background-color: var(--top-color);
-  border-radius: 10px;
+  border-radius: 5px;
   border: 2px solid var(--top-color);
   color: #ffffff;
   font-weight: 500;

@@ -26,7 +26,7 @@ const App = () => {
           <Route path="/month-details" element={<MonthDetails />} />
           {/* Custom route for DayDetails under MonthDetails  */}
           <Route
-            path="/month-details-:monthName-:year/day-details"
+            path="/day-details"
             element={<DayDetails />}
           />
           <Route path="/add-expense" element={<AddExpense />} />

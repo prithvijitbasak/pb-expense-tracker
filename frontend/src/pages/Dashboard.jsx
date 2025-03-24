@@ -6,6 +6,7 @@ import { logout } from "../utils/auth";
 import DayDetailsCard from "../components/DayDetailsCard";
 import MonthDetailsCard from "../components/MonthDetailsCard";
 import YearDetailsCard from "../components/YearDetailsCard";
+import WelcomeAddBanner from "../components/WelcomeAddBanner";
 
 const Dashboard = () => {
   const [showAddExpense, setShowAddExpense] = useState(false);
@@ -84,19 +85,14 @@ const Dashboard = () => {
             </div>
           </header>
 
-          <section className="add-expenses">
-            <p>Spent money on something!!</p>
-            <Link to="/add-expense" onClick={handleAddExpenseClick}>
-              <button>Add Expense</button>
-            </Link>
-          </section>
+          <WelcomeAddBanner />
 
           {showAddExpense && <AddExpense onClose={handleCloseAddExpense} />}
 
           <div className="info-section">
             <DayDetailsCard />
             <MonthDetailsCard />
-            <YearDetailsCard/>
+            <YearDetailsCard />
           </div>
         </div>
       </div>
