@@ -10,9 +10,9 @@ const DayDetailsCard = () => {
     const token = localStorage.getItem("token");
 
     const today = new Date();
-    const formattedDate = `${today.getFullYear()}-${String(
+    const formattedDate = `${String(today.getDate()).padStart(2, "0")}-${String(
       today.getMonth() + 1
-    ).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+    ).padStart(2, "0")}-${today.getFullYear()}`;
 
     try {
       const response = await fetch(
