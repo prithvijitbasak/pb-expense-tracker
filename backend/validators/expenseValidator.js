@@ -22,6 +22,7 @@ const expenseSchema = z.object({
     .max(200, "Title must be at most 200 characters"), // Fixed typo in max limit
   amount: z.number().min(0, "Amount cannot be negative"),
   category: z.enum([
+    "Savings",
     "Food",
     "Transport",
     "Shopping",
