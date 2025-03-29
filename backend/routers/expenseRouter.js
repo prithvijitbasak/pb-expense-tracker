@@ -14,5 +14,8 @@ router.route("/categories").get(getExpenseCategories);
 router
   .route("/get-expenses-by-date")
   .get(authMiddleware, expenseReportingController.getExpensesByDate);
+router
+  .route("/get-expenses-by-month")
+  .get(authMiddleware, expenseReportingController.getExpensesByMonth);
 
 module.exports = router;
