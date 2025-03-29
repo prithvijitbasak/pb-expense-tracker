@@ -6,13 +6,12 @@ import { API } from "../utils/auth";
 const DayDetailsCard = () => {
   const [totalExpenses, setTotalExpenses] = useState(0);
 
+  const today = new Date();
+  const formattedDate = `${String(today.getDate()).padStart(2, "0")}-${String(
+    today.getMonth() + 1
+  ).padStart(2, "0")}-${today.getFullYear()}`;
   const fetchTotalExpense = async () => {
     const token = localStorage.getItem("token");
-
-    const today = new Date();
-    const formattedDate = `${String(today.getDate()).padStart(2, "0")}-${String(
-      today.getMonth() + 1
-    ).padStart(2, "0")}-${today.getFullYear()}`;
 
     try {
       const response = await fetch(
@@ -41,9 +40,11 @@ const DayDetailsCard = () => {
 
   return (
     <div className="details-card">
-      <h3 className="details-heading-text">Today's Expenses</h3>
+      <h3 className="details-heading-text">
+        Today expenses
+      </h3>
       <p className="total-text">Total Expenses = {totalExpenses}</p>
-      <Link to={"/day-details"} className="details-btn">
+      <Link to={`/day-details?date=${formattedDate}`} className="details-btn">
         See Details
       </Link>
     </div>

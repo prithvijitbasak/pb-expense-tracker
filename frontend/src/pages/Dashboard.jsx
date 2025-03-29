@@ -7,6 +7,7 @@ import DayDetailsCard from "../components/DayDetailsCard";
 import MonthDetailsCard from "../components/MonthDetailsCard";
 import YearDetailsCard from "../components/YearDetailsCard";
 import WelcomeAddBanner from "../components/WelcomeAddBanner";
+import SearchBoxSection from "../components/SearchBoxSection";
 
 const Dashboard = () => {
   const [showAddExpense, setShowAddExpense] = useState(false);
@@ -94,6 +95,7 @@ const Dashboard = () => {
             <MonthDetailsCard />
             <YearDetailsCard />
           </div>
+          <SearchBoxSection />
         </div>
       </div>
     </>
