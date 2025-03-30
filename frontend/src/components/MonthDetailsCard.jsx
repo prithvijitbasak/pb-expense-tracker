@@ -10,6 +10,10 @@ const MonthDetailsCard = () => {
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const year = date.getFullYear();
 
+  console.log(
+    `${API}/api/expenses/get-expenses-by-month?month=${month}&year=${year}`
+  );
+
   const fetchTotalExpenseOfMonth = async () => {
     const token = localStorage.getItem("token");
     try {
@@ -39,7 +43,10 @@ const MonthDetailsCard = () => {
     <div className="details-card">
       <h3 className="details-heading-text">This Month Expenses</h3>
       <p className="total-text">Total Expenses = {totalExpense}</p>
-      <Link to={"/month-details"} className="details-btn">
+      <Link
+        to={`/month-details?month=${month}&year=${year}`}
+        className="details-btn"
+      >
         See Details
       </Link>
     </div>
