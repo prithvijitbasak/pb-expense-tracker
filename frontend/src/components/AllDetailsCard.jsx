@@ -11,12 +11,24 @@ const AllDetailsCard = ({
 }) => {
   return (
     <div className="expense-card" key={index}>
-      <p className="title">Title - {title}</p>
-      <p className="price">Price - {amount}</p>
-      <p className="category">Category - {category}</p>
-      <p className="date-of-expense">Date - {date}</p>
-      <p className="notes">Notes: {notes}</p>
-      <p className="created-date">Added on - {createdAt}</p>
+      <p className="title">
+        <span className="font-bold tracking-wider">Title</span> - {title}
+      </p>
+      <p className="price">
+        <span className="font-bold tracking-wider">Price</span> - ₹{amount}
+      </p>
+      <p className="category">
+        <span className="font-bold tracking-wider">Category:</span> {category}
+      </p>
+      <p className="date-of-expense">
+        <span className="font-bold tracking-wider">Date:</span> {date}
+      </p>
+      <p className="notes">
+        <span className="font-bold tracking-wider">Notes:</span> {notes}
+      </p>
+      <p className="created-date">
+        <span className="font-bold tracking-wider">Added on:</span> {createdAt}
+      </p>
     </div>
   );
 };

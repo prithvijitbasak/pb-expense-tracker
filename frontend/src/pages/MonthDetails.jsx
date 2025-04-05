@@ -57,7 +57,7 @@ const MonthDetails = () => {
     <div className="month-details-wrapper">
       <div className="container">
         <div className="month-details-container">
-          <h2 className="heading-text">
+          <h2 className="heading-text font-bold tracking-wider text-2xl">
             All the expenses of month: {month}, {year}
           </h2>
 
