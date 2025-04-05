@@ -52,9 +52,9 @@ const DayDetails = () => {
                   title={expense.title}
                   amount={expense.amount}
                   category={expense.category}
-                  date={expense.date}
+                  date={new Date(expense.date).toLocaleString("en-GB")}
                   notes={expense.notes}
-                  createdAt={expense.createdAt}
+                  createdAt={new Date(expense.createdAt).toLocaleString("en-GB")}
                 />
               ))
             ) : (
