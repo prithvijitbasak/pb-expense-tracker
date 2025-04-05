@@ -72,4 +72,69 @@ const getExpenseCategories = (req, res) => {
   }
 };
 
-module.exports = { addExpense, getExpenseCategories };
+const editExpense = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { _id, ...expenseData } = req.body;
+
+    console.log("Edit Request Received:", req.body);
+
+    // Check for missing _id
+    if (!_id) {
+      return res.status(400).json({
+        success: false,
+        message: "Expense ID (_id) is required to perform an update.",
+      });
+    }
+
+    // Validate updated data (excluding _id)
+    const validationResult = validateExpense(expenseData);
+    if (!validationResult.success) {
+      return res.status(400).json({
+        success: false,
+        message: "Validation failed for the expense data.",
+        errors: validationResult.error.format(),
+      });
+    }
+
+    // Check if the expense exists and belongs to the user
+    const existingExpense = await Expense.findOne({ _id, user: userId });
+    if (!existingExpense) {
+      return res.status(404).json({
+        success: false,
+        message: "Expense not found or you are not authorized to update it.",
+      });
+    }
+
+    // Prepare update data
+    const updatedData = {
+      title: validationResult.data.title,
+      amount: validationResult.data.amount,
+      category: validationResult.data.category,
+      date: new Date(validationResult.data.date),
+      notes: validationResult.data.notes || "",
+    };
+
+    // Perform update
+    const updatedExpense = await Expense.findByIdAndUpdate(_id, updatedData, {
+      new: true, // Return updated document
+      runValidators: true, // Ensure schema-level validation runs again
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Expense updated successfully.",
+      updatedExpense,
+    });
+  } catch (error) {
+    console.error("Error editing expense:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};
+
+
+module.exports = { addExpense, getExpenseCategories, editExpense };

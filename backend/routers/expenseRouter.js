@@ -2,6 +2,7 @@ const express = require("express");
 const {
   addExpense,
   getExpenseCategories,
+  editExpense,
 } = require("../controllers/expenseController");
 const expenseReportingController = require("../controllers/expenseReportingController");
 const authMiddleware = require("../middlewares/authMiddleware");
@@ -17,5 +18,6 @@ router
 router
   .route("/get-expenses-by-month")
   .get(authMiddleware, expenseReportingController.getExpensesByMonth);
+router.route("/edit").patch(authMiddleware, editExpense);
 
 module.exports = router;
