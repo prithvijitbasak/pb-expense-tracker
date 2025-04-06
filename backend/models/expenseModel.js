@@ -1,52 +1,52 @@
 const mongoose = require("mongoose");
 
-const ExpenseSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-    index: true, // Index for faster user-based queries
+const ExpenseSchema = new mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      index: true,
+    },
+    title: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    amount: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
+    category: {
+      type: String,
+      enum: [
+        "Savings",
+        "Food",
+        "Transport",
+        "Grocery",
+        "Bill",
+        "Medicine",
+        "Shopping",
+        "Entertainment",
+        "Other",
+      ],
+      required: true,
+      trim: true,
+    },
+    date: {
+      type: Date,
+      required: true,
+    },
+    notes: {
+      type: String,
+      trim: true,
+    },
   },
-  title: {
-    type: String,
-    required: true,
-    trim: true, // Removes extra spaces
-  },
-  amount: {
-    type: Number,
-    required: true,
-    min: 0, // Ensures no negative values
-  },
-  category: {
-    type: String,
-    enum: [
-      "Savings",
-      "Food",
-      "Transport",
-      "Grocery",
-      "Bill",
-      "Medicine",
-      "Shopping",
-      "Entertainment",
-      "Other",
-    ],
-    required: true,
-    trim: true,
-  },
-  date: {
-    type: Date,
-    required: true,
-  },
-  notes: {
-    type: String,
-    trim: true, // Allows optional notes with trimmed spaces
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  {
+    timestamps: true, // ✅ Adds createdAt and updatedAt automatically
+  }
+);
 
 const Expense = mongoose.model("Expense", ExpenseSchema);
-
 module.exports = Expense;
