@@ -3,6 +3,7 @@ import "../assets/styles/DayDetails.css";
 import { API } from "../utils/auth";
 import { useSearchParams } from "react-router-dom";
 import AllDetailsCard from "../components/AllDetailsCard";
+import { formatDateTime } from "../utils/formatterFunctions";
 
 const DayDetails = () => {
   const [expenses, setExpenses] = useState([]);
@@ -41,7 +42,7 @@ const DayDetails = () => {
     <div className="day-details-wrapper">
       <div className="container">
         <div className="day-details-contents">
-          <h2 className="heading-date">
+          <h2 className="heading-date heading-text font-bold tracking-wider text-2xl">
             Expenses of: {date || "No date selected"}
           </h2>
           <div className="expenses-card-container">
@@ -52,9 +53,9 @@ const DayDetails = () => {
                   title={expense.title}
                   amount={expense.amount}
                   category={expense.category}
-                  date={new Date(expense.date).toLocaleString("en-GB")}
                   notes={expense.notes}
-                  createdAt={new Date(expense.createdAt).toLocaleString("en-GB")}
+                  createdAt={formatDateTime(expense.createdAt)}
+                  updatedAt={formatDateTime(expense.updatedAt)}
                 />
               ))
             ) : (

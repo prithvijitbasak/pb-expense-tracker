@@ -6,9 +6,9 @@ const AllDetailsCard = ({
   title,
   amount,
   category,
-  date,
   notes,
   createdAt,
+  updatedAt,
 }) => {
   return (
     <div className="expense-card flex flex-col justify-between" key={index}>
@@ -22,9 +22,6 @@ const AllDetailsCard = ({
         <p className="category">
           <span className="font-bold tracking-wider">Category:</span> {category}
         </p>
-        <p className="date-of-expense">
-          <span className="font-bold tracking-wider">Date:</span> {date}
-        </p>
         <p className="notes">
           <span className="font-bold tracking-wider">Notes:</span> {notes}
         </p>
@@ -32,12 +29,16 @@ const AllDetailsCard = ({
           <span className="font-bold tracking-wider">Added on:</span>{" "}
           {createdAt}
         </p>
+        <p className="updated-date">
+          <span className="font-bold tracking-wider">Updated on:</span>{" "}
+          {updatedAt}
+        </p>
       </div>
       <div className="edit-delete-btn flex justify-end gap-4">
         <button className="rounded bg-green-500 px-2 font-medium cursor-pointer edit-btn">
           Edit
         </button>
-        <button className="rounded bg-red-500 px-3 py-3  px-[5px] font-medium cursor-pointer delete-btn">
+        <button className="rounded bg-red-500 px-3 py-3 font-medium cursor-pointer delete-btn">
           Delete
         </button>
       </div>
@@ -52,9 +53,9 @@ AllDetailsCard.propTypes = {
   title: PropTypes.string.isRequired,
   amount: PropTypes.number.isRequired,
   category: PropTypes.string.isRequired,
-  date: PropTypes.string.isRequired,
   notes: PropTypes.string,
   createdAt: PropTypes.string.isRequired,
+  updatedAt: PropTypes.string.isRequired,
 };
 
 export default AllDetailsCard;

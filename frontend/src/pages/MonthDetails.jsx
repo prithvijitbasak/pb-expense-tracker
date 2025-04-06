@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { API } from "../utils/auth";
 import AllDetailsCard from "../components/AllDetailsCard";
 import { useSearchParams } from "react-router-dom";
-import "../assets/styles/MonthDetails.css"
+import "../assets/styles/MonthDetails.css";
+import { formatDateTime } from "../utils/formatterFunctions";
 
 const MonthDetails = () => {
   const [expenses, setExpenses] = useState([]);
@@ -52,7 +53,6 @@ const MonthDetails = () => {
     }
   }, [month, year]); // ✅ Only fetch when `month` or `year` changes
 
-
   return (
     <div className="month-details-wrapper">
       <div className="container">
@@ -69,13 +69,15 @@ const MonthDetails = () => {
                   title={expense.title}
                   amount={expense.amount}
                   category={expense.category}
-                  date={new Date(expense.date).toLocaleDateString("en-GB")} // ✅ Format Date
                   notes={expense.notes}
-                  createdAt={new Date(expense.createdAt).toLocaleString("en-GB")} // ✅ Format Created Date
+                  createdAt={formatDateTime(expense.createdAt)} // ✅ Format Created Date
+                  updatedAt={formatDateTime(expense.updatedAt)}
                 />
               ))
             ) : (
-              <p className="no-expense-text">No expenses found for the selected month.</p>
+              <p className="no-expense-text">
+                No expenses found for the selected month.
+              </p>
             )}
           </div>
         </div>
