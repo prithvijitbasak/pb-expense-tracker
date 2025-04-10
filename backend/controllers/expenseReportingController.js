@@ -34,7 +34,7 @@ const getExpensesByDate = async (req, res) => {
     const expenses = await Expense.find({
       user: userId,
       date: { $gte: startDate, $lte: endDate },
-    }).select("-_id title amount category date notes createdAt updatedAt");
+    }).select("_id title amount category date notes createdAt updatedAt");
 
     // Calculate total expenses
     const totalExpenses = expenses.reduce(
@@ -83,7 +83,7 @@ const getExpensesByMonth = async (req, res) => {
     const expenses = await Expense.find({
       user: userId,
       date: { $gte: startDate, $lte: endDate },
-    }).select("-_id title amount category date notes createdAt updatedAt");
+    }).select("_id title amount category date notes createdAt updatedAt");
 
     // Calculate total expenses
     const totalExpenses = expenses.reduce(
