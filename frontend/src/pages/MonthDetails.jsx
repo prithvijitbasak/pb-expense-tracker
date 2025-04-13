@@ -3,13 +3,15 @@ import { API } from "../utils/auth";
 import AllDetailsCard from "../components/AllDetailsCard";
 import { useSearchParams } from "react-router-dom";
 import "../assets/styles/MonthDetails.css";
-import { formatDateTime } from "../utils/formatterFunctions";
+import UpdateExpenseModal from "../components/UpdateExpenseModal";
 
 const MonthDetails = () => {
   const [expenses, setExpenses] = useState([]);
   const [searchParams] = useSearchParams();
   const month = searchParams.get("month");
   const year = searchParams.get("year");
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedExpense, setSelectedExpense] = useState(null);
 
   // console.log("Fetching expenses for:", month, year);
 
@@ -47,6 +49,11 @@ const MonthDetails = () => {
     }
   };
 
+  const handleEditClicked = (expense) => {
+    setSelectedExpense(expense);
+    setOpenModal(true);
+  };
+
   useEffect(() => {
     if (month && year) {
       fetchExpenses(month, year);
@@ -66,12 +73,9 @@ const MonthDetails = () => {
               expenses.map((expense, index) => (
                 <AllDetailsCard
                   key={index}
-                  title={expense.title}
-                  amount={expense.amount}
-                  category={expense.category}
-                  notes={expense.notes}
-                  createdAt={formatDateTime(expense.createdAt)} // ✅ Format Created Date
-                  updatedAt={formatDateTime(expense.updatedAt)}
+                  index={index}
+                  expense={expense}
+                  checkIsEditClicked={handleEditClicked}
                 />
               ))
             ) : (
@@ -82,6 +86,17 @@ const MonthDetails = () => {
           </div>
         </div>
       </div>
+      {/* Edit Modal */}
+      {openModal && selectedExpense && (
+        <UpdateExpenseModal
+          expenseData={selectedExpense}
+          onClose={() => {
+            setOpenModal(false);
+            setSelectedExpense(null);
+          }}
+          onUpdated={() => fetchExpenses(month, year)}
+        />
+      )}
     </div>
   );
 };

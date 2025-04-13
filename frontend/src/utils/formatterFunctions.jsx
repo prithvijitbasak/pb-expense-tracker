@@ -12,4 +12,16 @@ const formatDateTime = (isoString) => {
   return `${day}-${month}-${year} | ${hours}:${minutes}:${seconds}`;
 };
 
-export { formatDateTime };
+const formatDtConven = (isoString) => {
+  const date = new Date(isoString);
+
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = String(date.getFullYear());
+
+  const formattedDate = `${day}-${month}-${year}`;
+
+  return formattedDate;
+};
+
+export { formatDateTime, formatDtConven };

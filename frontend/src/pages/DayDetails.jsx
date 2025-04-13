@@ -3,13 +3,14 @@ import "../assets/styles/DayDetails.css";
 import { API } from "../utils/auth";
 import { useSearchParams } from "react-router-dom";
 import AllDetailsCard from "../components/AllDetailsCard";
-import { formatDateTime } from "../utils/formatterFunctions";
+import UpdateExpenseModal from "../components/UpdateExpenseModal";
 
 const DayDetails = () => {
   const [expenses, setExpenses] = useState([]);
-  // const [selectedDate, setSelectedDate] = useState("");
   const [searchParams] = useSearchParams();
-  const date = searchParams.get("date"); // Extract the date from query params
+  const date = searchParams.get("date");
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedExpense, setSelectedExpense] = useState(null);
 
   useEffect(() => {
     fetchExpenses(date);
@@ -38,6 +39,11 @@ const DayDetails = () => {
     }
   };
 
+  const handleEditClicked = (expense) => {
+    setSelectedExpense(expense);
+    setOpenModal(true);
+  };
+
   return (
     <div className="day-details-wrapper">
       <div className="container">
@@ -50,12 +56,9 @@ const DayDetails = () => {
               expenses.map((expense, index) => (
                 <AllDetailsCard
                   key={index}
-                  title={expense.title}
-                  amount={expense.amount}
-                  category={expense.category}
-                  notes={expense.notes}
-                  createdAt={formatDateTime(expense.createdAt)}
-                  updatedAt={formatDateTime(expense.updatedAt)}
+                  index={index}
+                  expense={expense}
+                  checkIsEditClicked={handleEditClicked}
                 />
               ))
             ) : (
@@ -66,6 +69,18 @@ const DayDetails = () => {
           </div>
         </div>
       </div>
+
+      {/* Edit Modal */}
+      {openModal && selectedExpense && (
+        <UpdateExpenseModal
+          expenseData={selectedExpense}
+          onClose={() => {
+            setOpenModal(false);
+            setSelectedExpense(null);
+          }}
+          onUpdated={() => fetchExpenses(date)}
+        />
+      )}
     </div>
   );
 };
