@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import { API } from "../utils/auth";
 import "../assets/styles/UpdateExpenseModal.css";
 import { RxCross1 } from "react-icons/rx";
 import { toast } from "react-toastify";
-import { formatDtConven } from "../utils/formatterFunctions";
+import { formatDtConven, toInputDateFormat } from "../utils/formatterFunctions";
 // Make sure styles exist
 
 const UpdateExpenseModal = ({ expenseData, onClose, onUpdated }) => {
@@ -19,15 +19,21 @@ const UpdateExpenseModal = ({ expenseData, onClose, onUpdated }) => {
     notes: "",
   });
 
+  const dropdownRef = useRef(null);
+
+
+
   // Load initial data when modal opens
   useEffect(() => {
     if (expenseData) {
+      const formattedISO = toInputDateFormat(expenseData.date); // instead of toISOString
+
       setFormData({
         _id: expenseData._id || "",
         title: expenseData.title || "",
         amount: expenseData.amount || "",
         category: expenseData.category || "",
-        date: expenseData.date || new Date().toISOString(),
+        date: formattedISO, // <-- fix here
         notes: expenseData.notes || "",
       });
     }
@@ -48,6 +54,22 @@ const UpdateExpenseModal = ({ expenseData, onClose, onUpdated }) => {
     };
     fetchCategories();
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpenCategoryDropdown(false);
+      }
+    };
+
+    if (openCategoryDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [openCategoryDropdown]);
 
   // Update form state
   const handleChange = (field, value) => {
@@ -145,7 +167,7 @@ const UpdateExpenseModal = ({ expenseData, onClose, onUpdated }) => {
               className="form-textarea w-full"
             />
 
-            <div className="category-field w-full!">
+            <div className="category-field w-full!" ref={dropdownRef}>
               <input
                 type="text"
                 value={formData.category}
