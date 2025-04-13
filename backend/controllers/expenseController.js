@@ -1,5 +1,6 @@
 const Expense = require("../models/expenseModel");
 const validateExpense = require("../validators/expenseValidator");
+const mongoose = require("mongoose");
 
 const addExpense = async (req, res) => {
   try {
@@ -136,5 +137,33 @@ const editExpense = async (req, res) => {
   }
 };
 
+const deleteExpense = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { id } = req.params; // ✅ Correct key here
 
-module.exports = { addExpense, getExpenseCategories, editExpense };
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid ID format" });
+    }
+
+    const existingExpense = await Expense.findOne({ _id: id, user: userId });
+
+    if (!existingExpense) {
+      return res.status(404).json({
+        success: false,
+        message: "Expense not found or you are not authorized to delete it.",
+      });
+    }
+
+    await existingExpense.deleteOne();
+
+    res.status(200).json({ message: "Expense deleted successfully!" });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to delete expense",
+      error: error.message,
+    });
+  }
+};
+
+module.exports = { addExpense, getExpenseCategories, editExpense, deleteExpense };
