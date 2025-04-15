@@ -4,6 +4,7 @@ import AllDetailsCard from "../components/AllDetailsCard";
 import { useSearchParams } from "react-router-dom";
 import "../assets/styles/MonthDetails.css";
 import UpdateExpenseModal from "../components/UpdateExpenseModal";
+import DeleteConfirmBox from "../components/DeleteConfirmBox";
 
 const MonthDetails = () => {
   const [expenses, setExpenses] = useState([]);
@@ -12,6 +13,7 @@ const MonthDetails = () => {
   const year = searchParams.get("year");
   const [openModal, setOpenModal] = useState(false);
   const [selectedExpense, setSelectedExpense] = useState(null);
+  const [openDelConfirm, setOpenDelConfirm] = useState(false);
 
   // console.log("Fetching expenses for:", month, year);
 
@@ -54,6 +56,11 @@ const MonthDetails = () => {
     setOpenModal(true);
   };
 
+  const handleDelClicked = (expense) => {
+    setSelectedExpense(expense);
+    setOpenDelConfirm(true);
+  };
+
   useEffect(() => {
     if (month && year) {
       fetchExpenses(month, year);
@@ -76,6 +83,7 @@ const MonthDetails = () => {
                   index={index}
                   expense={expense}
                   checkIsEditClicked={handleEditClicked}
+                  checkIsDelClicked={handleDelClicked}
                 />
               ))
             ) : (
@@ -95,6 +103,18 @@ const MonthDetails = () => {
             setSelectedExpense(null);
           }}
           onUpdated={() => fetchExpenses(month, year)}
+        />
+      )}
+
+      {/* Delete confirm box */}
+      {openDelConfirm && selectedExpense && (
+        <DeleteConfirmBox
+          expenseData={selectedExpense}
+          onClose={() => {
+            setOpenDelConfirm(true);
+            setSelectedExpense(null);
+          }}
+          onDeleted={() => fetchExpenses(month, year)}
         />
       )}
     </div>

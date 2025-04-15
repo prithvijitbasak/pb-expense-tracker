@@ -4,6 +4,7 @@ import { API } from "../utils/auth";
 import { useSearchParams } from "react-router-dom";
 import AllDetailsCard from "../components/AllDetailsCard";
 import UpdateExpenseModal from "../components/UpdateExpenseModal";
+import DeleteConfirmBox from "../components/DeleteConfirmBox";
 
 const DayDetails = () => {
   const [expenses, setExpenses] = useState([]);
@@ -11,6 +12,7 @@ const DayDetails = () => {
   const date = searchParams.get("date");
   const [openModal, setOpenModal] = useState(false);
   const [selectedExpense, setSelectedExpense] = useState(null);
+  const [openDelConfirm, setOpenDelConfirm] = useState(false);
 
   useEffect(() => {
     fetchExpenses(date);
@@ -44,6 +46,11 @@ const DayDetails = () => {
     setOpenModal(true);
   };
 
+  const handleDelClicked = (expense) => {
+    setSelectedExpense(expense);
+    setOpenDelConfirm(true);
+  };
+
   return (
     <div className="day-details-wrapper">
       <div className="container">
@@ -59,6 +66,7 @@ const DayDetails = () => {
                   index={index}
                   expense={expense}
                   checkIsEditClicked={handleEditClicked}
+                  checkIsDelClicked={handleDelClicked}
                 />
               ))
             ) : (
@@ -79,6 +87,18 @@ const DayDetails = () => {
             setSelectedExpense(null);
           }}
           onUpdated={() => fetchExpenses(date)}
+        />
+      )}
+
+      {/* Delete confirm box */}
+      {openDelConfirm && selectedExpense && (
+        <DeleteConfirmBox
+          expenseData={selectedExpense}
+          onClose={() => {
+            setOpenDelConfirm(true);
+            setSelectedExpense(null);
+          }}
+          onDeleted={() => fetchExpenses(date)}
         />
       )}
     </div>

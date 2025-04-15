@@ -3,7 +3,12 @@ import "../assets/styles/AllDetailsCard.css";
 import { formatDateTime, formatDtConven } from "../utils/formatterFunctions";
 import { useEffect, useState } from "react";
 
-const AllDetailsCard = ({ index, expense, checkIsEditClicked }) => {
+const AllDetailsCard = ({
+  index,
+  expense,
+  checkIsEditClicked,
+  checkIsDelClicked,
+}) => {
   const { title, amount, category, date, notes, createdAt, updatedAt } =
     expense;
 
@@ -11,6 +16,10 @@ const AllDetailsCard = ({ index, expense, checkIsEditClicked }) => {
 
   const handleEditClick = () => {
     checkIsEditClicked(expense); // Pass the whole expense to parent
+  };
+
+  const handleDelClick = () => {
+    checkIsDelClicked(expense);
   };
 
   const checkIfEdited = (createdAt, updatedAt) => {
@@ -26,7 +35,10 @@ const AllDetailsCard = ({ index, expense, checkIsEditClicked }) => {
   }, [createdAt, updatedAt]);
 
   return (
-    <div className="expense-card flex flex-col justify-between gap-4" key={index}>
+    <div
+      className="expense-card flex flex-col justify-between gap-4"
+      key={index}
+    >
       <div className="pb-3">
         <p className="title">
           <span className="font-bold tracking-wider">Title:</span> {title}
@@ -69,7 +81,13 @@ const AllDetailsCard = ({ index, expense, checkIsEditClicked }) => {
           >
             Edit
           </button>
-          <button className="rounded bg-red-500 px-3 py-3 font-medium cursor-pointer delete-btn">
+          <button
+            className="rounded bg-red-500 px-3 py-3 font-medium cursor-pointer delete-btn"
+            onClick={() => {
+              handleDelClick();
+              console.log("Opening the delete confirm box");
+            }}
+          >
             Delete
           </button>
         </div>
@@ -82,6 +100,7 @@ AllDetailsCard.propTypes = {
   index: PropTypes.number,
   expense: PropTypes.object.isRequired,
   checkIsEditClicked: PropTypes.func.isRequired,
+  checkIsDelClicked: PropTypes.func.isRequired,
 };
 
 export default AllDetailsCard;
