@@ -8,6 +8,7 @@ import MonthDetailsCard from "../components/MonthDetailsCard";
 import YearDetailsCard from "../components/YearDetailsCard";
 import WelcomeAddBanner from "../components/WelcomeAddBanner";
 import SearchBoxSection from "../components/SearchBoxSection";
+import DashBanner from "../components/DashBanner";
 
 const Dashboard = () => {
   const [showAddExpense, setShowAddExpense] = useState(false);
@@ -17,9 +18,9 @@ const Dashboard = () => {
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
 
-  const handleAddExpenseClick = () => {
-    setShowAddExpense(true);
-  };
+  // const handleAddExpenseClick = () => {
+  //   setShowAddExpense(true);
+  // };
 
   const handleCloseAddExpense = () => {
     setShowAddExpense(false);
@@ -79,12 +80,8 @@ const Dashboard = () => {
               </div>
             )}
           </div>
-          <header className="dashboard-header">
-            <div className="dashboard-header-wrapper">
-              <h1>Expense Tracker</h1>
-              <h2>Track your day-to-day expenses</h2>
-            </div>
-          </header>
+
+          <DashBanner />
 
           <WelcomeAddBanner />
 
