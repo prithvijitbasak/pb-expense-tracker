@@ -101,4 +101,53 @@ const getExpensesByMonth = async (req, res) => {
   }
 };
 
-module.exports = { getExpensesByDate, getExpensesByMonth };
+const getExpensesByYear = async (req, res) => {
+  try {
+    const { year } = req.query;
+    const userId = req.user.id; // Extract user ID from authMiddleware
+
+    // Check if userId is available
+    if (!userId) {
+      return res.status(401).json({ error: "Unauthorized! No user ID found" });
+    }
+
+    // Validate year
+    if (!year) {
+      return res.status(400).json({ error: "Missing year parameter" });
+    }
+
+    const yearNum = parseInt(year, 10);
+
+    // Validate year format
+    if (isNaN(yearNum) || yearNum < 1000 || yearNum > 9999) {
+      return res.status(400).json({ error: "Invalid year format" });
+    }
+
+    // Construct the start and end date for the entire year
+    const startDate = new Date(yearNum, 0, 1); // January 1st, 00:00:00
+    const endDate = new Date(yearNum, 11, 31, 23, 59, 59, 999); // December 31st, 23:59:59
+
+    // Fetch expenses for the given year
+    const expenses = await Expense.find({
+      user: userId,
+      date: { $gte: startDate, $lte: endDate },
+    }).select("_id title amount category date notes createdAt updatedAt");
+
+    // Calculate total expenses
+    const totalExpenses = expenses.reduce(
+      (sum, expense) => sum + expense.amount,
+      0
+    );
+
+    return res.status(200).json({
+      totalExpenses,
+      expenses,
+    });
+  } catch (error) {
+    console.error("Error fetching yearly expenses:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
+module.exports = { getExpensesByDate, getExpensesByMonth, getExpensesByYear };

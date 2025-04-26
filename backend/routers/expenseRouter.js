@@ -19,6 +19,9 @@ router
 router
   .route("/get-expenses-by-month")
   .get(authMiddleware, expenseReportingController.getExpensesByMonth);
+router
+  .route("/get-expenses-by-year")
+  .get(authMiddleware, expenseReportingController.getExpensesByYear);
 router.route("/edit").patch(authMiddleware, editExpense);
 router.route("/:id").delete(authMiddleware, deleteExpense);
 
