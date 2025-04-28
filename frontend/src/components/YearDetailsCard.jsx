@@ -6,13 +6,14 @@ import { useEffect, useState } from "react";
 const YearDetailsCard = () => {
   const [totalExpense, setTotalExpense] = useState(null);
 
+  const currentYear = new Date().getFullYear();
   const fetchTotalYearExpense = async () => {
     const token = localStorage.getItem("token");
-    const currentYear = new Date().getFullYear();
     try {
       const response = await fetch(
         `${API}/api/expenses/get-expenses-by-year?year=${currentYear}`,
         {
+          method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -37,7 +38,7 @@ const YearDetailsCard = () => {
     <div className="details-card">
       <h3 className="details-heading-text">This Year Expenses</h3>
       <p className="total-text">Total Expenses = {totalExpense}</p>
-      <Link to={"/year-details"} className="details-btn">
+      <Link to={`/year-details?year=${currentYear}`} className="details-btn">
         See Details
       </Link>
     </div>
