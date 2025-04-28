@@ -7,32 +7,32 @@ const YearDetailsCard = () => {
   const [totalExpense, setTotalExpense] = useState(null);
 
   const currentYear = new Date().getFullYear();
-  const fetchTotalYearExpense = async () => {
-    const token = localStorage.getItem("token");
-    try {
-      const response = await fetch(
-        `${API}/api/expenses/get-expenses-by-year?year=${currentYear}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (response.ok) {
-        const data = await response.json();
-        const totalExpenses = data.totalExpenses;
-        setTotalExpense(totalExpenses);
-        console.log(totalExpenses);
-      }
-    } catch (error) {
-      console.error("The error is: ", error);
-    }
-  };
-
   useEffect(() => {
+    const fetchTotalYearExpense = async () => {
+      const token = localStorage.getItem("token");
+      try {
+        const response = await fetch(
+          `${API}/api/expenses/get-expenses-by-year?year=${currentYear}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.ok) {
+          const data = await response.json();
+          const totalExpenses = data.totalExpenses;
+          setTotalExpense(totalExpenses);
+          console.log(totalExpenses);
+        }
+      } catch (error) {
+        console.error("The error is: ", error);
+      }
+    };
+
     fetchTotalYearExpense();
-  }, []);
+  }, [currentYear]);
 
   return (
     <div className="details-card">
