@@ -104,30 +104,29 @@ const getExpensesByMonth = async (req, res) => {
 const getExpensesByYear = async (req, res) => {
   try {
     const { year } = req.query;
-    const userId = req.user.id; // Extract user ID from authMiddleware
+    const userId = req.user.id;
 
-    // Check if userId is available
+    // Authorization Check
     if (!userId) {
       return res.status(401).json({ error: "Unauthorized! No user ID found" });
     }
 
-    // Validate year
+    // Validation
     if (!year) {
       return res.status(400).json({ error: "Missing year parameter" });
     }
 
     const yearNum = parseInt(year, 10);
 
-    // Validate year format
     if (isNaN(yearNum) || yearNum < 1000 || yearNum > 9999) {
       return res.status(400).json({ error: "Invalid year format" });
     }
 
-    // Construct the start and end date for the entire year
-    const startDate = new Date(yearNum, 0, 1); // January 1st, 00:00:00
-    const endDate = new Date(yearNum, 11, 31, 23, 59, 59, 999); // December 31st, 23:59:59
+    // Construct start and end dates of the year
+    const startDate = new Date(yearNum, 0, 1); // Jan 1st
+    const endDate = new Date(yearNum, 11, 31, 23, 59, 59, 999); // Dec 31st
 
-    // Fetch expenses for the given year
+    // Fetch all expenses of the year
     const expenses = await Expense.find({
       user: userId,
       date: { $gte: startDate, $lte: endDate },
@@ -139,8 +138,26 @@ const getExpensesByYear = async (req, res) => {
       0
     );
 
+    // 🔥 Now calculate total expenses for each month 🔥
+    const monthlyExpenses = {};
+
+    // Initialize each month to 0
+    for (let month = 0; month < 12; month++) {
+      const monthFormatted = month.toString().padStart(2, "0");
+      monthlyExpenses[monthFormatted] = 0;
+    }
+
+    // Accumulate expense amount into the correct month
+    expenses.forEach((expense) => {
+      const expenseMonth = new Date(expense.date).getMonth(); // getMonth() => 0 (Jan) to 11 (Dec)
+      const monthFormatted = expenseMonth.toString().padStart(2, "0");
+      monthlyExpenses[monthFormatted] += expense.amount;
+    });
+
+    // Final response
     return res.status(200).json({
       totalExpenses,
+      monthlyExpenses, // 🔥 newly added field 🔥
       expenses,
     });
   } catch (error) {
@@ -148,6 +165,7 @@ const getExpensesByYear = async (req, res) => {
     return res.status(500).json({ error: "Internal server error" });
   }
 };
+
 
 
 module.exports = { getExpensesByDate, getExpensesByMonth, getExpensesByYear };
