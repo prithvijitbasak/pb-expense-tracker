@@ -125,11 +125,11 @@ const getExpensesByYear = async (req, res) => {
     const startDate = new Date(yearNum, 0, 1); 
     const endDate = new Date(yearNum, 11, 31, 23, 59, 59, 999);
 
-    // 👉 Correct Aggregation with ObjectId cast
+    // ✅ Corrected `aggregate` spelling & ObjectId casting
     const aggregation = await Expense.aggregate([
       {
         $match: {
-          user: mongoose.Types.ObjectId(userId), // ✅ Must cast to ObjectId
+          user: new mongoose.Types.ObjectId(userId), // ✅ Correct for Mongoose v6+
           date: { $gte: startDate, $lte: endDate },
         },
       },
@@ -141,14 +141,14 @@ const getExpensesByYear = async (req, res) => {
       },
       {
         $project: {
-          month: { $subtract: ["$_id.month", 1] },
+          month: { $subtract: ["$_id.month", 1] }, // Converts to 0-based (0–11)
           totalAmount: 1,
           _id: 0,
         },
       },
     ]);
 
-    // Prepare monthlyExpenses object
+    // Prepare monthlyExpenses object (keys: "00" to "11")
     const monthlyExpenses = {};
     for (let month = 0; month < 12; month++) {
       const monthFormatted = month.toString().padStart(2, "0");
@@ -160,7 +160,7 @@ const getExpensesByYear = async (req, res) => {
       monthlyExpenses[monthFormatted] = item.totalAmount;
     });
 
-    // If you want to show expense list too
+    // Get all expenses for the year
     const expenses = await Expense.find({
       user: userId,
       date: { $gte: startDate, $lte: endDate },
@@ -171,8 +171,8 @@ const getExpensesByYear = async (req, res) => {
 
     return res.status(200).json({
       totalExpenses,
-      expenses,
       monthlyExpenses,
+      expenses,
     });
   } catch (error) {
     console.error("Error fetching yearly expenses:", error);
