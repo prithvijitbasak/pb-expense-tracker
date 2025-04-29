@@ -125,6 +125,7 @@ const getExpensesByYear = async (req, res) => {
     const endDate = new Date(yearNum, 11, 31, 23, 59, 59, 999); // Dec 31st
 
     // 3. 📊 Aggregation to Calculate Monthly Totals
+    // 3. 📊 Aggregation to Calculate Monthly Totals
     const aggregation = await Expense.aggregate([
       {
         $match: {
@@ -140,19 +141,19 @@ const getExpensesByYear = async (req, res) => {
       },
       {
         $project: {
-          month: { $subtract: ["$_id.month", 1] }, // Convert to 0-based index (0–11)
+          month: "$_id.month", // ✅ Keep month 1–12
           totalAmount: 1,
           _id: 0,
         },
       },
       {
-        $sort: { month: 1 }, // ✅ Ensures month order: Jan → Dec
+        $sort: { month: 1 }, // ✅
       },
     ]);
 
     // 4. 🗓️ Prepare Default Monthly Expenses Object (00 to 11)
     const monthlyExpenses = {};
-    for (let month = 0; month < 12; month++) {
+    for (let month = 1; month <= 12; month++) {
       const monthFormatted = month.toString().padStart(2, "0");
       monthlyExpenses[monthFormatted] = 0;
     }
@@ -179,18 +180,14 @@ const getExpensesByYear = async (req, res) => {
 
     // 8. 📦 Send the Response
     return res.status(200).json({
-      totalExpenses,       // total sum for year
-      monthlyExpenses,     // { "00": 5000, "01": 800, ... }
-      expenses,            // all individual expense documents for frontend
+      totalExpenses, // total sum for year
+      monthlyExpenses, // { "00": 5000, "01": 800, ... }
+      expenses, // all individual expense documents for frontend
     });
   } catch (error) {
     console.error("Error fetching yearly expenses:", error);
     return res.status(500).json({ error: "Internal server error" });
   }
 };
-
-
-
-
 
 module.exports = { getExpensesByDate, getExpensesByMonth, getExpensesByYear };
