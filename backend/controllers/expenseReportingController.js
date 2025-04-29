@@ -106,7 +106,7 @@ const getExpensesByYear = async (req, res) => {
     const { year } = req.query;
     const userId = req.user.id;
 
-    // Authorization and Validation
+    // 1. 🔐 Authorization & Validation
     if (!userId) {
       return res.status(401).json({ error: "Unauthorized! No user ID found" });
     }
@@ -116,69 +116,79 @@ const getExpensesByYear = async (req, res) => {
     }
 
     const yearNum = parseInt(year, 10);
-
     if (isNaN(yearNum) || yearNum < 1000 || yearNum > 9999) {
       return res.status(400).json({ error: "Invalid year format" });
     }
 
-    // Define start and end date range
-    const startDate = new Date(yearNum, 0, 1); 
-    const endDate = new Date(yearNum, 11, 31, 23, 59, 59, 999);
+    // 2. 📆 Define Start and End Dates for the Year
+    const startDate = new Date(yearNum, 0, 1); // Jan 1st
+    const endDate = new Date(yearNum, 11, 31, 23, 59, 59, 999); // Dec 31st
 
-    // ✅ Corrected `aggregate` spelling & ObjectId casting
+    // 3. 📊 Aggregation to Calculate Monthly Totals
     const aggregation = await Expense.aggregate([
       {
         $match: {
-          user: new mongoose.Types.ObjectId(userId), // ✅ Correct for Mongoose v6+
+          user: new mongoose.Types.ObjectId(userId),
           date: { $gte: startDate, $lte: endDate },
         },
       },
       {
         $group: {
-          _id: { month: { $month: "$date" } },
+          _id: { month: { $month: "$date" } }, // Month number (1–12)
           totalAmount: { $sum: "$amount" },
         },
       },
       {
         $project: {
-          month: { $subtract: ["$_id.month", 1] }, // Converts to 0-based (0–11)
+          month: { $subtract: ["$_id.month", 1] }, // Convert to 0-based index (0–11)
           totalAmount: 1,
           _id: 0,
         },
       },
+      {
+        $sort: { month: 1 }, // ✅ Ensures month order: Jan → Dec
+      },
     ]);
 
-    // Prepare monthlyExpenses object (keys: "00" to "11")
+    // 4. 🗓️ Prepare Default Monthly Expenses Object (00 to 11)
     const monthlyExpenses = {};
     for (let month = 0; month < 12; month++) {
       const monthFormatted = month.toString().padStart(2, "0");
       monthlyExpenses[monthFormatted] = 0;
     }
 
+    // 5. 🧮 Fill in Monthly Totals from Aggregation
     aggregation.forEach((item) => {
       const monthFormatted = item.month.toString().padStart(2, "0");
       monthlyExpenses[monthFormatted] = item.totalAmount;
     });
 
-    // Get all expenses for the year
+    // 6. 📜 Fetch All Expenses for the Year
     const expenses = await Expense.find({
       user: userId,
       date: { $gte: startDate, $lte: endDate },
-    }).select("_id title amount category date notes createdAt updatedAt");
+    })
+      .select("_id title amount category date notes createdAt updatedAt")
+      .sort({ date: 1 }); // ✅ Sorted by date ascending for frontend display
 
-    // Calculate grand total from aggregation
-    const totalExpenses = aggregation.reduce((sum, item) => sum + item.totalAmount, 0);
+    // 7. 💰 Calculate Grand Total
+    const totalExpenses = aggregation.reduce(
+      (sum, item) => sum + item.totalAmount,
+      0
+    );
 
+    // 8. 📦 Send the Response
     return res.status(200).json({
-      totalExpenses,
-      monthlyExpenses,
-      expenses,
+      totalExpenses,       // total sum for year
+      monthlyExpenses,     // { "00": 5000, "01": 800, ... }
+      expenses,            // all individual expense documents for frontend
     });
   } catch (error) {
     console.error("Error fetching yearly expenses:", error);
     return res.status(500).json({ error: "Internal server error" });
   }
 };
+
 
 
 
