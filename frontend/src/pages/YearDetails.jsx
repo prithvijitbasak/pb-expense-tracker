@@ -53,7 +53,7 @@ const YearDetails = () => {
     <>
       <section className="year-wrapper">
         <div className="container">
-          <div className="year">Year - {year}</div>
+          <div className="year font-bold text-2xl">Year - {year}</div>
         </div>
       </section>
 
@@ -71,9 +71,8 @@ const YearDetails = () => {
                   key={monthData.index}
                 >
                   <div className="month-link">
-                    <p>{monthData.name}</p>
-                    <br />
-                    <p>
+                    <p className="text-2xl font-bold pb-3">{monthData.name}</p>
+                    <p className="text">
                       Total = {monthlyExpenses[monthFormatted] ?? "Loading..."}
                     </p>
                   </div>

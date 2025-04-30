@@ -5,6 +5,7 @@ import { useSearchParams } from "react-router-dom";
 import "../assets/styles/MonthDetails.css";
 import UpdateExpenseModal from "../components/UpdateExpenseModal";
 import DeleteConfirmBox from "../components/DeleteConfirmBox";
+import monthData from "../data/monthData.json";
 
 const MonthDetails = () => {
   const [expenses, setExpenses] = useState([]);
@@ -72,7 +73,7 @@ const MonthDetails = () => {
       <div className="container">
         <div className="month-details-container">
           <h2 className="heading-text font-bold tracking-wider text-2xl">
-            All the expenses of month: {month}, {year}
+            All the expenses of month: {monthData[month]}, {year}
           </h2>
 
           <div className="expenses-card-container">
