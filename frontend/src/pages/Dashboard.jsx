@@ -9,6 +9,7 @@ import YearDetailsCard from "../components/YearDetailsCard";
 import WelcomeAddBanner from "../components/WelcomeAddBanner";
 import SearchBoxSection from "../components/SearchBoxSection";
 import DashBanner from "../components/DashBanner";
+import ClockCard from "../components/ClockCard";
 
 const Dashboard = () => {
   const [showAddExpense, setShowAddExpense] = useState(false);
@@ -82,6 +83,10 @@ const Dashboard = () => {
           </div>
 
           <DashBanner />
+
+          <div className="mt-2 flex justify-end">
+            <ClockCard />
+          </div>
 
           <WelcomeAddBanner />
 
