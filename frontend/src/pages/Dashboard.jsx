@@ -84,7 +84,7 @@ const Dashboard = () => {
 
           <DashBanner />
 
-          <div className="mt-2 flex justify-end">
+          <div className="mt-7 flex justify-end">
             <ClockCard />
           </div>
 
