@@ -52,7 +52,7 @@ const DayDetails = () => {
   };
 
   return (
-    <div className="day-details-wrapper">
+    <div className="day-details-wrapper mb-10">
       <div className="container">
         <div className="day-details-contents">
           <h2 className="heading-date heading-text font-bold tracking-wider text-2xl">

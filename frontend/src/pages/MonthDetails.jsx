@@ -69,7 +69,7 @@ const MonthDetails = () => {
   }, [month, year]); // ✅ Only fetch when `month` or `year` changes
 
   return (
-    <div className="month-details-wrapper">
+    <div className="month-details-wrapper mb-10">
       <div className="container">
         <div className="month-details-container">
           <h2 className="heading-text font-bold tracking-wider text-2xl">
