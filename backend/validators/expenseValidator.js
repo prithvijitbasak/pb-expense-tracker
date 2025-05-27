@@ -27,6 +27,7 @@ const expenseSchema = z.object({
     "Transport",
     "Shopping",
     "Bill",
+    "Medicine",
     "Entertainment",
     "Grocery",
     "Other",
