@@ -8,7 +8,11 @@ const Footer = () => {
               <span className="block text-xl">PB Expense Tracker</span> |
               <span className="text-l block">
                 Developed by{" "}
-                <a href="https://prithvijitbasak.netlify.app/" className="underline underline-offset-2">
+                <a
+                  href="https://prithvijitbasak.netlify.app/"
+                  className="underline underline-offset-2"
+                  target="_blank"
+                >
                   Prithvijit Basak
                 </a>
               </span>
