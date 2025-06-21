@@ -60,3 +60,6 @@ nodemon index.js
 ## Tech stacks used
 
 MongoDB, Express.js, React.js, Node.js, Tailwind CSS
+
+
+*Note: I am still working on this project. Once it is complete, I will try to deploy it.*
