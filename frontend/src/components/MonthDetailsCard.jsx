@@ -37,7 +37,7 @@ const MonthDetailsCard = () => {
 
   useEffect(() => {
     fetchTotalExpenseOfMonth();
-  });
+  }, []);
 
   return (
     <div className="details-card">
