@@ -8,7 +8,7 @@ import Login from "./components/Login";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import Register from "./components/Register";
 import Profile from "./pages/Profile";
-import Layout from "./utils/Layout"; 
+import Layout from "./utils/Layout";
 
 const App = () => {
   return (
@@ -24,11 +24,11 @@ const App = () => {
             <Route path="/" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/year-details" element={<YearDetails />} />
-            <Route path="/month-details" element={<MonthDetails />} />
-            <Route path="/day-details" element={<DayDetails />} />
             <Route path="/add-expense" element={<AddExpense />} />
           </Route>
         </Route>
+        <Route path="/day-details" element={<DayDetails />} />
+        <Route path="/month-details" element={<MonthDetails />} />
 
         {/* 404 fallback */}
         <Route path="*" element={<div>No matching route</div>} />

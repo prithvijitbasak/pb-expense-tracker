@@ -6,6 +6,7 @@ import "../assets/styles/MonthDetails.css";
 import UpdateExpenseModal from "../components/UpdateExpenseModal";
 import DeleteConfirmBox from "../components/DeleteConfirmBox";
 import monthData from "../data/monthData.json";
+import useTotalExpense from "../hooks/useTotalExpense";
 
 const MonthDetails = () => {
   const [expenses, setExpenses] = useState([]);
@@ -68,6 +69,11 @@ const MonthDetails = () => {
     }
   }, [month, year]); // ✅ Only fetch when `month` or `year` changes
 
+  const { total, loading, error } = useTotalExpense("month", {
+    month: `${month}`,
+    year: `${year}`,
+  });
+
   return (
     <div className="month-details-wrapper mb-10">
       <div className="container">
@@ -75,6 +81,15 @@ const MonthDetails = () => {
           <h2 className="heading-text font-bold tracking-wider text-2xl">
             All the expenses of month: {monthData[month]}, {year}
           </h2>
+
+          <h4 className="font-bold text-right pb-3 pr-9">
+            Total ={" "}
+            {loading
+              ? "Loading total expense..."
+              : error
+              ? "Error fetching total"
+              : `${total}`}
+          </h4>
 
           <div className="expenses-card-container">
             {expenses.length > 0 ? (
