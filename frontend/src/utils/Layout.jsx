@@ -5,7 +5,7 @@ const Layout = () => {
   return (
     <>
       <Outlet />
-      <Footer className=""/>
+      {/* <Footer className=""/> */}
     </>
   );
 };
