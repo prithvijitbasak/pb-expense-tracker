@@ -24,7 +24,7 @@ const YearDetailsCard = () => {
           const data = await response.json();
           const totalExpenses = data.totalExpenses;
           setTotalExpense(totalExpenses);
-          console.log(totalExpenses);
+          // console.log(totalExpenses);
         }
       } catch (error) {
         console.error("The error is: ", error);
