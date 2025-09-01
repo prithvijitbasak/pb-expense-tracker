@@ -58,4 +58,64 @@ const monthAnalytics = async (req, res) => {
   }
 };
 
-module.exports = { monthAnalytics };
+const yearAnalytics = async (req, res) => {
+  try {
+    const { year } = req.query;
+
+    // ✅ Validate query param
+    if (!year) {
+      return res.status(400).json({ message: "Year is required" });
+    }
+
+    const userId = req.user._id; // ✅ From authMiddleware
+
+    // ✅ Define the full year range
+    const startDate = new Date(year, 0, 1);  // Jan 1st, 00:00:00
+    const endDate = new Date(Number(year) + 1, 0, 1); // Next year's Jan 1st
+
+    // ✅ MongoDB aggregation
+    const analytics = await Expense.aggregate([
+      {
+        $match: {
+          user: userId, // Only this user's expenses
+          date: { $gte: startDate, $lt: endDate }, // Expenses within the year
+        },
+      },
+      {
+        $group: {
+          _id: "$category", // Group by category
+          totalAmount: { $sum: "$amount" }, // Sum amounts
+        },
+      },
+      {
+        $project: {
+          _id: 0, // Remove _id
+          category: "$_id", // Rename
+          totalAmount: 1, // Keep totalAmount
+        },
+      },
+      {
+        $sort: { totalAmount: -1 }, // Optional: highest expense first
+      },
+    ]);
+
+    // ✅ Ensure all categories appear (even if 0)
+    const categories = expenseCategories;
+
+    const result = categories.map((cat) => {
+      const found = analytics.find((a) => a.category === cat);
+      return {
+        category: cat,
+        totalAmount: found ? found.totalAmount : 0,
+      };
+    });
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error("Year Analytics Error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+module.exports = { monthAnalytics, yearAnalytics };
