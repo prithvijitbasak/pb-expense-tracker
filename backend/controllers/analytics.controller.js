@@ -1,4 +1,5 @@
 const Expense = require("../models/expenseModel");
+const expenseCategories = require("../constants/expenseCategories");
 
 const monthAnalytics = async (req, res) => {
   try {
@@ -40,17 +41,7 @@ const monthAnalytics = async (req, res) => {
     ]);
 
     // ✅ Ensure all categories are always present
-    const categories = [
-      "Savings",
-      "Food",
-      "Transport",
-      "Grocery",
-      "Bill",
-      "Medicine",
-      "Shopping",
-      "Entertainment",
-      "Other",
-    ];
+    const categories = expenseCategories;
 
     const result = categories.map((cat) => {
       const found = analytics.find((a) => a.category === cat);

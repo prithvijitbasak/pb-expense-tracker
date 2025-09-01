@@ -1,4 +1,5 @@
 const { z } = require("zod");
+const expenseCategories = require("../constants/expenseCategories");
 
 // Helper function to convert 'dd-mm-yyyy' to a Date object
 const parseDate = (val) => {
@@ -21,17 +22,7 @@ const expenseSchema = z.object({
     .min(1, "Title is required")
     .max(200, "Title must be at most 200 characters"), // Fixed typo in max limit
   amount: z.number().min(0, "Amount cannot be negative"),
-  category: z.enum([
-    "Savings",
-    "Food",
-    "Transport",
-    "Shopping",
-    "Bill",
-    "Medicine",
-    "Entertainment",
-    "Grocery",
-    "Other",
-  ]),
+  category: z.enum(expenseCategories),
   date: z.preprocess(
     parseDate,
     z.date().refine((date) => !isNaN(date.getTime()), {

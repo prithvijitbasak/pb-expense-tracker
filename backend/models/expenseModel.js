@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const expenseCategories = require("../constants/expenseCategories");
 
 const ExpenseSchema = new mongoose.Schema(
   {
@@ -20,17 +21,7 @@ const ExpenseSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      enum: [
-        "Savings",
-        "Food",
-        "Transport",
-        "Grocery",
-        "Bill",
-        "Medicine",
-        "Shopping",
-        "Entertainment",
-        "Other",
-      ],
+      enum: expenseCategories,
       required: true,
       trim: true,
     },
