@@ -44,6 +44,7 @@ const Profile = () => {
           <h2 className="profile-heading">My Profile</h2>
             {user ? (
               <>
+                <p className="profile-data"><span className="bold-font">User ID</span> - {user._id}</p>
                 <p className="profile-data"><span className="bold-font">Full name</span> - {user.fullName}</p>
                 <p className="profile-data"><span className="bold-font">Username</span> - {user.username}</p>
                 <p className="profile-data"><span className="bold-font">Email</span> - {user.email}</p>
