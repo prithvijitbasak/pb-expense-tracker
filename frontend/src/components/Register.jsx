@@ -4,6 +4,7 @@ import "../assets/styles/Login.css";
 import { useNavigate } from "react-router-dom";
 import { API } from "../utils/auth"; // Import the function
 import { toast } from "react-toastify";
+import { FaEyeSlash, FaEye } from "react-icons/fa";
 
 const Register = () => {
   const [user, setUser] = useState({
@@ -20,6 +21,13 @@ const Register = () => {
 
   const handleInput = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
+  };
+
+  const [viewPassword, setViewPassword] = useState(false);
+
+  const handleViewPassword = () => {
+    if (viewPassword === false) setViewPassword(true);
+    else setViewPassword(false);
   };
 
   const handleSubmit = async (e) => {
@@ -75,6 +83,7 @@ const Register = () => {
               value={user.fullName}
               onChange={handleInput}
               required
+              className="select-none"
             />
             <input
               type="text"
@@ -83,6 +92,7 @@ const Register = () => {
               value={user.username}
               onChange={handleInput}
               required
+              className="select-none"
             />
             <input
               type="email"
@@ -91,6 +101,7 @@ const Register = () => {
               value={user.email}
               onChange={handleInput}
               required
+              className="select-none"
             />
             <input
               type="text"
@@ -99,16 +110,31 @@ const Register = () => {
               value={user.phone}
               onChange={handleInput}
               required
+              className="select-none"
             />
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={user.password}
-              onChange={handleInput}
-              required
-            />
-            <button type="submit" className="submit-btn">
+            <div className="relative">
+              <input
+                type={viewPassword ? "text" : "password"}
+                name="password"
+                placeholder="Password"
+                value={user.password}
+                onChange={handleInput}
+                required
+                className="select-none"
+              />
+              {viewPassword ? (
+                <FaEye
+                  className="absolute right-5 top-1/2 -translate-y-1/2 cursor-pointer"
+                  onClick={handleViewPassword}
+                />
+              ) : (
+                <FaEyeSlash
+                  className="absolute right-5 top-1/2 -translate-y-1/2 cursor-pointer"
+                  onClick={handleViewPassword}
+                />
+              )}
+            </div>
+            <button type="submit" className="submit-btn select-none">
               Sign Up
             </button>
             <div className="signup-div">
