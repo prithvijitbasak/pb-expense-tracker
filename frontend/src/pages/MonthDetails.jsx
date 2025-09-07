@@ -87,7 +87,7 @@ const MonthDetails = () => {
             All the expenses of month: {monthData[month]}, {year}
           </h2>
 
-          <h4 className="font-bold text-right pb-3 pr-9">
+          <h4 className="font-bold text-right pb-3 pr-9 text-xl">
             Total ={" "}
             {loading
               ? "Loading total expense..."
