@@ -7,6 +7,7 @@ import UpdateExpenseModal from "../components/UpdateExpenseModal";
 import DeleteConfirmBox from "../components/DeleteConfirmBox";
 import monthData from "../data/monthData.json";
 import useTotalExpense from "../hooks/useTotalExpense";
+import { ShimmerGrid } from "../components/ShimmerUI";
 
 const MonthDetails = () => {
   const [expenses, setExpenses] = useState([]);
@@ -16,14 +17,17 @@ const MonthDetails = () => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedExpense, setSelectedExpense] = useState(null);
   const [openDelConfirm, setOpenDelConfirm] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // console.log("Fetching expenses for:", month, year);
 
   const fetchExpenses = async (month, year) => {
+    setIsLoading(true);
     try {
       const token = localStorage.getItem("token");
       if (!token) {
         console.error("No token found in local storage!");
+        setIsLoading(false); // ✅ prevent infinite loading
         return;
       }
 
@@ -37,19 +41,20 @@ const MonthDetails = () => {
         },
       });
 
-      const responseText = await response.text();
-      // console.log("Response Status:", response.status);
-      // console.log("Response Body:", responseText);
-
       if (response.ok) {
-        const data = JSON.parse(responseText); // ✅ Parse JSON correctly
-        // console.log("Expenses Data:", data.expenses);
-        setExpenses(data.expenses); // ✅ Extract `expenses` array from response
+        const data = await response.json(); // ✅ parse JSON directly
+        setExpenses(data.expenses || []); // ✅ default to [] if undefined
       } else {
-        console.error("Error fetching expenses:", responseText);
+        const errorText = await response.text();
+        console.error("Error fetching expenses:", errorText);
+        setExpenses([]); // ✅ optional: clear expenses on error
       }
+      setIsLoading(false);
     } catch (error) {
       console.error("Fetch error:", error);
+      setExpenses([]); // ✅ optional: prevent stale data
+    } finally {
+      setIsLoading(false); // ✅ always reset loading
     }
   };
 
@@ -92,10 +97,14 @@ const MonthDetails = () => {
           </h4>
 
           <div className="expenses-card-container">
-            {expenses.length > 0 ? (
+            {isLoading ? (
+              // ✅ Case 1: When data is being fetched
+              <ShimmerGrid />
+            ) : expenses.length > 0 ? (
+              // ✅ Case 2: When expenses exist
               expenses.map((expense, index) => (
                 <AllDetailsCard
-                  key={index}
+                  key={expense._id || index} // Prefer unique id if available
                   index={index}
                   expense={expense}
                   checkIsEditClicked={handleEditClicked}
@@ -103,6 +112,7 @@ const MonthDetails = () => {
                 />
               ))
             ) : (
+              // ✅ Case 3: When no expenses found
               <p className="no-expense-text">
                 No expenses found for the selected month.
               </p>

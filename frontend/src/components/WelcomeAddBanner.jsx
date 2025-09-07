@@ -2,9 +2,10 @@ import "../assets/styles/WelcomeAddBanner.css";
 import { Link } from "react-router-dom";
 import { API } from "../utils/auth";
 import { useEffect, useState } from "react";
+import {ShimmerBar} from "./ShimmerUI";
 
 const WelcomeAddBanner = () => {
-  const [name, setName] = useState("Fetching name....");
+  const [name, setName] = useState("");
 
   const fetchName = async () => {
     const token = localStorage.getItem("token");
@@ -35,7 +36,7 @@ const WelcomeAddBanner = () => {
     <div className="welcome-add-expense-banner">
       <div className="name-card">
         <p className="welcome-card-text">Welcome,</p>
-        <h3 className="profile-name">{name}</h3>
+        <h3 className="profile-name">{!name ? <ShimmerBar /> : name}</h3>
       </div>
       <div className="add-expense-card">
         <p className="add-expense-card-text">Have spent money on something?</p>
