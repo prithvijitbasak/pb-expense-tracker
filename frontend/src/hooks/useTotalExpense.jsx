@@ -38,7 +38,7 @@ const useTotalExpense = (type, values = {}) => {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log(response);
+        // console.log(response);
         setTotal(response.data.totalExpenses || 0);
         setError(null);
       } catch (err) {
