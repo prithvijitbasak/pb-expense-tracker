@@ -26,9 +26,9 @@ const App = () => {
             <Route path="/year-details" element={<YearDetails />} />
             <Route path="/add-expense" element={<AddExpense />} />
           </Route>
+          <Route path="/day-details" element={<DayDetails />} />
+          <Route path="/month-details" element={<MonthDetails />} />
         </Route>
-        <Route path="/day-details" element={<DayDetails />} />
-        <Route path="/month-details" element={<MonthDetails />} />
 
         {/* 404 fallback */}
         <Route path="*" element={<div>No matching route</div>} />
