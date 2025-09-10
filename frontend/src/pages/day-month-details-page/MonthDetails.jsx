@@ -63,7 +63,7 @@ const MonthDetails = () => {
   return (
     <>
       <DayMonthYearDetails
-        typeOfExpense={month}
+        typeOfExpense="month"
         isLoading={isLoading}
         expenses={expenses}
         totalExpense={totalExpense}

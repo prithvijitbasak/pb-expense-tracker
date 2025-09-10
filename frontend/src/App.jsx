@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MonthDetails from "./pages/day-month-details-page/MonthDetails";
-import DayDetails from "./pages/DayDetails";
+import DayDetails from "./pages/day-month-details-page/DayDetails";
 import YearDetails from "./pages/YearDetails";
 import Dashboard from "./pages/Dashboard";
 import AddExpense from "./components/AddExpense";

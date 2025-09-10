@@ -110,7 +110,7 @@ const AddExpense = () => {
         }
 
         const data = await response.json();
-        console.log("Fetched Categories from API:", data); // Debugging API response
+        // console.log("Fetched Categories from API:", data); // Debugging API response
 
         // Extract the categories array from the object
         if (Array.isArray(data.categories)) {

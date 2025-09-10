@@ -9,8 +9,22 @@ import monthData from "../../data/monthData.json";
 import { ShimmerGrid } from "../../components/ShimmerUI";
 
 const DayMonthYearDetails = (props) => {
-  const { typeOfExpense, isLoading, expenses, totalExpense, fetchExpenses, paramArray } = props;
-  const [month, year] = paramArray;
+  const {
+    typeOfExpense,
+    isLoading,
+    expenses,
+    totalExpense,
+    fetchExpenses,
+    paramArray,
+  } = props;
+
+  let date, month, year;
+
+  if (typeOfExpense === "day") {
+    [date] = paramArray;
+  } else {
+    [month, year] = paramArray;
+  }
   const [openModal, setOpenModal] = useState(false);
   const [selectedExpense, setSelectedExpense] = useState(null);
   const [openDelConfirm, setOpenDelConfirm] = useState(false);
@@ -29,18 +43,20 @@ const DayMonthYearDetails = (props) => {
     <div className="month-details-wrapper mb-10">
       <div className="container">
         <div className="month-details-container">
-          {/* <h2 className="heading-text font-bold tracking-wider text-2xl">
-            All the expenses of month: {monthData[month]}, {year}
-          </h2> */}
+          {typeOfExpense === "day" ? (
+            <h2 className="heading-text font-bold tracking-wider text-2xl">
+              Expenses of: {date}
+            </h2>
+          ) : (
+            <h2 className="heading-text font-bold tracking-wider text-2xl">
+              All the expenses of month: {monthData[month]}, {year}
+            </h2>
+          )}
 
-          {/* <h4 className="font-bold text-right pb-3 pr-9 text-xl">
+          <h4 className="font-bold text-right pb-3 pr-9 text-xl">
             Total ={" "}
-            {loading
-              ? "Loading total expense..."
-              : error
-              ? "Error fetching total"
-              : `${total}`}
-          </h4> */}
+            {isLoading ? "Loading total expense..." : `${totalExpense.total}`}
+          </h4>
 
           <div className="expenses-card-container">
             {isLoading ? (
@@ -74,7 +90,11 @@ const DayMonthYearDetails = (props) => {
             setOpenModal(false);
             setSelectedExpense(null);
           }}
-          onUpdated={() => fetchExpenses(month, year)}
+          onUpdated={() =>
+            typeOfExpense === "day"
+              ? fetchExpenses(date)
+              : fetchExpenses(month, year)
+          }
         />
       )}
 
@@ -86,7 +106,11 @@ const DayMonthYearDetails = (props) => {
             setOpenDelConfirm(true);
             setSelectedExpense(null);
           }}
-          onDeleted={() => fetchExpenses(month, year)}
+          onDeleted={() =>
+            typeOfExpense === "day"
+              ? fetchExpenses(date)
+              : fetchExpenses(month, year)
+          }
         />
       )}
     </div>
