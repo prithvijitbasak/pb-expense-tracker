@@ -77,7 +77,8 @@ const DayMonthYearDetails = (props) => {
             ) : (
               // ✅ Case 3: When no expenses found
               <p className="no-expense-text">
-                No expenses found for the selected month.
+                No expenses found for the selected{" "}
+                {typeOfExpense === "day" ? `day` : `month`}.
               </p>
             )}
           </div>
