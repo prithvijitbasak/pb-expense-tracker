@@ -7,6 +7,7 @@ import UpdateExpenseModal from "../../components/UpdateExpenseModal";
 import DeleteConfirmBox from "../../components/DeleteConfirmBox";
 import monthData from "../../data/monthData.json";
 import { ShimmerGrid } from "../../components/ShimmerUI";
+import { BritishDate } from "../../utils/formatterFunctions";
 
 const DayMonthYearDetails = (props) => {
   const {
@@ -45,7 +46,7 @@ const DayMonthYearDetails = (props) => {
         <div className="month-details-container">
           {typeOfExpense === "day" ? (
             <h2 className="heading-text font-bold tracking-wider text-2xl">
-              Expenses of: {date}
+              Expenses of: <BritishDate date={date} />
             </h2>
           ) : (
             <h2 className="heading-text font-bold tracking-wider text-2xl">

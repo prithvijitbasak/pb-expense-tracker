@@ -1,3 +1,5 @@
+import "../data/monthData.json";
+
 const formatDateTime = (isoString) => {
   const date = new Date(isoString);
 
@@ -35,4 +37,56 @@ const toInputDateFormat = (dateString) => {
   return `${year}-${month}-${day}`; // yyyy-mm-dd
 };
 
-export { formatDateTime, formatDtConven, toInputDateFormat };
+const BritishDate = (props) => {
+  const { date } = props;
+  const [day, month, year] = date.split("-");
+
+  // Convert day to number
+  const dayNum = parseInt(day, 10);
+
+  // Function to get suffix
+  const getDaySuffix = (d) => {
+    if (d >= 11 && d <= 13) return "th"; // special case
+    switch (d % 10) {
+      case 1:
+        return "st";
+      case 2:
+        return "nd";
+      case 3:
+        return "rd";
+      default:
+        return "th";
+    }
+  };
+
+  // Day with suffix
+  // const dayWithSuffix = `${dayNum}${getDaySuffix(dayNum)}`;
+
+  // Months array
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const monthName = months[parseInt(month, 10) - 1];
+
+  // return `${dayWithSuffix} ${monthName}, ${year}`;
+  return (
+    <span>
+      {dayNum}
+      <sup>{getDaySuffix(dayNum)}</sup> {monthName}, {year}
+    </span>
+  );
+};
+
+export { formatDateTime, formatDtConven, toInputDateFormat, BritishDate };
