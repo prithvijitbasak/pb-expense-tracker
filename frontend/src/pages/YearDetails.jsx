@@ -72,9 +72,9 @@ const YearDetails = () => {
                 >
                   <div className="month-link">
                     <p className="text-2xl font-bold pb-3">{monthData.name}</p>
-                    <p className="text">
+                    {/*<p className="text">
                       Total = {monthlyExpenses[monthFormatted] ?? "Loading..."}
-                    </p>
+                    </p> */}
                   </div>
                 </Link>
               );

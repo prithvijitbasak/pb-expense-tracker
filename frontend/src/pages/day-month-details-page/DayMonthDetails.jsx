@@ -8,6 +8,7 @@ import DeleteConfirmBox from "../../components/DeleteConfirmBox";
 import monthData from "../../data/monthData.json";
 import { ShimmerGrid } from "../../components/ShimmerUI";
 import { BritishDate } from "../../utils/formatterFunctions";
+import NoExpenseCTA from "../../components/NoExpenseCTA";
 
 const DayMonthDetails = (props) => {
   const {
@@ -76,10 +77,7 @@ const DayMonthDetails = (props) => {
               ))
             ) : (
               // ✅ Case 3: When no expenses found
-              <p className="no-expense-text">
-                No expenses found for the selected{" "}
-                {typeOfExpense === "day" ? `day` : `month`}.
-              </p>
+              <NoExpenseCTA typeOfExpense={typeOfExpense} />
             )}
           </div>
         </div>
