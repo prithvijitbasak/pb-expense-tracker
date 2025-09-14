@@ -1,4 +1,4 @@
-import DayMonthYearDetails from "./DayMonthYearDetails";
+import DayMonthDetails from "./DayMonthDetails";
 import { useEffect, useState } from "react";
 import { API } from "../../utils/auth";
 import { useSearchParams } from "react-router-dom";
@@ -62,13 +62,13 @@ const MonthDetails = () => {
 
   return (
     <>
-      <DayMonthYearDetails
+      <DayMonthDetails
         typeOfExpense="month"
         isLoading={isLoading}
         expenses={expenses}
         totalExpense={totalExpense}
         fetchExpenses={fetchExpenses}
-        paramArray={[month, year]}
+        paramArray={[month, year]} // extremely necessary to tell the component which type of expense is this for day or month
       />
     </>
   );

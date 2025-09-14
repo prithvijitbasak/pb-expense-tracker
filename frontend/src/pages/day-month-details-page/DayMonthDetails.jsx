@@ -9,7 +9,7 @@ import monthData from "../../data/monthData.json";
 import { ShimmerGrid } from "../../components/ShimmerUI";
 import { BritishDate } from "../../utils/formatterFunctions";
 
-const DayMonthYearDetails = (props) => {
+const DayMonthDetails = (props) => {
   const {
     typeOfExpense,
     isLoading,
@@ -119,4 +119,4 @@ const DayMonthYearDetails = (props) => {
   );
 };
 
-export default DayMonthYearDetails;
+export default DayMonthDetails;

@@ -5,7 +5,7 @@ import { useSearchParams } from "react-router-dom";
 import AllDetailsCard from "../../components/AllDetailsCard";
 import UpdateExpenseModal from "../../components/UpdateExpenseModal";
 import DeleteConfirmBox from "../../components/DeleteConfirmBox";
-import DayMonthYearDetails from "./DayMonthYearDetails";
+import DayMonthDetails from "./DayMonthDetails";
 import useTotalExpense from "../../hooks/useTotalExpense";
 
 const DayDetails = () => {
@@ -50,13 +50,13 @@ const DayDetails = () => {
 
   return (
     <>
-      <DayMonthYearDetails
+      <DayMonthDetails
         typeOfExpense="day"
         isLoading={isLoading}
         expenses={expenses}
         totalExpense={totalExpense}
         fetchExpenses={fetchExpenses}
-        paramArray={[date]}
+        paramArray={[date]} // extremely necessary to tell the component which type of expense is this for day or month
       />
     </>
   );
