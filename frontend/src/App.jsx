@@ -15,19 +15,19 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         {/* Public Routes */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route element={<Layout />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
 
-        {/* Protected Routes with Footer */}
-        <Route element={<ProtectedRoute />}>
-          <Route element={<Layout />}>
+          {/* Protected Routes with Footer */}
+          <Route element={<ProtectedRoute />}>
             <Route path="/" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/year-details" element={<YearDetails />} />
             <Route path="/add-expense" element={<AddExpense />} />
+            <Route path="/day-details" element={<DayDetails />} />
+            <Route path="/month-details" element={<MonthDetails />} />
           </Route>
-          <Route path="/day-details" element={<DayDetails />} />
-          <Route path="/month-details" element={<MonthDetails />} />
         </Route>
 
         {/* 404 fallback */}

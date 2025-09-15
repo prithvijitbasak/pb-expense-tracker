@@ -11,6 +11,7 @@ import SearchBoxSection from "../components/SearchBoxSection";
 import DashBanner from "../components/DashBanner";
 import ClockCard from "../components/ClockCard";
 import DashboardAnalytics from "../components/DashboardAnalytics";
+import Sidebar from "../components/Sidebar";
 
 const Dashboard = () => {
   const [showAddExpense, setShowAddExpense] = useState(false);
@@ -56,8 +57,9 @@ const Dashboard = () => {
 
   return (
     <>
+      {/* <Sidebar /> */}
       <div className="dashboard">
-        <div className="container">
+        <div className="mx-auto px-1.5 ">
           <div className="user-logo-div">
             {/* Assign the ref to button */}
             <span
