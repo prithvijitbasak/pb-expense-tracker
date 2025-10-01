@@ -15,7 +15,7 @@ const DashboardAnalytics = () => {
 
   return (
     <div className="flex justify-between pt-12">
-      <div className="w-xl">
+      <div className="w-lg">
         <h3 className="bold text-center pb-4 underline underline-offset-2">
           Expenses of this month
         </h3>
@@ -24,7 +24,7 @@ const DashboardAnalytics = () => {
             <MonthChart month={month} year={year} />
           )}
       </div>
-      <div className="w-xl">
+      <div className="w-lg">
         <h3 className="bold text-center pb-4 underline underline-offset-2">
           Expenses of this year
         </h3>

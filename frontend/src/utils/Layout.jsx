@@ -7,7 +7,9 @@ const Layout = () => {
     <>
       <div className="flex">
         <Sidebar />
-        <Outlet />
+        <div className="ml-[250px] flex-1 p-2">
+          <Outlet />
+        </div>
       </div>
       {/* <Footer className=""/> */}
     </>

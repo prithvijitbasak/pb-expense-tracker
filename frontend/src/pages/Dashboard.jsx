@@ -58,10 +58,10 @@ const Dashboard = () => {
   return (
     <>
       {/* <Sidebar /> */}
-      <div className="dashboard">
-        <div className="mx-auto px-1.5 ">
+
+      {/*
           <div className="user-logo-div">
-            {/* Assign the ref to button */}
+            
             <span
               className="user-logo-span"
               ref={buttonRef}
@@ -84,26 +84,25 @@ const Dashboard = () => {
               </div>
             )}
           </div>
+          */}
 
-          <DashBanner />
+      <DashBanner />
 
-          <div className="mt-7 flex justify-end">
-            <ClockCard />
-          </div>
-
-          <WelcomeAddBanner />
-
-          {showAddExpense && <AddExpense onClose={handleCloseAddExpense} />}
-
-          <div className="info-section">
-            <DayDetailsCard />
-            <MonthDetailsCard />
-            <YearDetailsCard />
-          </div>
-          <SearchBoxSection />
-          <DashboardAnalytics />
-        </div>
+      <div className="mt-7 flex justify-end">
+        <ClockCard />
       </div>
+
+      <WelcomeAddBanner />
+
+      {showAddExpense && <AddExpense onClose={handleCloseAddExpense} />}
+
+      <div className="info-section">
+        <DayDetailsCard />
+        <MonthDetailsCard />
+        <YearDetailsCard />
+      </div>
+      <SearchBoxSection />
+      <DashboardAnalytics />
     </>
   );
 };
