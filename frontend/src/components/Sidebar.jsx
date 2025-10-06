@@ -8,21 +8,24 @@ import { FaUserCircle } from "react-icons/fa";
 import { useState } from "react";
 import { logout } from "../utils/auth";
 
-const Sidebar = () => {
-  const [isCloseArrowClicked, setIsCloseArrowClicked] = useState(false);
-
-  const handleCloseArrowClick = () => {
-    if (isCloseArrowClicked === false) setIsCloseArrowClicked(true);
-    else setIsCloseArrowClicked(false);
-  };
+const Sidebar = (props) => {
+  const { isOpen, handleCloseArrowClick } = props;
 
   return (
     <>
-      <div className="p-2 fixed bg-[var(--top-color)] h-[100%] overflow-hidden w-[250px] left-0 top-0 transition-[width] duration-300 ease-in-out">
-        <FaArrowLeftLong
-          className="absolute top-4 right-3.5 cursor-pointer text-white"
-          onClick={handleCloseArrowClick}
-        />
+      <div
+        className={`p-2 fixed bg-[var(--top-color)] h-[100%] overflow-hidden ${
+          isOpen ? "w-[250px]" : "w-[80]"
+        } left-0 top-0 transition-[width] duration-300 ease-in-out`}
+      >
+        {
+          <FaArrowLeftLong
+            className={`absolute top-4 right-3.5 cursor-pointer text-white ${
+              !isOpen ? "rotate-180" : ""
+            }`}
+            onClick={handleCloseArrowClick}
+          />
+        }
         <div className="flex gap-x-3 justify-start pt-10 items-center">
           <div>
             <img src={logo} className="w-[100%] block" />

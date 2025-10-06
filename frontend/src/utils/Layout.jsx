@@ -1,13 +1,23 @@
 import { Outlet } from "react-router-dom";
 import Footer from "../components/Footer";
 import Sidebar from "../components/Sidebar";
+import { useState } from "react";
 
 const Layout = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  const handleCloseArrowClick = () => {
+    setIsSidebarOpen((prev) => !prev);
+  };
+
   return (
     <>
       <div className="flex">
-        <Sidebar />
-        <div className="ml-[250px] flex-1 p-2">
+        <Sidebar
+          isOpen={isSidebarOpen}
+          handleCloseArrowClick={handleCloseArrowClick}
+        />
+        <div className={`${isSidebarOpen ? "ml-[250px]" : "ml-80"} flex-1 p-2`}>
           <Outlet />
         </div>
       </div>
