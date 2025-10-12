@@ -17,7 +17,7 @@ const Layout = () => {
           isOpen={isSidebarOpen}
           handleCloseArrowClick={handleCloseArrowClick}
         />
-        <div className={`${isSidebarOpen ? "ml-[250px]" : "ml-80"} flex-1 p-2`}>
+        <div className={`${isSidebarOpen ? "ml-[250px]" : "ml-[80px]"} flex-1 p-2 transition-[margin-left] duration-300`}>
           <Outlet />
         </div>
       </div>

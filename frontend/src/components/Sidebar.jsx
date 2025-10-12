@@ -15,7 +15,7 @@ const Sidebar = (props) => {
     <>
       <div
         className={`p-2 fixed bg-[var(--top-color)] h-[100%] overflow-hidden ${
-          isOpen ? "w-[250px]" : "w-[80]"
+          isOpen ? "w-[250px]" : "w-[80px]"
         } left-0 top-0 transition-[width] duration-300 ease-in-out`}
       >
         {
