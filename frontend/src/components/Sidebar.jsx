@@ -26,28 +26,28 @@ const Sidebar = (props) => {
             onClick={handleCloseArrowClick}
           />
         }
-        <div className="flex gap-x-3 justify-start pt-10 items-center">
+        <Link className="flex gap-x-3 justify-start pt-10 items-center" to={"/"}>
           <div>
             <img src={logo} className="w-[100%] block" />
           </div>
-          <h2 className="text-white font-bold text-lg text-wrap text-center">
+          <h2 className={`text-white font-bold text-lg text-wrap text-center ${!isOpen? "hidden" : ""}`}>
             PB Expense Tracker
           </h2>
-        </div>
+        </Link>
         <div className="pt-5 flex flex-col gap-y-4">
           <Link
             className="text-white text-lg items-center flex gap-x-4 py-2"
             to={"/"}
           >
             <MdOutlineSpaceDashboard className="inline" />{" "}
-            <span className="">Dashboard</span>
+            <span className={`${!isOpen? "hidden" : ""}`}>Dashboard</span>
           </Link>
           <Link
             className="text-white text-lg items-center flex gap-x-4 py-2"
             to={"/add-expense"}
           >
             <FaCirclePlus className="inline" />{" "}
-            <span className="">Add Expense</span>
+            <span className={`${!isOpen? "hidden" : ""}`}>Add Expense</span>
           </Link>
           <p
             className="text-white text-lg items-center flex gap-x-4 py-2 cursor-pointer"
@@ -56,7 +56,7 @@ const Sidebar = (props) => {
               logout();
             }}
           >
-            <FiLogOut className="inline" /> <span className="">Logout</span>
+            <FiLogOut className="inline" /> <span className={`${!isOpen? "hidden" : ""}`}>Logout</span>
           </p>
         </div>
         <div className="fixed bottom-0 pb-7 text-center">
@@ -65,7 +65,7 @@ const Sidebar = (props) => {
             className="text-white text-lg items-center flex gap-x-4"
           >
             <FaUserCircle className="text-white" />
-            Profile
+            <span className={`${!isOpen? "hidden" : ""}`}>Profile</span>
           </Link>
         </div>
       </div>
