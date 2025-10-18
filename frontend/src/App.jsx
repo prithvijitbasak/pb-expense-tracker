@@ -8,17 +8,15 @@ import Login from "./components/Login";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import Register from "./components/Register";
 import Profile from "./pages/Profile";
-import Layout from "./utils/Layout";
+import MainLayout from "./layouts/MainLayout";
+import PublicLayout from "./layouts/PublicLayout";
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
         {/* Public Routes */}
-        <Route element={<Layout />}>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-
+        <Route element={<MainLayout />}>
           {/* Protected Routes with Footer */}
           <Route element={<ProtectedRoute />}>
             <Route path="/" element={<Dashboard />} />
@@ -28,6 +26,11 @@ const App = () => {
             <Route path="/day-details" element={<DayDetails />} />
             <Route path="/month-details" element={<MonthDetails />} />
           </Route>
+        </Route>
+
+        <Route element={<PublicLayout />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
         </Route>
 
         {/* 404 fallback */}

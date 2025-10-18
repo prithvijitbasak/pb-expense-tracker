@@ -3,7 +3,7 @@ import Footer from "../components/Footer";
 import Sidebar from "../components/Sidebar";
 import { useState } from "react";
 
-const Layout = () => {
+const MainLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const handleCloseArrowClick = () => {
@@ -17,13 +17,17 @@ const Layout = () => {
           isOpen={isSidebarOpen}
           handleCloseArrowClick={handleCloseArrowClick}
         />
-        <div className={`${isSidebarOpen ? "ml-[250px]" : "ml-[70px]"} flex-1 p-2 transition-[margin-left] duration-300`}>
+        <div
+          className={`${
+            isSidebarOpen ? "ml-[250px]" : "ml-[70px]"
+          } flex-1 p-2 transition-[margin-left] duration-300`}
+        >
           <Outlet />
         </div>
       </div>
-      {/* <Footer className=""/> */}
+      
     </>
   );
 };
 
-export default Layout;
+export default MainLayout;
