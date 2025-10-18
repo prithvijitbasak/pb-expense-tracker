@@ -57,34 +57,7 @@ const Dashboard = () => {
 
   return (
     <>
-      {/* <Sidebar /> */}
-
-      {/*
-          <div className="user-logo-div">
-            
-            <span
-              className="user-logo-span"
-              ref={buttonRef}
-              onClick={handleUserImgClicked}
-            >
-              <img src="/images/account.png" alt="" />
-            </span>
-            {isUserImgClicked && (
-              <div className="user-dropdown" ref={dropdownRef}>
-                <p>
-                  <Link to="/profile">Profile</Link>
-                </p>
-                <p
-                  onClick={() => {
-                    logout();
-                  }}
-                >
-                  Logout
-                </p>
-              </div>
-            )}
-          </div>
-          */}
+      
 
       <DashBanner />
 
