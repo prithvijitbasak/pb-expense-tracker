@@ -14,7 +14,7 @@ import ErrorPage from "./pages/ErrorPage";
 
 const router = createBrowserRouter([
   {
-    element: <MainLayout />,
+    element: <MainLayout />, // wrapper for the protected pages
     children: [
       {
         element: <ProtectedRoute />, // acts as a wrapper for authentication
@@ -30,7 +30,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    element: <PublicLayout />,
+    element: <PublicLayout />, // wrapper for the public pages. 
     children: [
       { path: "/login", element: <Login /> },
       { path: "/register", element: <Register /> },
