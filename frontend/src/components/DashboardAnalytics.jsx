@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import MonthChart from "./MonthChart";
-import YearChart from "./YearChart";
+import MonthAndYearChart from "./analytics/MonthAndYearChart";
 
 const DashboardAnalytics = () => {
   const [month, setMonth] = useState(null);
@@ -21,7 +20,11 @@ const DashboardAnalytics = () => {
         </h3>
         {month &&
           year && ( // ✅ conditional render
-            <MonthChart month={month} year={year} />
+            <MonthAndYearChart
+              typeOfChart={"month"}
+              month={month}
+              year={year}
+            />
           )}
       </div>
       <div className="w-lg">
@@ -29,8 +32,8 @@ const DashboardAnalytics = () => {
           Expenses of this year
         </h3>
         {year && ( // ✅ conditional render
-            <YearChart year={year} />
-          )}
+          <MonthAndYearChart typeOfChart={"year"} year={year}/>
+        )}
       </div>
     </div>
   );

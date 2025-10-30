@@ -10,7 +10,7 @@ import {
   Legend,
 } from "chart.js";
 
-import { API } from "../utils/auth";
+import { API } from "../../utils/auth";
 
 // Register chart.js components
 ChartJS.register(
@@ -22,23 +22,25 @@ ChartJS.register(
   Legend
 );
 
-const MonthChart = ({ month, year }) => {
+const MonthAndYearChart = ({ typeOfChart, month, year }) => {
   const [expenseData, setExpenseData] = useState([]);
+
+  const fetchURL =
+    typeOfChart === "month"
+      ? `${API}/api/expenses/analytics/month?month=${month}&year=${year}`
+      : `${API}/api/expenses/analytics/year?&year=${year}`;
 
   // Fetch data from API
   useEffect(() => {
     const fetchExpenses = async () => {
       try {
         const token = localStorage.getItem("token"); // if auth is required
-        const response = await fetch(
-          `${API}/api/expenses/analytics/month?month=${month}&year=${year}`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`, // remove if not needed
-            },
-          }
-        );
+        const response = await fetch(fetchURL, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // remove if not needed
+          },
+        });
         const data = await response.json();
         setExpenseData(data); // now data is an array
       } catch (error) {
@@ -47,7 +49,7 @@ const MonthChart = ({ month, year }) => {
     };
 
     fetchExpenses();
-  }, []);
+  }, [typeOfChart, month, year]);
 
   if (!expenseData.length) {
     return <p>Loading...</p>;
@@ -96,4 +98,4 @@ const MonthChart = ({ month, year }) => {
   return <Bar data={data} options={options} />;
 };
 
-export default MonthChart;
+export default MonthAndYearChart;

@@ -1,9 +1,10 @@
 /* CSS for the add expense details pop up details starts*/
 .popup-wrapper {
   height: 100vh;
-  background-color: rgba(17, 24, 39, 0.75);
+  /* background-color: rgba(17, 24, 39, 0.75); */
   padding: 40px;
 }
+
 .popup-card {
   max-width: 90%;
   margin: 0 auto;

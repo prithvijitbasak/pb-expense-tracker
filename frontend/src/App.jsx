@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import MonthDetails from "./pages/day-month-details-page/MonthDetails";
 import DayDetails from "./pages/day-month-details-page/DayDetails";
 import YearDetails from "./pages/YearDetails";
@@ -10,34 +10,41 @@ import Register from "./components/Register";
 import Profile from "./pages/Profile";
 import MainLayout from "./layouts/MainLayout";
 import PublicLayout from "./layouts/PublicLayout";
+import ErrorPage from "./pages/ErrorPage";
 
+const router = createBrowserRouter([
+  {
+    element: <MainLayout />,
+    children: [
+      {
+        element: <ProtectedRoute />, // acts as a wrapper for authentication
+        children: [
+          { path: "/", element: <Dashboard /> },
+          { path: "/profile", element: <Profile /> },
+          { path: "/year-details", element: <YearDetails /> },
+          { path: "/add-expense", element: <AddExpense /> },
+          { path: "/day-details", element: <DayDetails /> },
+          { path: "/month-details", element: <MonthDetails /> },
+        ],
+      },
+    ],
+  },
+  {
+    element: <PublicLayout />,
+    children: [
+      { path: "/login", element: <Login /> },
+      { path: "/register", element: <Register /> },
+    ],
+  },
+  {
+    path: "*",
+    element: <ErrorPage />,
+  },
+]);
+
+// ✅ Use RouterProvider
 const App = () => {
-  return (
-    <BrowserRouter>
-      <Routes>
-        {/* Public Routes */}
-        <Route element={<MainLayout />}>
-          {/* Protected Routes with Footer */}
-          <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/year-details" element={<YearDetails />} />
-            <Route path="/add-expense" element={<AddExpense />} />
-            <Route path="/day-details" element={<DayDetails />} />
-            <Route path="/month-details" element={<MonthDetails />} />
-          </Route>
-        </Route>
-
-        <Route element={<PublicLayout />}>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Route>
-
-        {/* 404 fallback */}
-        <Route path="*" element={<div>No matching route</div>} />
-      </Routes>
-    </BrowserRouter>
-  );
+  return <RouterProvider router={router} />;
 };
 
 export default App;

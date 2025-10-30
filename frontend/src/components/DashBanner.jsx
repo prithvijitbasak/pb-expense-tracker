@@ -1,6 +1,6 @@
 const DashBanner = () => {
   return (
-    <div className="bg-[var(--top-color)] mt-4">
+    <div className="bg-[var(--top-color)] mt-0.5 rounded">
       <div className="container">
         <div className="py-3">
           <h1 className="font-bold text-center text-white text-3xl tracking-wider pb-2">PB Expense Tracker</h1>
