@@ -1,10 +1,11 @@
-
-
+import WeeklyExpenseChart from "../../components/analytics/WeeklyExpenseChart";
 
 const Analytics = () => {
   return (
-    <div>Analytics</div>
-  )
-}
+    <div>
+      <WeeklyExpenseChart />
+    </div>
+  );
+};
 
 export default Analytics;
