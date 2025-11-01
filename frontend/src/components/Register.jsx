@@ -5,8 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { API } from "../utils/auth"; // Import the function
 import { toast } from "react-toastify";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
+import { useAuth } from "../context/AuthContext";
 
 const Register = () => {
+  const { setToken, setIsLogin } = useAuth();
+
   const [user, setUser] = useState({
     fullName: "",
     username: "",
@@ -47,6 +50,8 @@ const Register = () => {
 
       if (response.ok) {
         localStorage.setItem("token", res_data.token);
+        setToken(res_data.token);
+        setIsLogin(true);
         setUser({
           fullName: "",
           username: "",

@@ -1,12 +1,16 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState} from "react";
 import "../assets/styles/Login.css";
 import { useNavigate } from "react-router-dom";
 import { API, isAuthenticated } from "../utils/auth"; // Import the function
 import { toast } from "react-toastify";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
+
+  const { setToken, setIsLogin } = useAuth();
+
   const [user, setUser] = useState({
     identifier: "",
     password: "",
@@ -52,6 +56,8 @@ const Login = () => {
         localStorage.setItem("token", res_data.token); // Store token in localStorage
         setUser({ identifier: "", password: "" });
         navigate("/"); // Redirect to home
+        setToken(res_data.token);
+        setIsLogin(true);
         toast.success("Logged in successfully");
       } else {
         console.log("Invalid credentials");

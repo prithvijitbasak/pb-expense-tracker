@@ -6,10 +6,31 @@ import logo from "../../images/exp-favicon.png";
 import { FiLogOut } from "react-icons/fi";
 import { FaUserCircle } from "react-icons/fa";
 import { useState } from "react";
+import { IoIosAnalytics } from "react-icons/io";
 import { logout } from "../utils/auth";
+import { useAuth } from "../context/AuthContext";
 
 const Sidebar = (props) => {
   const { isOpen, handleCloseArrowClick } = props;
+  const { user, loading } = useAuth();
+
+  // 🌀 Show shimmer while loading user data
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <p className="text-gray-500 text-lg font-medium">Loading profile...</p>
+      </div>
+    );
+  }
+
+  // ⚠️ If not loading but user data missing (e.g. not logged in)
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-gray-600">
+        No user data found. Please log in again.
+      </div>
+    );
+  }
 
   return (
     <>
@@ -57,6 +78,15 @@ const Sidebar = (props) => {
             className={`text-white text-lg items-center flex gap-x-4 py-2 ${
               !isOpen ? "justify-center" : "justify-left"
             }`}
+            to={"/analytics"}
+          >
+            <IoIosAnalytics className="inline" />{" "}
+            <span className={`${!isOpen ? "hidden" : ""}`}>Analytics</span>
+          </Link>
+          <Link
+            className={`text-white text-lg items-center flex gap-x-4 py-2 ${
+              !isOpen ? "justify-center" : "justify-left"
+            }`}
             to={"/add-expense"}
           >
             <FaCirclePlus className="inline" />{" "}
@@ -85,7 +115,9 @@ const Sidebar = (props) => {
             className="text-white text-lg items-center flex gap-x-4"
           >
             <FaUserCircle className="text-white" />
-            <span className={`${!isOpen ? "hidden" : ""}`}>Profile</span>
+            <span className={`${!isOpen ? "hidden" : ""}`}>
+              {user.fullName}
+            </span>
           </Link>
         </div>
       </div>

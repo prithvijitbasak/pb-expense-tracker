@@ -10,6 +10,7 @@ import Register from "./components/Register";
 import Profile from "./pages/Profile";
 import MainLayout from "./layouts/MainLayout";
 import PublicLayout from "./layouts/PublicLayout";
+import Analytics from "./pages/analytics/Analytics";
 import ErrorPage from "./pages/ErrorPage";
 
 const router = createBrowserRouter([
@@ -25,12 +26,13 @@ const router = createBrowserRouter([
           { path: "/add-expense", element: <AddExpense /> },
           { path: "/day-details", element: <DayDetails /> },
           { path: "/month-details", element: <MonthDetails /> },
+          { path: "/analytics", element: <Analytics /> },
         ],
       },
     ],
   },
   {
-    element: <PublicLayout />, // wrapper for the public pages. 
+    element: <PublicLayout />, // wrapper for the public pages.
     children: [
       { path: "/login", element: <Login /> },
       { path: "/register", element: <Register /> },
