@@ -69,7 +69,7 @@ const Sidebar = (props) => {
             className={`text-white text-lg items-center flex gap-x-4 py-2 ${
               !isOpen ? "justify-center" : "justify-left"
             }`}
-            to={"/"}
+            to={`/${user.username}`}
           >
             <MdOutlineSpaceDashboard className="inline" />{" "}
             <span className={`${!isOpen ? "hidden" : ""}`}>Dashboard</span>

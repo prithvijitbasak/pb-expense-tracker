@@ -1,70 +1,48 @@
-import { createContext, useEffect, useState, useContext } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { API } from "../utils/auth";
+
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token"));
-  const [isLogin, setIsLogin] = useState(!!token);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isLogin, setIsLogin] = useState(!!token);
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      // If no token exists, stop loading immediately
+    const fetchUser = async () => {
       if (!token) {
         setLoading(false);
         return;
       }
-
       try {
-        const response = await fetch(`${API}/api/auth/me`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
+        const res = await fetch(`${API}/api/auth/me`, {
+          headers: { Authorization: `Bearer ${token}` },
         });
-
-        if (response.ok) {
-          const userData = await response.json();
-          setUser(userData);
-        } else if (response.status === 401) {
-          // Handle expired/invalid token
-          localStorage.removeItem("token");
-          setToken(null);
-          setIsLogin(false);
-          setUser(null);
+        const data = await res.json();
+        if (res.ok) {
+          setUser(data);
+          setIsLogin(true);
         } else {
-          console.error("Failed to fetch user data");
+          localStorage.removeItem("token");
+          setIsLogin(false);
         }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
+      } catch (err) {
+        console.error("Error fetching user:", err);
       } finally {
-        // ✅ Stop loading in all cases (success or failure)
         setLoading(false);
       }
     };
-
-    fetchUserData();
+    fetchUser();
   }, [token]);
 
   return (
     <AuthContext.Provider
-      value={{
-        isLogin,
-        setIsLogin,
-        user,
-        setUser,
-        token,
-        setToken,
-        loading,
-        setLoading,
-      }}
+      value={{ token, setToken, user, setUser, isLogin, setIsLogin, loading }}
     >
       {children}
     </AuthContext.Provider>
   );
 };
-
-export const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);

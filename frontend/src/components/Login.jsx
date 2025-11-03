@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import "../assets/styles/Login.css";
 import { useNavigate } from "react-router-dom";
 import { API, isAuthenticated } from "../utils/auth"; // Import the function
@@ -8,10 +8,9 @@ import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
+  const { setToken, setIsLogin, user } = useAuth();
 
-  const { setToken, setIsLogin } = useAuth();
-
-  const [user, setUser] = useState({
+  const [loggedInUser, setLoggedInUser] = useState({
     identifier: "",
     password: "",
   });
@@ -29,13 +28,13 @@ const Login = () => {
   // Redirect if already logged in
   useEffect(() => {
     if (isAuthenticated()) {
-      navigate("/"); // Redirect to home if user is already logged in
+      navigate(`/${res_data.username}`); // Redirect to home if user is already logged in
     }
   }, [navigate]);
 
   const handleInput = (e) => {
-    setUser({
-      ...user,
+    setLoggedInUser({
+      ...loggedInUser,
       [e.target.name]: e.target.value,
     });
   };
@@ -48,21 +47,21 @@ const Login = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(user),
+        body: JSON.stringify(loggedInUser),
       });
 
       const res_data = await response.json();
       if (response.ok) {
         localStorage.setItem("token", res_data.token); // Store token in localStorage
-        setUser({ identifier: "", password: "" });
-        navigate("/"); // Redirect to home
+        setLoggedInUser({ identifier: "", password: "" });
+        navigate(`/${res_data.username}`); // Redirect to home
         setToken(res_data.token);
         setIsLogin(true);
         toast.success("Logged in successfully");
       } else {
         console.log("Invalid credentials");
         toast.error("Invalid credentials");
-        setUser({ identifier: "", password: "" });
+        setLoggedInUser({ identifier: "", password: "" });
       }
     } catch (error) {
       console.error("Login failed", error);
@@ -82,7 +81,7 @@ const Login = () => {
               type="text"
               name="identifier"
               placeholder="Email/Username/Phone"
-              value={user.identifier}
+              value={loggedInUser.identifier}
               onChange={handleInput}
               required
               className="select-none"
@@ -92,7 +91,7 @@ const Login = () => {
                 type={viewPassword ? "text" : "password"}
                 name="password"
                 placeholder="Password"
-                value={user.password}
+                value={loggedInUser.password}
                 onChange={handleInput}
                 required
                 className="select-none"

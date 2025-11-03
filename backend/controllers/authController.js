@@ -58,6 +58,7 @@ const register = async (req, res) => {
       message: "Registration successful",
       token: await userCreated.generateToken(),
       userId: userCreated._id.toString(),
+      username: userCreated.username.toString()
     });
   } catch (error) {
     console.log(error);
@@ -89,6 +90,7 @@ const login = async (req, res) => {
         message: "Login successful",
         token: await userExist.generateToken(),
         userId: userExist._id.toString(),
+        username: userExist.username.toString()
       });
     } else {
       return res(400).send({ message: "Invalid username or password" });
