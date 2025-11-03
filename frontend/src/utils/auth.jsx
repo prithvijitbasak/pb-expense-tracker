@@ -3,7 +3,7 @@ const API = import.meta.env.VITE_APP_API_URI;
 
 const logout = () => {
   localStorage.removeItem("token");
-  window.location.href = "/login"; // Redirect instead of reloading
+  window.location.href = "/"; // Redirect instead of reloading
 };
 
 const isTokenExpired = (token) => {

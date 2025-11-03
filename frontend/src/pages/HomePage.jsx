@@ -136,7 +136,7 @@ const HomePage = () => {
       {/* Footer */}
       <footer className="text-center py-6 border-t mt-10 text-sm bg-white">
         <p>
-          © {currentYear} Developed by{" "}
+          © {currentYear} | Developed by{" "}
           <a
             href="https://prithvijitbasak.netlify.app/"
             className="text-[#4caf50] font-medium hover:underline"
