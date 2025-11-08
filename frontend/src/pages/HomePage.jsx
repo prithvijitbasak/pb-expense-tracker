@@ -22,13 +22,13 @@ const HomePage = () => {
           ) : (
             <>
               <Link
-                to="/signup"
+                to="/register"
                 className="px-4 py-2 bg-[#4caf50] text-white rounded-full hover:bg-[#43a047] transition-all duration-300"
               >
                 Sign Up
               </Link>
               <Link
-                to="/signin"
+                to="/login"
                 className="px-4 py-2 border border-[#4caf50] text-[#4caf50] rounded-full hover:bg-[#4caf50] hover:text-white transition-all duration-300"
               >
                 Sign In
@@ -56,13 +56,13 @@ const HomePage = () => {
           {!isLogin ? (
             <div className="flex justify-center gap-4">
               <Link
-                to="/signup"
+                to="/register"
                 className="px-6 py-3 bg-[#4caf50] text-white rounded-full font-semibold hover:bg-[#43a047] transition-all duration-300"
               >
                 Get Started
               </Link>
               <Link
-                to="/signin"
+                to="/login"
                 className="px-6 py-3 border border-[#4caf50] text-[#4caf50] rounded-full font-semibold hover:bg-[#4caf50] hover:text-white transition-all duration-300"
               >
                 Sign In

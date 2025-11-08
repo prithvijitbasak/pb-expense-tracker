@@ -37,18 +37,25 @@ const App = () => {
         {
           element: <ProtectedRoute />,
           children: [
-            // ✅ Dynamic dashboard path
-            { path: "/:username", element: <Dashboard /> },
-            { path: "/profile", element: <Profile /> },
-            { path: "/year-details", element: <YearDetails /> },
-            { path: "/add-expense", element: <AddExpense /> },
-            { path: "/day-details", element: <DayDetails /> },
-            { path: "/month-details", element: <MonthDetails /> },
-            { path: "/analytics", element: <Analytics /> },
+            {
+              path: "/:username",
+              children: [
+                { index: true, element: <Dashboard /> },
+                { path: "profile", element: <Profile /> },
+              ],
+            },
+
+            // these routes are direct children (not nested under username)
+            { path: "year-details", element: <YearDetails /> },
+            { path: "add-expense", element: <AddExpense /> },
+            { path: "day-details", element: <DayDetails /> },
+            { path: "month-details", element: <MonthDetails /> },
+            { path: "analytics", element: <Analytics /> },
           ],
         },
       ],
     },
+
     {
       element: <PublicLayout />,
       children: [
@@ -56,19 +63,12 @@ const App = () => {
         { path: "/register", element: <Register /> },
         {
           path: "/",
-          element: (
-            // isLogin && user ? (
-            //   <Navigate to={`/${user.username}`} replace />
-            // ) : (
-            //   <HomePage />
-            // ),
-            <HomePage />
-          ),
+          element: <HomePage />,
         },
       ],
     },
     {
-      path: "*",
+      path: "/404-error",
       element: <ErrorPage />,
     },
   ]);

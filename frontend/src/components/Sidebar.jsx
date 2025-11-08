@@ -78,7 +78,7 @@ const Sidebar = (props) => {
             className={`text-white text-lg items-center flex gap-x-4 py-2 ${
               !isOpen ? "justify-center" : "justify-left"
             }`}
-            to={"/analytics"}
+            to={`/${user.username}/analytics`}
           >
             <IoIosAnalytics className="inline" />{" "}
             <span className={`${!isOpen ? "hidden" : ""}`}>Analytics</span>
@@ -87,7 +87,7 @@ const Sidebar = (props) => {
             className={`text-white text-lg items-center flex gap-x-4 py-2 ${
               !isOpen ? "justify-center" : "justify-left"
             }`}
-            to={"/add-expense"}
+            to={`/${user.username}/add-expense`}
           >
             <FaCirclePlus className="inline" />{" "}
             <span className={`${!isOpen ? "hidden" : ""}`}>Add Expense</span>
@@ -96,7 +96,6 @@ const Sidebar = (props) => {
             className={`text-white text-lg items-center flex gap-x-4 py-2 cursor-pointer ${
               !isOpen ? "justify-center" : "justify-left"
             }`}
-            to={"/add-expense"}
             onClick={() => {
               logout();
             }}
@@ -111,7 +110,7 @@ const Sidebar = (props) => {
           }`}
         >
           <Link
-            to={"/profile"}
+            to={`/${user.username}/profile`}
             className="text-white text-lg items-center flex gap-x-4"
           >
             <FaUserCircle className="text-white" />
