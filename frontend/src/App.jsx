@@ -71,6 +71,10 @@ const App = () => {
       path: "/404-error",
       element: <ErrorPage />,
     },
+    {
+      path: "/:username/*",
+      element: <ErrorPage />,
+    },
   ]);
 
   // ✅ This key ensures router rebuilds when user changes
