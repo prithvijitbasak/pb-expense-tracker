@@ -2,11 +2,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../assets/styles/SearchBoxSection.css";
 import { toast } from "react-toastify";
+import { useAuth } from "../context/AuthContext";
 
 const SearchBoxSection = () => {
   const [rawDate, setRawDate] = useState(""); // Stores the input date in yyyy-mm-dd
   const [formattedDate, setFormattedDate] = useState(""); // Stores the converted dd-mm-yyyy format
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const handleDate = (e) => {
     const collectedDate = e.target.value;
@@ -21,7 +23,7 @@ const SearchBoxSection = () => {
 
   const handleSearch = () => {
     if (formattedDate) {
-      navigate(`/day-details?date=${formattedDate}`);
+      navigate(`/${user.username}/day-details?date=${formattedDate}`);
     } else {
       toast.error("Please select a date!");
     }

@@ -2,9 +2,11 @@ import { Link } from "react-router-dom";
 import "../assets/styles/DetailsCard.css";
 import { useEffect, useState } from "react";
 import { API } from "../utils/auth";
+import { useAuth } from "../context/AuthContext";
 
 const DayDetailsCard = () => {
   const [totalExpenses, setTotalExpenses] = useState(0);
+  const { user } = useAuth();
 
   const today = new Date();
   const formattedDate = `${String(today.getDate()).padStart(2, "0")}-${String(
@@ -40,11 +42,12 @@ const DayDetailsCard = () => {
 
   return (
     <div className="details-card">
-      <h3 className="details-heading-text">
-        Today expenses
-      </h3>
+      <h3 className="details-heading-text">Today expenses</h3>
       <p className="total-text">Total Expenses = {totalExpenses}</p>
-      <Link to={`/day-details?date=${formattedDate}`} className="details-btn">
+      <Link
+        to={`/${user.username}/day-details?date=${formattedDate}`}
+        className="details-btn"
+      >
         See Details
       </Link>
     </div>

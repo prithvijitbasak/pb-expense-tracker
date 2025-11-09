@@ -42,15 +42,15 @@ const App = () => {
               children: [
                 { index: true, element: <Dashboard /> },
                 { path: "profile", element: <Profile /> },
+                { path: "year-details", element: <YearDetails /> },
+                { path: "add-expense", element: <AddExpense /> },
+                { path: "day-details", element: <DayDetails /> },
+                { path: "month-details", element: <MonthDetails /> },
+                { path: "analytics", element: <Analytics /> },
               ],
             },
 
             // these routes are direct children (not nested under username)
-            { path: "year-details", element: <YearDetails /> },
-            { path: "add-expense", element: <AddExpense /> },
-            { path: "day-details", element: <DayDetails /> },
-            { path: "month-details", element: <MonthDetails /> },
-            { path: "analytics", element: <Analytics /> },
           ],
         },
       ],

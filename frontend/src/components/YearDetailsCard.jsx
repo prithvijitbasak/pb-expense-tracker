@@ -2,9 +2,11 @@ import { Link } from "react-router-dom";
 import "../assets/styles/DetailsCard.css";
 import { API } from "../utils/auth";
 import { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthContext";
 
 const YearDetailsCard = () => {
   const [totalExpense, setTotalExpense] = useState(null);
+  const { user } = useAuth();
 
   const currentYear = new Date().getFullYear();
   useEffect(() => {
@@ -38,7 +40,10 @@ const YearDetailsCard = () => {
     <div className="details-card">
       <h3 className="details-heading-text">This Year Expenses</h3>
       <p className="total-text">Total Expenses = {totalExpense}</p>
-      <Link to={`/year-details?year=${currentYear}`} className="details-btn">
+      <Link
+        to={`/${user.username}/year-details?year=${currentYear}`}
+        className="details-btn"
+      >
         See Details
       </Link>
     </div>

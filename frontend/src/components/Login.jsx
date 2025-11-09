@@ -28,7 +28,7 @@ const Login = () => {
   // Redirect if already logged in
   useEffect(() => {
     if (isAuthenticated()) {
-      navigate(`/${res_data.username}`); // Redirect to home if user is already logged in
+      navigate(`/${user.username}`); // Redirect to home if user is already logged in
     }
   }, [navigate]);
 
@@ -54,7 +54,7 @@ const Login = () => {
       if (response.ok) {
         localStorage.setItem("token", res_data.token); // Store token in localStorage
         setLoggedInUser({ identifier: "", password: "" });
-        navigate(`/${res_data.username}`); // Redirect to home
+        navigate(`/${user.username}`); // Redirect to home
         setToken(res_data.token);
         setIsLogin(true);
         toast.success("Logged in successfully");

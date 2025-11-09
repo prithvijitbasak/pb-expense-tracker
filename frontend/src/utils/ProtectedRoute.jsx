@@ -8,14 +8,15 @@ const ProtectedRoute = () => {
   }
 
   const { username } = useParams();
-  const { user } = useAuth(); 
+  const { user } = useAuth();
+
+  // console.log("showing the username from useParams");
+  // console.log(username);
 
   // ✅ If the URL username doesn't match the logged-in user's username
-  if (username !== user.username) {
+  if (username && username !== user.username) {
     return <Navigate to="/404-error" replace />;
   }
-
-  
 
   return <Outlet />;
 };
