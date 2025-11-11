@@ -2,10 +2,12 @@ import "../assets/styles/WelcomeAddBanner.css";
 import { Link } from "react-router-dom";
 import { API } from "../utils/auth";
 import { useEffect, useState } from "react";
-import {ShimmerBar} from "./ShimmerUI";
+import { ShimmerBar } from "./ShimmerUI";
+import { useAuth } from "../context/AuthContext";
 
 const WelcomeAddBanner = () => {
   const [name, setName] = useState("");
+  const { user } = useAuth();
 
   const fetchName = async () => {
     const token = localStorage.getItem("token");
@@ -42,7 +44,10 @@ const WelcomeAddBanner = () => {
         <p className="add-expense-card-text">Have spent money on something?</p>
         <p className="add-expense-card-text">Add your expenses below &darr;</p>
         <div className="add-expense-btn-div">
-          <Link to={"/add-expense"} className="add-expense-btn">
+          <Link
+            to={`/${user.username}/add-expense`}
+            className="add-expense-btn"
+          >
             Add Expense
           </Link>
         </div>
