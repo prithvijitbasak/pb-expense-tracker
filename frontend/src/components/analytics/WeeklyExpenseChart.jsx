@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   BarChart,
   Bar,
@@ -8,18 +9,36 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
+import { API } from "../../utils/auth";
 
 const WeeklyExpenseChart = () => {
-  // Sample Data (You’ll replace this with your API data)
-  const data = [
-    { day: "Mon", Food: 300, Travel: 150, Shopping: 80, Bills: 100 },
-    { day: "Tue", Food: 250, Travel: 200, Shopping: 120, Bills: 90 },
-    { day: "Wed", Food: 200, Travel: 180, Shopping: 100, Bills: 110 },
-    { day: "Thu", Food: 280, Travel: 170, Shopping: 90, Bills: 130 },
-    { day: "Fri", Food: 320, Travel: 190, Shopping: 70, Bills: 120 },
-    { day: "Sat", Food: 400, Travel: 250, Shopping: 160, Bills: 100 },
-    { day: "Sun", Food: 350, Travel: 200, Shopping: 150, Bills: 130 },
-  ];
+  const [last7DaysData, setLast7DaysData] = useState([]);
+  const token = localStorage.getItem("token");
+  const API = import.meta.env.VITE_API_URL || "http://localhost:5001"; // optional fallback
+
+  useEffect(() => {
+    const fetchLast7DaysData = async () => {
+      try {
+        const res = await fetch(`${API}/api/expenses/analytics/last7days`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          setLast7DaysData(data);
+        } else {
+          console.error("Failed to fetch weekly analytics");
+        }
+      } catch (error) {
+        console.error("Error fetching weekly analytics:", error);
+      }
+    };
+
+    fetchLast7DaysData();
+  }, [API, token]); // ✅ Runs only once when component mounts
 
   return (
     <div className="mx-4 md:mx-10 my-6 bg-white shadow-lg rounded-2xl p-6 border border-gray-200">
@@ -29,7 +48,7 @@ const WeeklyExpenseChart = () => {
 
       <div className="w-full h-80">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} barSize={40}>
+          <BarChart data={last7DaysData} barSize={40}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
             <XAxis dataKey="day" tick={{ fill: "#6b7280" }} />
             <YAxis tick={{ fill: "#6b7280" }} />

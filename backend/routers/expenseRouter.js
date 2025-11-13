@@ -8,7 +8,7 @@ const {
 const expenseReportingController = require("../controllers/expenseReportingController");
 const authMiddleware = require("../middlewares/authMiddleware");
 const Expense = require("../models/expenseModel");
-const { monthAnalytics, yearAnalytics } = require("../controllers/analytics.controller");
+const { monthAnalytics, yearAnalytics, last7DaysAnalytics } = require("../controllers/analytics.controller");
 
 const router = express.Router();
 
@@ -27,5 +27,6 @@ router.route("/edit").patch(authMiddleware, editExpense);
 router.route("/:id").delete(authMiddleware, deleteExpense);
 router.route("/analytics/month").get(authMiddleware, monthAnalytics);
 router.route("/analytics/year").get(authMiddleware, yearAnalytics);
+router.route("/analytics/last7days").get(authMiddleware, last7DaysAnalytics);
 
 module.exports = router;
