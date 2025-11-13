@@ -30,7 +30,7 @@ const Login = () => {
   // Redirect if already logged in
   useEffect(() => {
     if (isAuthenticated() && user) {
-      navigate(`/${user.username}`); // Redirect to home if user is already logged in
+      navigate(`/${user.username}`); // Redirect to dashboard if user is already logged in
     }
   }, [user, navigate]);
 
@@ -129,7 +129,7 @@ const Login = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-[#4caf50] hover:bg-[#45a049] text-white font-semibold rounded-lg py-2 transition-all duration-300 shadow-md hover:shadow-[#4caf50]/40 select-none"
+            className="w-full bg-[#4caf50] hover:bg-[#45a049] text-white font-semibold rounded-lg py-2 transition-all duration-300 shadow-md hover:shadow-[#4caf50]/40 select-none cursor-pointer"
           >
             Login
           </button>
