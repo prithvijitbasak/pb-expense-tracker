@@ -8,7 +8,7 @@ const validate = (schema) => async (req, res, next) => {
 
     const status = 400;
     const message = "Validation failed";
-    const extraDetails = error.errors[0].message;
+    const extraDetails = (error.errors || error.issues)[0].message;
 
     const err = {
       status,
