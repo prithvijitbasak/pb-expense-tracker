@@ -20,6 +20,7 @@ const WeeklyExpenseChart = () => {
     const fetchLast7DaysData = async () => {
       try {
         const res = await fetch(`${API}/api/expenses/analytics/last7days`, {
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -63,10 +64,15 @@ const WeeklyExpenseChart = () => {
             <Legend wrapperStyle={{ paddingTop: "10px" }} />
 
             {/* Each Bar represents a category, stacked together */}
+            <Bar dataKey="Savings" stackId="a" fill="#c8e6c9" />
             <Bar dataKey="Food" stackId="a" fill="#4caf50" />
-            <Bar dataKey="Travel" stackId="a" fill="#81c784" />
+            <Bar dataKey="Transport" stackId="a" fill="#81c784" />
+            <Bar dataKey="Grocery" stackId="a" fill="#c8e6c9" />
             <Bar dataKey="Shopping" stackId="a" fill="#a5d6a7" />
-            <Bar dataKey="Bills" stackId="a" fill="#c8e6c9" />
+            <Bar dataKey="Bill" stackId="a" fill="#c8e6c9" />
+            <Bar dataKey="Medicine" stackId="a" fill="#c8e6c9" />
+            <Bar dataKey="Entertainment" stackId="a" fill="#c8e6c9" />
+            <Bar dataKey="Other" stackId="a" fill="#c8e6c9" />
           </BarChart>
         </ResponsiveContainer>
       </div>
