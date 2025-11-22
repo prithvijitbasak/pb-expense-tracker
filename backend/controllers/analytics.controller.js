@@ -1,4 +1,4 @@
-const Expense = require("../models/expenseModel");
+const Expense = require("../models/expense.model");
 const expenseCategories = require("../constants/expenseCategories");
 
 const monthAnalytics = async (req, res) => {

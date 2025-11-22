@@ -4,7 +4,7 @@ const {
   username,
   email,
   phone,
-} = require("../validators/authValidator");
+} = require("./auth.validator");
 
 const updateUserSchema = z.object({
   fullName: fullName.optional(),

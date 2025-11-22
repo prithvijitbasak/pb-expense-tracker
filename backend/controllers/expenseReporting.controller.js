@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Expense = require("../models/expenseModel");
+const Expense = require("../models/expense.model");
 
 const getExpensesByDate = async (req, res) => {
   try {

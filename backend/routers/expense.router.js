@@ -4,10 +4,10 @@ const {
   getExpenseCategories,
   editExpense,
   deleteExpense,
-} = require("../controllers/expenseController");
-const expenseReportingController = require("../controllers/expenseReportingController");
-const authMiddleware = require("../middlewares/authMiddleware");
-const Expense = require("../models/expenseModel");
+} = require("../controllers/expense.controller");
+const expenseReportingController = require("../controllers/expenseReporting.controller");
+const authMiddleware = require("../middlewares/auth.middleware");
+const Expense = require("../models/expense.model");
 const { monthAnalytics, yearAnalytics, last7DaysAnalytics } = require("../controllers/analytics.controller");
 
 const router = express.Router();

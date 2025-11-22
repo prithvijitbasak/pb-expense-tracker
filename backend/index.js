@@ -1,8 +1,8 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
-const authRoute = require("./routers/authRouter");
-const expenseRoute = require("./routers/expenseRouter");
+const authRoute = require("./routers/auth.router");
+const expenseRoute = require("./routers/expense.router");
 const userRoute = require("./routers/user.router");
 var bodyParser = require("body-parser");
 const cors = require("cors");
