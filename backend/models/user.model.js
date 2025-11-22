@@ -5,23 +5,23 @@ const jwt = require("jsonwebtoken");
 const userSchema = new mongoose.Schema({
   fullName: {
     type: String,
-    require: true,
+    required: true,
   },
   username: {
     type: String,
-    require: true,
+    required: true,
   },
   email: {
     type: String,
-    require: true,
+    required: true,
   },
   phone: {
     type: String,
-    require: true,
+    required: true,
   },
   password: {
     type: String,
-    require: true,
+    required: true,
   },
   isAdmin: {
     type: Boolean,
@@ -29,29 +29,53 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-userSchema.methods.generateToken = async function () {
-  try {
-    return jwt.sign(
-      {
-        userId: this._id.toString(),
-        email: this.email,
-        phone: this.phone,
-        isAdmin: this.isAdmin,
-      },
-      process.env.JWT_KEY,
-      {
-        expiresIn: "1d",
-      }
-    );
-  } catch (error) {
-    console.log(error);
-  }
+/**
+ * Generate Access Token
+ * ----------------------
+ * What it is:
+ *   A short-lived JWT used for normal authenticated requests.
+ *
+ * Why:
+ *   Short life (like 15 min) reduces damage if stolen.
+ */
+userSchema.methods.generateAccessToken = function () {
+  return jwt.sign(
+    {
+      userId: this._id.toString(),
+      email: this.email,
+      isAdmin: this.isAdmin,
+    },
+    process.env.JWT_ACCESS_KEY,
+    { expiresIn: "1h" } // 1 hour
+  );
 };
 
+/**
+ * Generate Refresh Token
+ * ------------------------
+ * What it is:
+ *   A long-lived token stored only in httpOnly cookies.
+ *
+ * Why:
+ *   Used to generate new access tokens without logging in again.
+ */
+userSchema.methods.generateRefreshToken = function () {
+  return jwt.sign(
+    {
+      userId: this._id.toString(),
+    },
+    process.env.JWT_REFRESH_KEY,
+    { expiresIn: "7d" } // 7 days
+  );
+};
+
+/**
+ * Compare hashed password
+ */
 userSchema.methods.comparePassword = async function (password) {
   return bcrypt.compare(password, this.password);
 };
 
-const User = new mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;
