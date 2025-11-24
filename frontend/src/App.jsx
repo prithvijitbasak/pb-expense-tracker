@@ -8,7 +8,7 @@ import DayDetails from "./pages/day-month-details-page/DayDetails";
 import YearDetails from "./pages/YearDetails";
 import Dashboard from "./pages/Dashboard";
 import AddExpense from "./components/AddExpense";
-import Login from "./components/Login";
+import Login from "./pages/Login";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import Register from "./components/Register";
 import Profile from "./pages/Profile";

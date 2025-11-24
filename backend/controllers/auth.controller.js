@@ -70,7 +70,7 @@ const login = async (req, res) => {
   try {
     const { identifier, password } = req.body;
 
-    // Search for user by username, email, or phone
+    // Find user by username, email or phone
     const userExist = await User.findOne({
       $or: [
         { username: identifier },
@@ -83,22 +83,45 @@ const login = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
+    // Compare password using bcrypt
     const isPasswordMatch = await userExist.comparePassword(password);
 
-    if (isPasswordMatch) {
-      return res.status(200).json({
-        message: "Login successful",
-        token: await userExist.generateToken(),
-        userId: userExist._id.toString(),
-        username: userExist.username.toString()
-      });
-    } else {
-      return res(400).send({ message: "Invalid username or password" });
+    if (!isPasswordMatch) {
+      return res.status(400).json({ message: "Invalid username or password" });
     }
+
+    // Generate access and refresh tokens
+    const accessToken = userExist.generateAccessToken();
+    const refreshToken = userExist.generateRefreshToken();
+
+    // Send cookies
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,        // JS cannot access this
+      secure: true,          // send only over HTTPS
+      sameSite: "strict",    // CSRF protection
+      maxAge: 15 * 60 * 1000 // 15 minutes
+    });
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    });
+
+    // Send success response
+    return res.status(200).json({
+      message: "Login successful",
+      userId: userExist._id.toString(),
+      username: userExist.username,
+    });
+
   } catch (error) {
     console.log(error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 
 const getUserProfile = async (req, res) => {
   try {

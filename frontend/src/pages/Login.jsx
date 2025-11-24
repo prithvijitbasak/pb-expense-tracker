@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
 import { Eye, EyeOff } from "lucide-react";
-import LoginShimmer from "./shimmerUIs/LoginShimmer";
+import LoginShimmer from "../components/shimmerUIs/LoginShimmer";
 
 const Login = () => {
   const { setToken, setIsLogin, user } = useAuth();
