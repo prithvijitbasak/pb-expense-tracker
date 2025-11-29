@@ -17,54 +17,73 @@ const register = async (req, res) => {
   try {
     const { fullName, username, email, phone, password } = req.body;
 
-    // Check if a user exists with either the username or email
+    // 1. Check for existing user
     const userExist = await User.findOne({
       $or: [{ username }, { email }, { phone }],
     });
 
     if (userExist) {
       if (userExist.username === username) {
-        return res
-          .status(400)
-          .send({ message: "This username already exists" });
+        return res.status(400).json({ message: "This username already exists" });
       }
       if (userExist.email === email) {
-        return res
-          .status(400)
-          .send({ message: "This email is already registered" });
+        return res.status(400).json({ message: "This email is already registered" });
       }
       if (userExist.phone === phone) {
-        return res
-          .status(400)
-          .send({ message: "This phone number is already used" });
+        return res.status(400).json({ message: "This phone number is already used" });
       }
     }
 
-    // Hash password with bcrypt
+    // 2. Hash password
     const saltRound = 10;
-    const hashPassword = await bcrypt.hash(password, saltRound);
+    const hashedPassword = await bcrypt.hash(password, saltRound);
 
-    // Create new user
+    // 3. Create user without refresh token
     const userCreated = await User.create({
       fullName,
       username,
       email,
       phone,
-      password: hashPassword,
+      password: hashedPassword,
     });
 
-    // Respond with success message and token
-    res.status(200).send({
-      message: "Registration successful",
-      token: await userCreated.generateToken(),
-      userId: userCreated._id.toString(),
-      username: userCreated.username.toString()
+    // 4. Generate tokens after creation
+    const refreshToken = userCreated.generateRefreshToken();
+    const accessToken = userCreated.generateAccessToken();
+
+    // 5. Save refreshToken in DB
+    userCreated.refreshToken = refreshToken;
+    await userCreated.save();
+
+    // 6. Send cookies (secure, httpOnly)
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,          // JS cannot access token → prevents XSS
+      secure: true,            // only HTTPS
+      sameSite: "none",        // required for cross-site cookies
+      maxAge: 12 * 60 * 60 * 1000, // 12 hours
     });
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+
+    // 7. Send final response
+    res.status(201).json({
+      message: "Registration successful",
+      userId: userCreated._id.toString(),
+      username: userCreated.username,
+    });
+
   } catch (error) {
-    console.log(error);
-    res.status(500).send({ message: "Server error, please try again later." });
+    console.error("Error in register:", error);
+    res.status(500).json({ message: "Server error, please try again later." });
   }
 };
+
+
 
 const login = async (req, res) => {
   try {
@@ -110,7 +129,7 @@ const login = async (req, res) => {
     });
 
     // Send success response
-    return res.status(200).json({
+    return res.status(201).json({
       message: "Login successful",
       userId: userExist._id.toString(),
       username: userExist.username,

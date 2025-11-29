@@ -2,32 +2,47 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const userSchema = new mongoose.Schema({
-  fullName: {
-    type: String,
-    required: true,
+const userSchema = new mongoose.Schema(
+  {
+    fullName: {
+      type: String,
+      required: [true, "Full name is required"],
+      trim: true,
+    },
+    username: {
+      type: String,
+      required: [true, "Username is required"],
+      unique: true,
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: [true, "Email is required"],
+      unique: true,
+      trim: true,
+    },
+    phone: {
+      type: String,
+      required: [true, "Phone is required"],
+      unique: true,
+      trim: true,
+    },
+    password: {
+      type: String,
+      required: [true, "Password is required"],
+    },
+    role: {
+      type: String,
+      default: "Normal user",
+    },
+    refreshToken: {
+      type: String,
+    },
   },
-  username: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-  },
-  phone: {
-    type: String,
-    required: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  isAdmin: {
-    type: Boolean,
-    default: false,
-  },
-});
+  {
+    timestamps: true, // for createdAt and updatedAt
+  }
+);
 
 /**
  * Generate Access Token
@@ -46,7 +61,7 @@ userSchema.methods.generateAccessToken = function () {
       isAdmin: this.isAdmin,
     },
     process.env.JWT_ACCESS_KEY,
-    { expiresIn: "1h" } // 1 hour
+    { expiresIn: "12h" } // 12 hour
   );
 };
 
