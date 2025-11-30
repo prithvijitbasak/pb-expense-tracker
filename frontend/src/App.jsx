@@ -10,7 +10,7 @@ import Dashboard from "./pages/Dashboard";
 import AddExpense from "./components/AddExpense";
 import Login from "./pages/Login";
 import ProtectedRoute from "./utils/ProtectedRoute";
-import Register from "./components/Register";
+import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import MainLayout from "./layouts/MainLayout";
 import PublicLayout from "./layouts/PublicLayout";

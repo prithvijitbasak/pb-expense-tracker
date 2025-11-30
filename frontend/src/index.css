@@ -14,6 +14,20 @@
   --top-color: #4caf50;
 }
 
+.bg-theme {
+  background-color: var(--top-color);
+}
+
+.text-theme {
+  color: var(--top-color);
+}
+
+.border-theme-focus {
+  /* This utility covers the focus ring and offset needed */
+  --tw-ring-color: var(--top-color);
+  --tw-ring-offset-color: #fff;
+}
+
 .container {
   max-width: 1290px;
   margin: 0 auto;
