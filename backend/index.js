@@ -9,7 +9,10 @@ const cors = require("cors");
 const connectDb = require("./utils/db");
 const PORT = 5001;
 
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true
+}));
 
 app.use(express.json());
 app.use(bodyParser.json());

@@ -16,6 +16,7 @@ const home = async (req, res) => {
 const register = async (req, res) => {
   try {
     const { fullName, username, email, phone, password } = req.body;
+    console.log(req.body);
 
     // 1. Check for existing user
     const userExist = await User.findOne({
@@ -24,13 +25,19 @@ const register = async (req, res) => {
 
     if (userExist) {
       if (userExist.username === username) {
-        return res.status(400).json({ message: "This username already exists" });
+        return res
+          .status(400)
+          .json({ message: "This username already exists" });
       }
       if (userExist.email === email) {
-        return res.status(400).json({ message: "This email is already registered" });
+        return res
+          .status(400)
+          .json({ message: "This email is already registered" });
       }
       if (userExist.phone === phone) {
-        return res.status(400).json({ message: "This phone number is already used" });
+        return res
+          .status(400)
+          .json({ message: "This phone number is already used" });
       }
     }
 
@@ -57,9 +64,9 @@ const register = async (req, res) => {
 
     // 6. Send cookies (secure, httpOnly)
     res.cookie("accessToken", accessToken, {
-      httpOnly: true,          // JS cannot access token → prevents XSS
-      secure: true,            // only HTTPS
-      sameSite: "none",        // required for cross-site cookies
+      httpOnly: true, // JS cannot access token → prevents XSS
+      secure: true, // only HTTPS
+      sameSite: "none", // required for cross-site cookies
       maxAge: 12 * 60 * 60 * 1000, // 12 hours
     });
 
@@ -76,14 +83,11 @@ const register = async (req, res) => {
       userId: userCreated._id.toString(),
       username: userCreated.username,
     });
-
   } catch (error) {
     console.error("Error in register:", error);
     res.status(500).json({ message: "Server error, please try again later." });
   }
 };
-
-
 
 const login = async (req, res) => {
   try {
@@ -115,17 +119,17 @@ const login = async (req, res) => {
 
     // Send cookies
     res.cookie("accessToken", accessToken, {
-      httpOnly: true,        // JS cannot access this
-      secure: true,          // send only over HTTPS
-      sameSite: "strict",    // CSRF protection
-      maxAge: 15 * 60 * 1000 // 15 minutes
+      httpOnly: true, // JS cannot access this
+      secure: true, // send only over HTTPS
+      sameSite: "strict", // CSRF protection
+      maxAge: 15 * 60 * 1000, // 15 minutes
     });
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: true,
       sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
     // Send success response
@@ -134,13 +138,11 @@ const login = async (req, res) => {
       userId: userExist._id.toString(),
       username: userExist.username,
     });
-
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
-
 
 const getUserProfile = async (req, res) => {
   try {
