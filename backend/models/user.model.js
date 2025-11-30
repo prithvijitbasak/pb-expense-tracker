@@ -57,8 +57,6 @@ userSchema.methods.generateAccessToken = function () {
   return jwt.sign(
     {
       userId: this._id.toString(),
-      email: this.email,
-      isAdmin: this.isAdmin,
     },
     process.env.JWT_ACCESS_KEY,
     { expiresIn: "12h" } // 12 hour
