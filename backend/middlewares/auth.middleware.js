@@ -3,35 +3,33 @@ const User = require("../models/user.model");
 
 const authMiddleware = async (req, res, next) => {
   try {
-    const authHeader = req.header("Authorization");
+    // 1. Extract access token from HTTP-only cookie
+    const token = req.cookies.accessToken;
 
-    if (!authHeader) {
+    // 2. Block request when token missing
+    if (!token) {
       return res.status(401).json({ message: "Unauthorized: Token not provided!" });
     }
 
-    let token = authHeader.trim();
+    // 3. Verify access token
+    const decoded = jwt.verify(token, process.env.JWT_ACCESS_KEY);
 
-    // Check if the token starts with "Bearer" and remove it
-    if (token.startsWith("Bearer")) {
-      token = token.replace("Bearer", "").trim();
-    } else {
-      return res.status(401).json({ message: "Unauthorized: Invalid token format!" });
+    // 4. Check the userId exists in the token
+    if (!decoded || !decoded.userId) {
+      return res.status(401).json({ message: "Unauthorized: Invalid token payload!" });
     }
 
-    // Verify JWT
-    const decoded = jwt.verify(token, process.env.JWT_KEY);
-
-    // Use `_id` instead of `username` for database lookup
+    // 5. Fetch user by ID
     const userData = await User.findById(decoded.userId).select("-password");
 
     if (!userData) {
       return res.status(401).json({ message: "Unauthorized: User not found!" });
     }
 
+    // 6. Attach user data to request
     req.user = userData;
-    req.token = token;
-    req.userId = userData._id; // Ensure correct userId is passed
 
+    // 7. Continue
     next();
   } catch (error) {
     console.error("Auth Error:", error.message);
