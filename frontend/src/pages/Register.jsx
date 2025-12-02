@@ -8,9 +8,9 @@ import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
 
 const Register = () => {
-  const { setToken, setIsLogin } = useAuth();
+  const { setToken, setIsLogin, user } = useAuth();
 
-  const [user, setUser] = useState({
+  const [registeredUser, setRegisteredUser] = useState({
     fullName: "",
     username: "",
     email: "",
@@ -23,7 +23,7 @@ const Register = () => {
   const URL = `${API}/api/auth/register`;
 
   const handleInput = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
+    setRegisteredUser({ ...registeredUser, [e.target.name]: e.target.value });
   };
 
   const [viewPassword, setViewPassword] = useState(false);
@@ -36,7 +36,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
   e.preventDefault();
   setError(null);
-  console.log(user);
+  console.log(registeredUser);
 
   try {
     const response = await fetch(URL, {
@@ -48,7 +48,7 @@ const Register = () => {
       // ⭐ MUST include this for cookies to work
       credentials: "include",
 
-      body: JSON.stringify(user),
+      body: JSON.stringify(registeredUser),
     });
 
     const res_data = await response.json();
@@ -59,7 +59,7 @@ const Register = () => {
       setToken("logged-in"); // optional flag, you may remove if not needed
 
       // Reset form
-      setUser({
+      setRegisteredUser({
         fullName: "",
         username: "",
         email: "",
@@ -104,7 +104,7 @@ const Register = () => {
             type="text"
             name="fullName"
             placeholder="Full Name"
-            value={user.fullName}
+            value={registeredUser.fullName}
             onChange={handleInput}
             required
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-300 ease-in-out select-none border-theme-focus"
@@ -113,7 +113,7 @@ const Register = () => {
             type="text"
             name="username"
             placeholder="Choose a username"
-            value={user.username}
+            value={registeredUser.username}
             onChange={handleInput}
             required
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-300 ease-in-out select-none border-theme-focus"
@@ -122,7 +122,7 @@ const Register = () => {
             type="email"
             name="email"
             placeholder="Email"
-            value={user.email}
+            value={registeredUser.email}
             onChange={handleInput}
             required
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-300 ease-in-out select-none border-theme-focus"
@@ -131,7 +131,7 @@ const Register = () => {
             type="tel" 
             name="phone"
             placeholder="Phone"
-            value={user.phone}
+            value={registeredUser.phone}
             onChange={handleInput}
             required
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-300 ease-in-out select-none border-theme-focus"
@@ -143,7 +143,7 @@ const Register = () => {
               type={viewPassword ? "text" : "password"}
               name="password"
               placeholder="Password"
-              value={user.password}
+              value={registeredUser.password}
               onChange={handleInput}
               required
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-300 ease-in-out select-none pr-12 border-theme-focus" 
@@ -162,7 +162,7 @@ const Register = () => {
               type={viewPassword ? "text" : "password"}
               name="password"
               placeholder="Confirm password"
-              value={user.password}
+              value={registeredUser.password}
               onChange={handleInput}
               required
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-300 ease-in-out select-none pr-12 border-theme-focus" 
