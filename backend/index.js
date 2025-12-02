@@ -5,6 +5,7 @@ const authRoute = require("./routers/auth.router");
 const expenseRoute = require("./routers/expense.router");
 const userRoute = require("./routers/user.router");
 var bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const connectDb = require("./utils/db");
 const PORT = 5001;
@@ -16,6 +17,7 @@ app.use(cors({
 
 app.use(express.json());
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 // using router
 app.use("/api/auth", authRoute);
