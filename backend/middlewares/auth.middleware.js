@@ -20,7 +20,7 @@ const authMiddleware = async (req, res, next) => {
     }
 
     // 5. Fetch user by ID
-    const userData = await User.findById(decoded.userId).select("-password");
+    const userData = await User.findById(decoded.userId).select("-password -refreshToken -__v");
 
     if (!userData) {
       return res.status(401).json({ message: "Unauthorized: User not found!" });
