@@ -10,6 +10,6 @@ router
   .route("/register")
   .post(validate(signupSchema), authControllers.register);
 router.route("/login").post(validate(loginSchema), authControllers.login);
-router.route("/me").get(authControllers.getUserProfile);
+router.route("/logout").post(authMiddleware, authControllers.logout);
 
 module.exports = router;
