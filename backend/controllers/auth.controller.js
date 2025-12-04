@@ -144,34 +144,38 @@ const login = async (req, res) => {
   }
 };
 
-const getUserProfile = async (req, res) => {
+const logout = async (req, res) => {
   try {
-    // Get token from headers
-    const token = req.header("Authorization")?.split(" ")[1]; // Extract after "Bearer"
-    // console.log("Extracted Token:", token);
-    // const token = req.header("Authorization");
+    // 1. The authenticated user is available from middleware
+    const user = req.user;
 
-    if (!token) {
-      return res
-        .status(401)
-        .json({ message: "Unauthorized: No token provided" });
-    }
-
-    // Verify token
-    const decoded = jwt.verify(token, process.env.JWT_KEY);
-
-    // Fetch user from DB excluding password
-    const user = await User.findById(decoded.userId).select("-password");
-
+    // 2. Safety check: if somehow no user exists, return a clean error
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.status(200).json(user);
+    // 3. Remove the refresh token from DB so it becomes unusable
+    await User.updateOne({ _id: user._id }, { $set: { refreshToken: null } });
+
+    // 4. Clear authentication cookies from the browser
+    res.clearCookie("accessToken", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+    });
+
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+    });
+
+    // 5. Return proper logout confirmation
+    return res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
-    console.error("Error fetching user profile:", error);
-    res.status(401).json({ message: "Invalid or expired token" });
+    console.error("Logout error:", error);
+    return res.status(500).json({ message: "Logout failed" });
   }
 };
 
-module.exports = { home, register, login, getUserProfile };
+module.exports = { home, register, login, logout };
