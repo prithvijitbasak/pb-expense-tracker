@@ -1,5 +1,20 @@
 const User = require("../models/user.model");
 
+const getUserProfile = async (req, res) => {
+  try {
+    const user = req.user;
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error("Error fetching user profile:", error);
+    res.status(401).json({ message: "Invalid or expired token" });
+  }
+};
+
 const updateUser = async (req, res) => {
   try {
     // 1. Extract authenticated user ID from auth middleware
@@ -45,7 +60,9 @@ const updateUser = async (req, res) => {
         _id: { $ne: userId },
       });
       if (existingPhone) {
-        return res.status(400).json({ message: "Phone number already registered" });
+        return res
+          .status(400)
+          .json({ message: "Phone number already registered" });
       }
     }
 
@@ -64,7 +81,6 @@ const updateUser = async (req, res) => {
       message: "User updated successfully",
       user: updatedUser,
     });
-
   } catch (error) {
     return res.status(500).json({
       message: "Server error while updating user",
@@ -73,5 +89,4 @@ const updateUser = async (req, res) => {
   }
 };
 
-
-module.exports = { updateUser };
+module.exports = { updateUser, getUserProfile };
