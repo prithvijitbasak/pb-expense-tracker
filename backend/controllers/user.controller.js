@@ -8,7 +8,10 @@ const getUserProfile = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.status(200).json(user);
+    const userProfile = user.toObject();
+    delete userProfile._id;
+
+    res.status(200).json(userProfile);
   } catch (error) {
     console.error("Error fetching user profile:", error);
     res.status(401).json({ message: "Invalid or expired token" });
