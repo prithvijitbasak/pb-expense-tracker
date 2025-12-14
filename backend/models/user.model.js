@@ -51,7 +51,7 @@ const userSchema = new mongoose.Schema(
  *   A short-lived JWT used for normal authenticated requests.
  *
  * Why:
- *   Short life (like 15 min) reduces damage if stolen.
+ *   Short life (like 2 min) reduces damage if stolen.
  */
 userSchema.methods.generateAccessToken = function () {
   return jwt.sign(
@@ -59,7 +59,7 @@ userSchema.methods.generateAccessToken = function () {
       userId: this._id.toString(),
     },
     process.env.JWT_ACCESS_KEY,
-    { expiresIn: "12h" } // 12 hour
+    { expiresIn: "10m" } 
   );
 };
 
