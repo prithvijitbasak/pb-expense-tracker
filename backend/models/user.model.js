@@ -59,7 +59,7 @@ userSchema.methods.generateAccessToken = function () {
       userId: this._id.toString(),
     },
     process.env.JWT_ACCESS_KEY,
-    { expiresIn: "10m" } 
+    { expiresIn: "5h" } 
   );
 };
 

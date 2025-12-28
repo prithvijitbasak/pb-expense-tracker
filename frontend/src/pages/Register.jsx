@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../assets/styles/Login.css";
 import { useNavigate } from "react-router-dom";
-import { API } from "../utils/auth"; // Import the function
+import { API } from "../utils/auth"; 
 import { toast } from "react-toastify";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
 
 const Register = () => {
-  const { setToken, setIsLogin, user } = useAuth();
+  const { setIsLogin, fetchUser } = useAuth();
 
   const [registeredUser, setRegisteredUser] = useState({
     fullName: "",
@@ -34,71 +34,76 @@ const Register = () => {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setError(null);
-  console.log(registeredUser);
+    e.preventDefault();
+    setError(null);
+    console.log(registeredUser);
 
-  try {
-    const response = await fetch(URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+    try {
+      const response = await fetch(URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
 
-      // ⭐ MUST include this for cookies to work
-      credentials: "include",
+        //  MUST include this for cookies to work
+        credentials: "include",
 
-      body: JSON.stringify(registeredUser),
-    });
-
-    const res_data = await response.json();
-
-    if (response.ok) {
-      // ⭐ Since token is stored in cookies, we do NOT store anything manually
-      setIsLogin(true);
-      setToken("logged-in"); // optional flag, you may remove if not needed
-
-      // Reset form
-      setRegisteredUser({
-        fullName: "",
-        username: "",
-        email: "",
-        phone: "",
-        password: "",
+        body: JSON.stringify(registeredUser),
       });
 
-      toast.success("Registration successful");
-      navigate("/");
-    } else {
-      console.error("Error response:", res_data);
-      setError(res_data.message || "Registration failed. Try again.");
-      toast.error(res_data.message);
-    }
-  } catch (error) {
-    console.error("Registration failed", error);
-    setError("Something went wrong. Please try again.");
-    toast.error("Something went wrong. Please try again.");
-  }
-};
+      const res_data = await response.json();
 
+      if (response.ok) {
+        //  token is stored in cookies, we do NOT store anything manually
+        setIsLogin(true);
+
+        // fetching the new user on context 
+        // line is extremely crucial to fetch the user on global context
+        // otherwise after registration it wont redirect to the dashboard
+        await fetchUser();
+
+        // Reset form
+        setRegisteredUser({
+          fullName: "",
+          username: "",
+          email: "",
+          phone: "",
+          password: "",
+        });
+
+        toast.success("Registration successful");
+        navigate(`/${res_data.username}`);
+      } else {
+        console.error("Error response:", res_data);
+        setError(res_data.message || "Registration failed. Try again.");
+        toast.error(res_data.message);
+      }
+    } catch (error) {
+      console.error("Registration failed", error);
+      setError("Something went wrong. Please try again.");
+      toast.error("Something went wrong. Please try again.");
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 sm:p-6 bg-gray-50">
       {/* Form Container */}
       <div className="w-full max-w-md bg-white shadow-xl rounded-lg p-8 sm:p-10 border border-gray-200">
-        
         {/* Form Header */}
         <div className="text-center mb-8">
           <h3 className="text-3xl font-extrabold text-gray-900">
             Create an account
           </h3>
-          <p className="mt-2 text-base text-gray-600">Enter your details below</p>
+          <p className="mt-2 text-base text-gray-600">
+            Enter your details below
+          </p>
         </div>
-        <p className="text-sm text-right my-2 italic text-red-600 font-medium pe-2 tracking-wide">All fields are required</p>
+        <p className="text-sm text-right my-2 italic text-red-600 font-medium pe-2 tracking-wide">
+          All fields are required
+        </p>
 
         {/* Registration Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
-          
           {/* Input Fields - using border-theme-focus for custom focus rings */}
           <input
             type="text"
@@ -128,7 +133,7 @@ const Register = () => {
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-300 ease-in-out select-none border-theme-focus"
           />
           <input
-            type="tel" 
+            type="tel"
             name="phone"
             placeholder="Phone"
             value={registeredUser.phone}
@@ -146,7 +151,7 @@ const Register = () => {
               value={registeredUser.password}
               onChange={handleInput}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-300 ease-in-out select-none pr-12 border-theme-focus" 
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-300 ease-in-out select-none pr-12 border-theme-focus"
             />
             <span
               className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer transition duration-150"
@@ -197,7 +202,7 @@ const Register = () => {
               Are you having an account? <br className="sm:hidden" />
               <Link
                 to="/login"
-                className="font-medium hover:underline transition duration-150 text-theme" 
+                className="font-medium hover:underline transition duration-150 text-theme"
               >
                 Login
               </Link>
