@@ -2,15 +2,13 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "../assets/styles/Login.css";
 import { useNavigate } from "react-router-dom";
-import { API, isAuthenticated } from "../utils/auth"; // Import the function
+import { API } from "../utils/auth"; // Import the function
 import { toast } from "react-toastify";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
-import { Eye, EyeOff } from "lucide-react";
-import LoginShimmer from "../components/shimmerUIs/LoginShimmer";
 
 const Login = () => {
-  const { setToken, setIsLogin, user } = useAuth();
+  const { setIsLogin, user, isLogin, fetchUser } = useAuth();
 
   const [loggedInUser, setLoggedInUser] = useState({
     identifier: "",
@@ -29,10 +27,10 @@ const Login = () => {
 
   // Redirect if already logged in
   useEffect(() => {
-    if (isAuthenticated() && user) {
-      navigate(`/${user.username}`); // Redirect to dashboard if user is already logged in
+    if (isLogin && user?.username) {
+      navigate(`/${user.username}`);
     }
-  }, [user, navigate]);
+  }, [isLogin, user, navigate]);
 
   const handleInput = (e) => {
     setLoggedInUser({
@@ -47,18 +45,17 @@ const Login = () => {
       const response = await fetch(URL, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json", // Critical: Tell server you're sending JSON
         },
+        credentials: "include",
         body: JSON.stringify(loggedInUser),
       });
 
       const res_data = await response.json();
       if (response.ok) {
-        localStorage.setItem("token", res_data.token); // Store token in localStorage
         setLoggedInUser({ identifier: "", password: "" });
-        // navigate(`/${res_data.username}`); // Redirect to home
-        setToken(res_data.token);
         setIsLogin(true);
+        fetchUser();
         toast.success("Logged in successfully");
       } else {
         console.log("Invalid credentials");
@@ -71,7 +68,6 @@ const Login = () => {
       toast.error("Incorrect login format entered");
     }
   };
-
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#4caf50] to-[#3e8e41] p-4">

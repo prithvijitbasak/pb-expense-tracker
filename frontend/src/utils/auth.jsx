@@ -1,7 +1,6 @@
 import { jwtDecode } from "jwt-decode";
 const API = import.meta.env.VITE_APP_API_URI;
 
-
 const logout = () => {
   localStorage.removeItem("token");
   window.location.href = "/"; // Redirect instead of reloading
@@ -17,16 +16,4 @@ const isTokenExpired = (token) => {
   }
 };
 
-const isAuthenticated = () => {
-  const token = localStorage.getItem("token");
-  if (!token) return false;
-
-  if (isTokenExpired(token)) {
-    logout(); // Auto-logout if expired
-    return false;
-  }
-
-  return true;
-}
-
-export { API, isAuthenticated, logout };
+export { API, logout };
