@@ -33,7 +33,7 @@ const username = z
   .min(3, { message: "The username must have atleast 3 characters" })
   .max(50, { message: "The username can only be up to 50 characters" })
   .regex(/^(?=.*[A-Za-z])[A-Za-z0-9]+$/, {
-    message: "The username must contain at least 1 letter and 1 number",
+    message: "The username can contain letter and number only",
   });
 
 const email = z
