@@ -30,10 +30,12 @@ const fullName = z
 const username = z
   .string({ required_error: "Please enter a username" })
   .trim()
-  .min(3, { message: "The username must have atleast 3 characters" })
+  .toLowerCase() // Optional: Automatically converts input to lowercase
+  .min(3, { message: "The username must have at least 3 characters" })
   .max(50, { message: "The username can only be up to 50 characters" })
-  .regex(/^(?=.*[A-Za-z])[A-Za-z0-9]+$/, {
-    message: "The username can contain letter and number only",
+  .regex(/^(?=.*[a-z])[a-z0-9]+$/, {
+    message:
+      "The username must be lowercase and contain only letters or numbers",
   });
 
 const email = z
@@ -51,10 +53,13 @@ const password = z
   .trim()
   .min(8, { message: "Password should have at least 8 characters" })
   .max(50, { message: "Password can only be up to 50 characters" })
-  .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{8,}$/, {
-    message:
-      "Password must have at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character",
-  });
+  .regex(
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{8,}$/,
+    {
+      message:
+        "Password must have at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character",
+    }
+  );
 
 // Signup schema using the reusable fields
 const signupSchema = z.object({
@@ -65,5 +70,11 @@ const signupSchema = z.object({
   password,
 });
 
-
-module.exports = { signupSchema, loginSchema, fullName, username, email, phone };
+module.exports = {
+  signupSchema,
+  loginSchema,
+  fullName,
+  username,
+  email,
+  phone,
+};
