@@ -117,6 +117,9 @@ const login = async (req, res) => {
     const accessToken = userExist.generateAccessToken();
     const refreshToken = userExist.generateRefreshToken();
 
+    userExist.refreshToken = refreshToken;
+    await userExist.save();
+
     // Send cookies
     res.cookie("accessToken", accessToken, {
       httpOnly: true, // JS cannot access this
