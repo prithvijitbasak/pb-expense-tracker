@@ -117,6 +117,8 @@ const login = async (req, res) => {
     const accessToken = userExist.generateAccessToken();
     const refreshToken = userExist.generateRefreshToken();
 
+    // extremely necessary because after logout the refreshtoken is deleted
+    // then on login we would must save the refreshToken otherwise the logic will fail
     userExist.refreshToken = refreshToken;
     await userExist.save();
 
