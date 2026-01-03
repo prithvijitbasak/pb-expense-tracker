@@ -34,6 +34,28 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const logout = async () => {
+    try {
+      const response = await fetch(`${API}/api/auth/logout`, {
+        method: "POST", 
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Logout failed with status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      // These will run regardless of whether the network request succeeded
+      setUser(null);
+      window.location.href = "/";
+    }
+  };
+
   useEffect(() => {
     fetchUser();
   }, []); // will run only on the initial render
@@ -45,6 +67,7 @@ export const AuthProvider = ({ children }) => {
     setIsLogin,
     loading,
     fetchUser,
+    logout
   };
 
   return (

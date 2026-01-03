@@ -7,14 +7,13 @@ import { FiLogOut } from "react-icons/fi";
 import { FaUserCircle } from "react-icons/fa";
 import { useState } from "react";
 import { IoIosAnalytics } from "react-icons/io";
-import { logout } from "../utils/auth";
 import { useAuth } from "../context/AuthContext";
 
 const Sidebar = (props) => {
   const { isOpen, handleCloseArrowClick } = props;
-  const { user, loading } = useAuth();
+  const { user, loading, logout } = useAuth();
 
-  // 🌀 Show shimmer while loading user data
+  // Show shimmer while loading user data
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -23,7 +22,7 @@ const Sidebar = (props) => {
     );
   }
 
-  // ⚠️ If not loading but user data missing (e.g. not logged in)
+  //  If not loading but user data missing (e.g. not logged in)
   if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center text-gray-600">

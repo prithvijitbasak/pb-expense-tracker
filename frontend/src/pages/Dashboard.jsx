@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import AddExpense from "../components/AddExpense";
 import "../assets/styles/Dashboard.css";
-import { logout } from "../utils/auth";
 import DayDetailsCard from "../components/DayDetailsCard";
 import MonthDetailsCard from "../components/MonthDetailsCard";
 import YearDetailsCard from "../components/YearDetailsCard";
