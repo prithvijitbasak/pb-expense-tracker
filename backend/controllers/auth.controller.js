@@ -67,7 +67,7 @@ const register = async (req, res) => {
       httpOnly: true, // JS cannot access token → prevents XSS
       secure: true, // only HTTPS
       sameSite: "none", // required for cross-site cookies
-      maxAge: 12 * 60 * 60 * 1000, // 12 hours
+      maxAge: 6 * 60 * 60 * 1000, // 6 hours
     });
 
     res.cookie("refreshToken", refreshToken, {
@@ -127,7 +127,7 @@ const login = async (req, res) => {
       httpOnly: true, // JS cannot access this
       secure: true, // send only over HTTPS
       sameSite: "strict", // CSRF protection
-      maxAge: 15 * 60 * 1000, // 15 minutes
+      maxAge: 6 * 60 * 60 * 1000, // 6 hours
     });
 
     res.cookie("refreshToken", refreshToken, {
