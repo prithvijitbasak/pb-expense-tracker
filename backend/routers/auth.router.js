@@ -11,5 +11,6 @@ router
   .post(validate(signupSchema), authControllers.register);
 router.route("/login").post(validate(loginSchema), authControllers.login);
 router.route("/logout").post(authMiddleware, authControllers.logout);
+router.route("/refresh-access-token").post(authControllers.refreshAccessToken);
 
 module.exports = router;
