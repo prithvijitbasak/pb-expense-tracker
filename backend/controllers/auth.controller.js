@@ -183,4 +183,26 @@ const logout = async (req, res) => {
   }
 };
 
-module.exports = { home, register, login, logout };
+const refreshAccessToken = async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+
+  if (!refreshToken) return res.status(401).json({ message: "Access Denied" });
+
+  jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY, (err, user) => {
+    if (err) return res.status(403).send("Invalid Refresh Token");
+
+    const accessToken = jwt.sign({ id: user._id }, process.env.JWT_ACCESS_KEY, {
+      expiresIn: "15m",
+    });
+
+    res
+      .cookie("accessToken", accessToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "Strict",
+      })
+      .json({ message: "Refreshed Successfully" });
+  });
+};
+
+module.exports = { home, register, login, logout, refreshAccessToken };
