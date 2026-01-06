@@ -32,11 +32,9 @@ const useTotalExpense = (type, values = {}) => {
 
       try {
         setLoading(true);
-        const token = localStorage.getItem("token");
+        
         const response = await axios.get(url, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          withCredentials: true,
         });
         // console.log(response);
         setTotal(response.data.totalExpenses || 0);

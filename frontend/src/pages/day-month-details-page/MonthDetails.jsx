@@ -16,20 +16,11 @@ const MonthDetails = () => {
   const fetchExpenses = async (month, year) => {
     setIsLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        console.error("No token found in local storage!");
-        setIsLoading(false); // ✅ prevent infinite loading
-        return;
-      }
-
       const url = `${API}/api/expenses/get-expenses-by-month?month=${month}&year=${year}`;
 
       const response = await fetch(url, {
         method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        credentials: "include",
       });
 
       if (response.ok) {

@@ -20,14 +20,13 @@ const DayDetails = () => {
 
   const fetchExpenses = async (date) => {
     setIsLoading(true);
-    const token = localStorage.getItem("token");
 
     try {
       const response = await fetch(
         `${API}/api/expenses/get-expenses-by-date?date=${date}`,
         {
           method: "GET",
-          headers: { Authorization: `Bearer ${token}` },
+          credentials: "include",
         }
       );
 

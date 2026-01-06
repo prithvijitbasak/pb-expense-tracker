@@ -23,9 +23,7 @@ const MonthDetailsCard = () => {
         `${API}/api/expenses/get-expenses-by-month?month=${month}&year=${year}`,
         {
           method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          credentials: "include",
         }
       );
       if (response.ok) {
