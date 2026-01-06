@@ -47,12 +47,8 @@ const AddExpense = () => {
 
   // Function to submit data
   const handleSubmit = async () => {
-    const token = localStorage.getItem("token"); // Retrieve JWT token
 
-    if (!token) {
-      toast.error("User not authenticated. Please log in.");
-      return;
-    }
+    
 
     // Transform inputFields to match backend structure
     const expenses = inputFields.map((field) => {
@@ -74,8 +70,8 @@ const AddExpense = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
+        credentials: "include",
         body: JSON.stringify(expenses), // Send only one expense if backend expects object
       });
 
