@@ -76,7 +76,7 @@ const AllDetailsCard = ({
             className="rounded bg-green-500 px-2 font-medium cursor-pointer edit-btn"
             onClick={() => {
               handleEditClick();
-              console.log("opening the edit modal");
+              // console.log("opening the edit modal");
             }}
           >
             Edit
@@ -85,7 +85,7 @@ const AllDetailsCard = ({
             className="rounded bg-red-500 px-3 py-3 font-medium cursor-pointer delete-btn"
             onClick={() => {
               handleDelClick();
-              console.log("Opening the delete confirm box");
+              // console.log("Opening the delete confirm box");
             }}
           >
             Delete

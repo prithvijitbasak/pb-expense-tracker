@@ -76,9 +76,10 @@ const getExpenseCategories = (req, res) => {
 const editExpense = async (req, res) => {
   try {
     const userId = req.user.id;
+    // console.log("User ID from authMiddleware:", userId);
     const { _id, ...expenseData } = req.body;
 
-    console.log("Edit Request Received:", req.body);
+    // console.log("Edit Request Received:", req.body);
 
     // Check for missing _id
     if (!_id) {

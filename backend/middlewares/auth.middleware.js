@@ -39,6 +39,7 @@ const authMiddleware = async (req, res, next) => {
     // from the object now before passing it to next() for privacy)
     userData.refreshToken = undefined;
     req.user = userData;
+    // console.log("Authenticated User:", req.user);
 
     next();
   } catch (error) {

@@ -76,7 +76,7 @@ const AddExpense = () => {
       });
 
       const data = await response.json();
-      console.log("Backend Response:", data); // Log response for debugging
+      // console.log("Backend Response:", data); // Log response for debugging
 
       if (response.ok) {
         toast.success("Expenses added successfully!");

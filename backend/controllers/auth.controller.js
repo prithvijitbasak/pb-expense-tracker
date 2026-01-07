@@ -16,7 +16,7 @@ const home = async (req, res) => {
 const register = async (req, res) => {
   try {
     const { fullName, username, email, phone, password } = req.body;
-    console.log(req.body);
+    // console.log(req.body);
 
     // 1. Check for existing user
     const userExist = await User.findOne({

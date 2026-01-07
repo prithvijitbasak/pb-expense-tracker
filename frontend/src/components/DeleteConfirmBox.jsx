@@ -5,7 +5,7 @@ import "../assets/styles/DeleteConfirmBox.css";
 
 const DeleteConfirmBox = ({ expenseData, onClose, onDeleted }) => {
   const handleDelete = async () => {
-    console.log("clicked delete");
+    // console.log("clicked delete");
     
     const expenseId = expenseData._id;
     try {
