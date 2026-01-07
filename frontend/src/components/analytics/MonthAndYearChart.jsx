@@ -34,12 +34,10 @@ const MonthAndYearChart = ({ typeOfChart, month, year }) => {
   useEffect(() => {
     const fetchExpenses = async () => {
       try {
-        const token = localStorage.getItem("token"); // if auth is required
+        
         const response = await fetch(fetchURL, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // remove if not needed
-          },
+          method: "GET",
+          credentials: "include",
         });
         const data = await response.json();
         setExpenseData(data); // now data is an array
