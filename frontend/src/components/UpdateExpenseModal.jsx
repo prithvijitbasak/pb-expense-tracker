@@ -83,7 +83,7 @@ const UpdateExpenseModal = ({ expenseData, onClose, onUpdated }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const token = localStorage.getItem("token");
+    
 
     // Format the date to "dd-mm-yyyy"
     const isoDate = new Date(formData.date);
@@ -99,9 +99,9 @@ const UpdateExpenseModal = ({ expenseData, onClose, onUpdated }) => {
       const response = await fetch(`${API}/api/expenses/edit`, {
         method: "PATCH",
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
         },
+        credentials: "include",
         body: JSON.stringify(payload),
       });
 

@@ -1,7 +1,5 @@
-import { useEffect, useState } from "react";
-import { API } from "../../utils/auth";
+import {  useState } from "react";
 import AllDetailsCard from "../../components/AllDetailsCard";
-import { useSearchParams } from "react-router-dom";
 import "../../assets/styles/MonthDetails.css";
 import UpdateExpenseModal from "../../components/UpdateExpenseModal";
 import DeleteConfirmBox from "../../components/DeleteConfirmBox";
