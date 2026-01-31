@@ -17,7 +17,7 @@ const loginSchema = z.object({
       {
         message:
           "Password must have at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character",
-      }
+      },
     ), // Custom regex ensures password has required complexity
 });
 
@@ -58,8 +58,15 @@ const password = z
     {
       message:
         "Password must have at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character",
-    }
+    },
   );
+
+const role = z.string({ required_error: "Please enter your role" }).trim();
+
+const timezone = z
+  .string({ required_error: "Please enter your timezone" })
+  .trim()
+  .regex(/^[A-Za-z_]+\/[A-Za-z_]+$/, "Invalid timezone format");
 
 // Signup schema using the reusable fields
 const signupSchema = z.object({
@@ -68,6 +75,8 @@ const signupSchema = z.object({
   email,
   phone,
   password,
+  role,
+  timezone,
 });
 
 module.exports = {

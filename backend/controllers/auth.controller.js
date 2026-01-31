@@ -1,7 +1,7 @@
-const express = require("express");
 const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { isValidTimezone } = require("./timezone.controller");
 
 // for home page
 const home = async (req, res) => {
@@ -15,7 +15,8 @@ const home = async (req, res) => {
 // for register purpose
 const register = async (req, res) => {
   try {
-    const { fullName, username, email, phone, password } = req.body;
+    const { fullName, username, email, phone, password, role, timezone } =
+      req.body;
     // console.log(req.body);
 
     // 1. Check for existing user
@@ -45,6 +46,15 @@ const register = async (req, res) => {
     const saltRound = 10;
     const hashedPassword = await bcrypt.hash(password, saltRound);
 
+    // checking whether the timezone is valid or not
+    const valid = await isValidTimezone(timezone);
+
+    if (!valid) {
+      return res.status(400).json({
+        message: "Invalid or unsupported timezone selected",
+      });
+    }
+
     // 3. Create user without refresh token
     const userCreated = await User.create({
       fullName,
@@ -52,6 +62,8 @@ const register = async (req, res) => {
       email,
       phone,
       password: hashedPassword,
+      role,
+      timezone,
     });
 
     // 4. Generate tokens after creation
