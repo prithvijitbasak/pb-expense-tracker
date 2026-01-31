@@ -20,7 +20,6 @@ const Profile = () => {
     );
   }
 
-  
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-100 flex items-center justify-center p-6">
       <div className="bg-white/90 backdrop-blur-md shadow-2xl rounded-2xl p-8 max-w-lg w-full border border-gray-200 relative overflow-hidden transition-transform duration-300 hover:scale-[1.01] hover:shadow-3xl">
@@ -43,7 +42,6 @@ const Profile = () => {
         {/* Profile Details */}
         <div className="space-y-4">
           {[
-            { label: "User ID", value: user._id },
             { label: "Full Name", value: user.fullName },
             { label: "Username", value: user.username },
             { label: "Email", value: user.email },
@@ -69,6 +67,10 @@ const Profile = () => {
             >
               {user.isAdmin ? "Yes" : "No"}
             </span>
+          </div>
+          <div className="flex justify-between items-center bg-gray-50 px-4 py-3 rounded-lg">
+            <span className="font-medium text-gray-600">Timezone</span>
+            <span className={`font-semibold`}>{user.timezone}</span>
           </div>
         </div>
 
