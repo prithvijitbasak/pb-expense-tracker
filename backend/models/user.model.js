@@ -35,13 +35,18 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "Normal user",
     },
+    timezone: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     refreshToken: {
       type: String,
     },
   },
   {
     timestamps: true, // for createdAt and updatedAt
-  }
+  },
 );
 
 /**
@@ -59,7 +64,7 @@ userSchema.methods.generateAccessToken = function () {
       userId: this._id.toString(),
     },
     process.env.JWT_ACCESS_KEY,
-    { expiresIn: "6h" } 
+    { expiresIn: "6h" },
   );
 };
 
@@ -78,7 +83,7 @@ userSchema.methods.generateRefreshToken = function () {
       userId: this._id.toString(),
     },
     process.env.JWT_REFRESH_KEY,
-    { expiresIn: "7d" } // 7 days
+    { expiresIn: "7d" }, // 7 days
   );
 };
 
