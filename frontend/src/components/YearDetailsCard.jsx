@@ -11,15 +11,12 @@ const YearDetailsCard = () => {
   const currentYear = new Date().getFullYear();
   useEffect(() => {
     const fetchTotalYearExpense = async () => {
-      const token = localStorage.getItem("token");
       try {
         const response = await fetch(
           `${API}/api/expenses/get-expenses-by-year?year=${currentYear}`,
           {
             method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            credentials: "include",
           }
         );
         if (response.ok) {
