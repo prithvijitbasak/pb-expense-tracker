@@ -13,18 +13,14 @@ import { API } from "../../utils/auth";
 
 const WeeklyExpenseChart = () => {
   const [last7DaysData, setLast7DaysData] = useState([]);
-  const token = localStorage.getItem("token");
-  const API = import.meta.env.VITE_API_URL || "http://localhost:5001"; // optional fallback
+  
 
   useEffect(() => {
     const fetchLast7DaysData = async () => {
       try {
         const res = await fetch(`${API}/api/expenses/analytics/last7days`, {
           method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
+          credentials: "include",
         });
 
         if (res.ok) {
@@ -39,7 +35,7 @@ const WeeklyExpenseChart = () => {
     };
 
     fetchLast7DaysData();
-  }, [API, token]); // ✅ Runs only once when component mounts
+  }, [API]); // ✅ Runs only once when component mounts
 
   return (
     <div className="mx-4 md:mx-10 my-6 bg-white shadow-lg rounded-2xl p-6 border border-gray-200">
@@ -61,7 +57,7 @@ const WeeklyExpenseChart = () => {
                 border: "1px solid #e5e7eb",
               }}
             />
-            <Legend wrapperStyle={{ paddingTop: "10px" }} />
+            <Legend wrapperStyle={{ paddingTop: "40px" }} />
 
             {/* Each Bar represents a category, stacked together */}
             <Bar dataKey="Savings" stackId="a" fill="#c8e6c9" />

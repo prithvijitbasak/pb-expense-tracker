@@ -1,5 +1,6 @@
 const Expense = require("../models/expense.model");
 const expenseCategories = require("../constants/expenseCategories");
+const mongoose = require("mongoose");
 
 const monthAnalytics = async (req, res) => {
   try {
@@ -70,7 +71,7 @@ const yearAnalytics = async (req, res) => {
     const userId = req.user._id; // ✅ From authMiddleware
 
     // ✅ Define the full year range
-    const startDate = new Date(year, 0, 1);  // Jan 1st, 00:00:00
+    const startDate = new Date(year, 0, 1); // Jan 1st, 00:00:00
     const endDate = new Date(Number(year) + 1, 0, 1); // Next year's Jan 1st
 
     // ✅ MongoDB aggregation
@@ -119,58 +120,84 @@ const yearAnalytics = async (req, res) => {
 
 const last7DaysAnalytics = async (req, res) => {
   try {
-    const userId = req.user._id;
+    const userId = req.user.id;
+    // console.log("User ID for Last 7 Days Analytics:", req.user);
+
     const today = new Date();
-    const endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1); // tomorrow
-    const startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 6); // 6 days ago
+    const tz = req.user.timezone || "UTC"; // Default to UTC if timezone is not set
+
+    // Create dates for the last 7 days (including today)
+    const startDate = new Date(today);
+    startDate.setDate(today.getDate() - 6);
+    startDate.setHours(0, 0, 0, 0);
+    // console.log("Start Date for Last 7 Days Analytics:", startDate);
+
+    const endDate = new Date(today);
+    endDate.setHours(23, 59, 59, 999);
+    // console.log("End Date for Last 7 Days Analytics:", endDate);
 
     const analytics = await Expense.aggregate([
       {
         $match: {
-          user: userId,
-          date: { $gte: startDate, $lt: endDate },
-        },
-      },
-      {
-        $project: {
-          category: 1,
-          amount: 1,
-          dayOfWeek: { $dayOfWeek: "$date" }, // 1 (Sun) - 7 (Sat)
+          user: new mongoose.Types.ObjectId(userId),
+          date: { $gte: startDate, $lte: endDate },
         },
       },
       {
         $group: {
-          _id: { dayOfWeek: "$dayOfWeek", category: "$category" },
+          _id: {
+            dateStr: {
+              $dateToString: {
+                format: "%d-%m-%Y",
+                date: "$date",
+                timezone: tz,
+              },
+            },
+            category: "$category",
+          },
           totalAmount: { $sum: "$amount" },
         },
       },
     ]);
 
-    // Helper: map MongoDB dayOfWeek → readable weekday
-    const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    const categories = expenseCategories; // e.g., ['Food', 'Travel', 'Shopping', 'Bills']
+    // console.log("Raw Analytics Data for Last 7 Days:", analytics);
 
-    // Step 1: Build map from aggregation results
+    // Map the DB results for easy lookup
     const resultMap = {};
-    analytics.forEach((a) => {
-      const dayName = weekDays[a._id.dayOfWeek - 1];
-      if (!resultMap[dayName]) resultMap[dayName] = {};
-      resultMap[dayName][a._id.category] = a.totalAmount;
+    analytics.forEach((item) => {
+      const { dateStr, category } = item._id;
+      if (!resultMap[dateStr]) resultMap[dateStr] = {};
+      resultMap[dateStr][category] = item.totalAmount;
     });
 
-    // Step 2: Build the final 7-day data (in chronological order)
+    // Generate the last 7 days including today
     const finalData = [];
-    for (let i = 6; i >= 0; i--) {
-      const d = new Date();
-      d.setDate(today.getDate() - i);
-      const dayName = weekDays[d.getDay()];
+    const categories = expenseCategories;
 
-      const dayData = { day: dayName };
-      categories.forEach((cat) => {
-        dayData[cat] = resultMap[dayName]?.[cat] || 0;
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(today.getDate() - i);
+
+      const day = String(d.getDate()).padStart(2, "0");
+      const month = String(d.getMonth() + 1).padStart(2, "0");
+      const year = d.getFullYear();
+      const dateKey = `${day}-${month}-${year}`;
+
+      const dayName = d.toLocaleDateString("en-US", {
+        weekday: "short",
+        timeZone: tz,
       });
 
-      finalData.push(dayData);
+      const dayEntry = {
+        date: dateKey,
+        day: dayName,
+      };
+
+      categories.forEach((cat) => {
+        dayEntry[cat] = resultMap[dateKey]?.[cat] || 0;
+      });
+
+      finalData.push(dayEntry);
     }
 
     res.status(200).json(finalData);
@@ -179,7 +206,5 @@ const last7DaysAnalytics = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
-
 
 module.exports = { monthAnalytics, yearAnalytics, last7DaysAnalytics };
