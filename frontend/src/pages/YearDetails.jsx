@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { API } from "../utils/auth";
+import { useAuth } from "../context/AuthContext";
 
 const YearDetails = () => {
+  const { user } = useAuth();
+  console.log("User in YearDetails: ", user);
+  console.log(user.username);
   const [searchParams] = useSearchParams();
   const year = searchParams.get("year"); // getting 'year' query param from URL
 
@@ -19,17 +23,13 @@ const YearDetails = () => {
 
   useEffect(() => {
     const fetchExpenses = async () => {
-      const token = localStorage.getItem("token");
-
       try {
         const response = await fetch(
           `${API}/api/expenses/get-expenses-by-year?year=${year}`,
           {
             method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+            credentials: "include",
+          },
         );
 
         if (response.ok) {
@@ -67,14 +67,14 @@ const YearDetails = () => {
 
               return (
                 <Link
-                  to={`/month-details?month=${monthFormatted}&year=${year}`}
+                  to={`${user.username}/month-details?month=${monthFormatted}&year=${year}`}
                   key={monthData.index}
                 >
                   <div className="month-link">
                     <p className="text-2xl font-bold pb-3">{monthData.name}</p>
-                    {/*<p className="text">
+                    <p className="text">
                       Total = {monthlyExpenses[monthFormatted] ?? "Loading..."}
-                    </p> */}
+                    </p>
                   </div>
                 </Link>
               );

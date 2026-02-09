@@ -17,7 +17,7 @@ const MonthDetailsCard = () => {
   // );
 
   const fetchTotalExpenseOfMonth = async () => {
-    const token = localStorage.getItem("token");
+    
     try {
       const response = await fetch(
         `${API}/api/expenses/get-expenses-by-month?month=${month}&year=${year}`,
