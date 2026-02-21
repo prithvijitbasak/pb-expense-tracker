@@ -30,8 +30,8 @@ const getExpensesByDate = async (req, res) => {
     const endDate = new Date(formattedDate);
     endDate.setHours(23, 59, 59, 999);
 
-    console.log("Start date: ", startDate);
-    console.log("End date: ", endDate);
+    // console.log("Start date: ", startDate);
+    // console.log("End date: ", endDate);
 
     // Fetch total expenses and expense details
     const expenses = await Expense.find({
