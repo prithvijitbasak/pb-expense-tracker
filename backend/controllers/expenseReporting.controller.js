@@ -42,7 +42,7 @@ const getExpensesByDate = async (req, res) => {
     // Calculate total expenses
     const totalExpenses = expenses.reduce(
       (sum, expense) => sum + expense.amount,
-      0
+      0,
     );
 
     return res.status(200).json({
@@ -88,11 +88,16 @@ const getExpensesByMonth = async (req, res) => {
       date: { $gte: startDate, $lte: endDate },
     }).select("_id title amount category date notes createdAt updatedAt");
 
-    // Calculate total expenses
-    const totalExpenses = expenses.reduce(
-      (sum, expense) => sum + expense.amount,
-      0
-    );
+    let totalAmount = 0;
+    expenses.forEach((expense) => {
+      totalAmount += expense.amount; 
+      console.log("Expense Amount:", expense.amount, "Total So Far:", totalAmount);
+    });
+
+    const totalExpenses = Number(totalAmount.toFixed(2)); // Ensure two decimal places
+    
+
+    console.log("Total Expenses for the month:", totalExpenses);
 
     return res.status(200).json({
       totalExpenses,
@@ -178,7 +183,7 @@ const getExpensesByYear = async (req, res) => {
     // 7. 💰 Calculate Grand Total
     const totalExpenses = aggregation.reduce(
       (sum, item) => sum + item.totalAmount,
-      0
+      0,
     );
 
     // 8. 📦 Send the Response
