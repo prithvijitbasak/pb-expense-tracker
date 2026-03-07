@@ -8,7 +8,7 @@ var bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const connectDb = require("./utils/db");
-const PORT = 5001;
+const PORT = process.env.PORT;
 
 app.use(
   cors({

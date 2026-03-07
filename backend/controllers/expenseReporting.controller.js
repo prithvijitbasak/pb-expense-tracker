@@ -91,7 +91,7 @@ const getExpensesByMonth = async (req, res) => {
     let totalAmount = 0;
     expenses.forEach((expense) => {
       totalAmount += expense.amount; 
-      console.log("Expense Amount:", expense.amount, "Total So Far:", totalAmount);
+      // console.log("Expense Amount:", expense.amount, "Total So Far:", totalAmount);
     });
 
     const totalExpenses = Number(totalAmount.toFixed(2)); // Ensure two decimal places

@@ -35,11 +35,11 @@ const ExpenseSearchBox = (props) => {
   const handleSearch = () => {
     if (formattedDate || (inputMonth && inputYear)) {
       if (searchType === "month") {
-        navigate(`/${user.username}/month-details?month=${inputMonth}&year=${inputYear}`);
-      } else {
         navigate(
-          `/${user.username}/day-details?date=${formattedDate}`,
+          `/${user.username}/month-details?month=${inputMonth}&year=${inputYear}`,
         );
+      } else {
+        navigate(`/${user.username}/day-details?date=${formattedDate}`);
       }
     } else {
       toast.error("Please select a date!");
