@@ -1,4 +1,4 @@
-import {  useState } from "react";
+import { useState } from "react";
 import AllDetailsCard from "../../components/AllDetailsCard";
 import "../../assets/styles/MonthDetails.css";
 import UpdateExpenseModal from "../../components/UpdateExpenseModal";
@@ -28,6 +28,7 @@ const DayMonthDetails = (props) => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedExpense, setSelectedExpense] = useState(null);
   const [openDelConfirm, setOpenDelConfirm] = useState(false);
+  const [isGridLayout, setIsGridLayout] = useState(true);
 
   const handleEditClicked = (expense) => {
     setSelectedExpense(expense);
@@ -37,6 +38,10 @@ const DayMonthDetails = (props) => {
   const handleDelClicked = (expense) => {
     setSelectedExpense(expense);
     setOpenDelConfirm(true);
+  };
+
+  const handleExpenseViewToggle = () => {
+    setIsGridLayout((prev) => !prev);
   };
 
   return (
@@ -52,6 +57,21 @@ const DayMonthDetails = (props) => {
               All the expenses of month: {monthData[month]}, {year}
             </h2>
           )}
+
+          <div className="layout-toggle-buttons flex gap-4 justify-start">
+            <button
+              className={`btn btn-primary cursor-pointer ${isGridLayout ? "border border-amber-600" : ""}`}
+              onClick={handleExpenseViewToggle}
+            >
+              Grid layout
+            </button>
+            <button
+              className={`btn btn-secondary cursor-pointer ${!isGridLayout ? "border border-amber-600" : ""}`}
+              onClick={handleExpenseViewToggle}
+            >
+              Table layout
+            </button>
+          </div>
 
           <h4 className="font-bold text-right pb-3 pr-9 text-xl">
             Total ={" "}

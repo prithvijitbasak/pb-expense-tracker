@@ -7,57 +7,53 @@ import UpdateExpenseModal from "../../components/UpdateExpenseModal";
 import DeleteConfirmBox from "../../components/DeleteConfirmBox";
 import DayMonthDetails from "./DayMonthDetails";
 import useTotalExpense from "../../hooks/useTotalExpense";
+import { useQuery } from "@tanstack/react-query";
 
 const DayDetails = () => {
-  const [expenses, setExpenses] = useState([]);
   const [searchParams] = useSearchParams();
   const date = searchParams.get("date");
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    fetchExpenses(date);
-  }, [date]);
 
   const fetchExpenses = async (date) => {
-    setIsLoading(true);
-
-    try {
-      const response = await fetch(
-        `${API}/api/expenses/get-expenses-by-date?date=${date}`,
-        {
-          method: "GET",
-          credentials: "include",
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        setExpenses(data.expenses || []);
-      } else {
-        console.log("Unable to fetch the expenses");
+    const response = await fetch(
+      `${API}/api/expenses/get-expenses-by-date?date=${date}`,
+      {
+        method: "GET",
+        credentials: "include",
       }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false); // ✅ always reset loading
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch expenses");
     }
+
+    const data = await response.json();
+    return data.expenses || [];
   };
 
-  const totalExpense = useTotalExpense("day", {
-    date: `${date}`,
+  const {
+    data: expenses = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["day-expenses", date],
+    queryFn: () => fetchExpenses(date),
+    enabled: !!date, // when date is available, then only fetch the expenses
   });
 
+  const totalExpense = useTotalExpense("day", { date });
+
+  if (error) {
+    return <p>Error loading expenses</p>;
+  }
+
   return (
-    <>
-      <DayMonthDetails
-        typeOfExpense="day"
-        isLoading={isLoading}
-        expenses={expenses}
-        totalExpense={totalExpense}
-        fetchExpenses={fetchExpenses}
-        paramArray={[date]} // extremely necessary to tell the component which type of expense is this for day or month
-      />
-    </>
+    <DayMonthDetails
+      typeOfExpense="day"
+      isLoading={isLoading}
+      expenses={expenses}
+      totalExpense={totalExpense}
+      paramArray={[date]}
+    />
   );
 };
 
