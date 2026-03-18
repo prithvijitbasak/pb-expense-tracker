@@ -8,6 +8,7 @@ const expenseCategories = [
   "Medicine",
   "Shopping",
   "Entertainment",
+  "Investment",
   "Other",
 ];
 
