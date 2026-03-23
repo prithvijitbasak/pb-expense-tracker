@@ -3,6 +3,7 @@ import {
   Navigate,
   RouterProvider,
 } from "react-router-dom";
+import React, { Suspense } from "react";
 import MonthDetails from "./pages/day-month-details-page/MonthDetails";
 import DayDetails from "./pages/day-month-details-page/DayDetails";
 import YearDetails from "./pages/YearDetails";
@@ -11,7 +12,6 @@ import AddExpense from "./components/AddExpense";
 import Login from "./pages/Login";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import Register from "./pages/Register";
-import Profile from "./pages/Profile";
 import MainLayout from "./layouts/MainLayout";
 import PublicLayout from "./layouts/PublicLayout";
 import Analytics from "./pages/analytics/Analytics";
@@ -30,6 +30,11 @@ const App = () => {
     );
   }
 
+  // calling the profile page using lazy loading to improve performance and reduce initial bundle size
+  const Profile = React.lazy(() => {
+    return import("./pages/Profile");
+  });
+
   const router = createBrowserRouter([
     {
       element: <MainLayout />,
@@ -41,7 +46,14 @@ const App = () => {
               path: "/:username",
               children: [
                 { index: true, element: <Dashboard /> },
-                { path: "profile", element: <Profile /> },
+                {
+                  path: "profile",
+                  element: (
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <Profile />
+                    </Suspense>
+                  ),
+                },
                 { path: "year-details", element: <YearDetails /> },
                 { path: "add-expense", element: <AddExpense /> },
                 { path: "day-details", element: <DayDetails /> },
