@@ -97,7 +97,7 @@ const getExpensesByMonth = async (req, res) => {
     const totalExpenses = Number(totalAmount.toFixed(2)); // Ensure two decimal places
     
 
-    console.log("Total Expenses for the month:", totalExpenses);
+    // console.log("Total Expenses for the month:", totalExpenses);
 
     return res.status(200).json({
       totalExpenses,

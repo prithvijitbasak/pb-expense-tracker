@@ -54,6 +54,7 @@ const DayDetails = () => {
       totalExpense={totalExpense}
       paramArray={[date]}
     />
+    
   );
 };
 
