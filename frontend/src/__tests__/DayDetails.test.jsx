@@ -20,7 +20,7 @@ vi.mock("react-router-dom", async () => {
   };
 });
 
-import DayDetails from "./DayDetails";
+import DayDetails from "../pages/day-month-details-page/DayDetails";
 
 test("renders DayDetails", () => {
   const queryClient = new QueryClient();
@@ -31,5 +31,5 @@ test("renders DayDetails", () => {
     </QueryClientProvider>
   );
 
-  expect(screen.getByTestId("mock-day-month")).toBeInTheDocument();
+  expect(screen.findByAllText("expenses-card-container")).toBeInTheDocument();
 });
