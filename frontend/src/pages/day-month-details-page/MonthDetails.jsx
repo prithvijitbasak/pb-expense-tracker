@@ -1,5 +1,4 @@
 import DayMonthDetails from "./DayMonthDetails";
-import { useEffect, useState } from "react";
 import { API } from "../../utils/auth";
 import { useSearchParams } from "react-router-dom";
 import useTotalExpense from "../../hooks/useTotalExpense";

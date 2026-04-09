@@ -24,7 +24,7 @@ const DeleteConfirmBox = ({ expenseData, onClose, onDeleted }) => {
 
   return (
     <>
-      <div className="flex justify-center items-center bg-[rgba(0,0,0,0.7)] w-full h-screen fixed top-0 pointer-events-none">
+      <div className="flex justify-center items-center bg-[rgba(0,0,0,0.7)] w-full inset-0 h-full fixed top-0 pointer-events-none">
         <div className="delete-box bg-white w-[35%] pointer-events-auto rounded-lg p-4!">
           <h3 className="font-bold text-xl text-center pb-1.5!">
             Heads Up! Are you sure you want to delete?

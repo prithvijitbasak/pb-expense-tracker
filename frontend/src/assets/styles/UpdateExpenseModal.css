@@ -5,7 +5,6 @@
   border-radius: 15px;
   border: none;
   box-shadow: #0000000f 0 2px 4px inset;
-  width: 100%;
   padding: 15px 20px;
   font-weight: 500;
   font-size: 16px;
@@ -14,7 +13,7 @@
 }
 
 .category-field {
-    width: 100%;
+  width: 100%;
 }
 
 .update-modal-wrapper {
@@ -37,11 +36,10 @@
   padding-bottom: 20px;
 }
 
-
 .update-btn {
-    padding: 10px 15px;
+  padding: 10px 15px;
 }
 
 .close-btn {
-    padding: 8px 10px;
+  padding: 8px 10px;
 }
