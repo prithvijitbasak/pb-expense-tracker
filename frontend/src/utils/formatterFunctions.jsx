@@ -17,7 +17,7 @@ const formatDateTime = (isoString) => {
 const formatDtConven = (isoString) => {
   const date = new Date(isoString);
 
-  const day = String(date.getDate()).padStart(2, "0"); 
+  const day = String(date.getDate()).padStart(2, "0");
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const year = String(date.getFullYear());
 
@@ -89,4 +89,19 @@ const BritishDate = (props) => {
   );
 };
 
-export { formatDateTime, formatDtConven, toInputDateFormat, BritishDate };
+const alphaNumDate = (dateString) => {
+  const date = new Date(dateString).toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+  return date;
+};
+
+export {
+  formatDateTime,
+  formatDtConven,
+  toInputDateFormat,
+  BritishDate,
+  alphaNumDate,
+};

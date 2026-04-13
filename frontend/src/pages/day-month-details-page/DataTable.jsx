@@ -27,7 +27,7 @@ export function DataTable({ columns, data }) {
        2. Added overflow-hidden to clip the border radius correctly.
        3. Added w-full and overflow-x-auto to make it responsive on mobile.
     */
-    <div className="pb-test w-full rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden">
+    <div className="w-full rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden">
       <div className="relative w-full overflow-x-auto">
         <Table className="min-w-[600px] w-full text-sm">
           <TableHeader className="bg-muted/50">
