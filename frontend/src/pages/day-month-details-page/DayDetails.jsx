@@ -41,49 +41,55 @@ const DayDetails = () => {
   // Define columns for the DataTable
   const columns = [
     {
-      accessorKey: "Serial No.",
-      header: "S.No",
-      cell: ({ row }) => row.index + 1, // Display the row index + 1 for serial number
+      accessorKey: "S.No",
+      header: () => <div className="text-center">S.No</div>, // Center header
+      cell: ({ row }) => <div className="text-center">{row.index + 1}</div>, // Center cell
     },
     {
       accessorKey: "title",
-      header: "Title",
+      header: () => <div className="text-center">Title</div>,
+      cell: ({ row }) => (
+        <div className="text-center">{row.getValue("title")}</div>
+      ),
     },
     {
       accessorKey: "amount",
-      header: "Amount (₹)",
+      header: () => <div className="text-center">Amount (₹)</div>,
       cell: ({ row }) => {
         const amount = parseFloat(row.getValue("amount"));
         return (
-          <div className="font-medium text-red-600">₹{amount.toFixed(2)}</div>
+          <div className="font-medium text-red-600 text-center">₹{amount.toFixed(2)}</div>
         );
       },
     },
     {
       accessorKey: "category",
-      header: "Category",
+      header: () => <div className="text-center">Category</div>,
+      cell: ({ row }) => (
+        <div className="text-center">{row.getValue("category")}</div>
+      ),
     },
     {
       accessorKey: "date",
-      header: "Date",
+      header: () => <div className="text-center">Date</div>,
       cell: ({ row }) => {
         const dateValue = row.getValue("date");
         const formattedDate = alphaNumDate(dateValue);
-        return formattedDate;
+        return <div className="text-center">{formattedDate}</div>;
       },
     },
     {
       accessorKey: "notes",
-      header: "Notes",
+      header: () => <div className="text-center">Notes</div>,
       cell: ({ row }) => {
         // Limit notes to 40 characters for better display in the table
         const notes = row.getValue("notes") || "";
-        return notes.length > 40 ? notes.substring(0, 40) + "..." : notes;
+        return <div className="text-center">{notes.length > 40 ? notes.substring(0, 40) + "..." : notes}</div>;
       },
     },
     {
       accessorKey: "createdAt",
-      header: "Expense Added On",
+      header: () => <div className="text-center">Expense Added On</div>,
       cell: ({ row }) => {
         const createdAtValue = row.getValue("createdAt");
         const formattedCreatedAt = new Date(createdAtValue).toLocaleString(
@@ -96,34 +102,38 @@ const DayDetails = () => {
             minute: "2-digit",
           },
         );
-        return formattedCreatedAt;
+        return <div className="text-center">{formattedCreatedAt}</div>;
       },
     },
     {
       accessorKey: "edit",
-      header: "Edit",
+      header: () => <div className="text-center">Edit</div>,
       cell: ({ row }) => {
         return (
-          <button
-            className="text-blue-500 hover:text-blue-700 cursor-pointer text-xl"
-            onClick={() => handleEditClicked(row.original)}
-          >
-            <FaEdit className="inline" />
-          </button>
+          <div className="text-center">
+            <button
+              className="text-blue-500 hover:text-blue-700 cursor-pointer text-xl"
+              onClick={() => handleEditClicked(row.original)}
+            >
+              <FaEdit className="inline" />
+            </button>
+          </div>
         );
       },
     },
     {
       accessorKey: "delete",
-      header: "Delete",
+      header: () => <div className="text-center">Delete</div>,
       cell: ({ row }) => {
         return (
-          <button
-            className="text-red-500 hover:text-red-700 cursor-pointer text-xl"
-            onClick={() => handleDelClicked(row.original)}
-          >
-            <MdDelete className="inline" />
-          </button>
+          <div className="text-center">
+            <button
+              className="text-red-500 hover:text-red-700 cursor-pointer text-xl"
+              onClick={() => handleDelClicked(row.original)}
+            >
+              <MdDelete className="inline" />
+            </button>
+          </div>
         );
       },
     },
