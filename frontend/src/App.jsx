@@ -18,6 +18,7 @@ import Analytics from "./pages/analytics/Analytics";
 import ErrorPage from "./pages/ErrorPage";
 import { useAuth } from "./context/AuthContext";
 import HomePage from "./pages/HomePage";
+import Report from "./pages/reports/Report";
 
 const App = () => {
   const { user, loading, isLogin } = useAuth(); // ✅ Now hook is used inside component
@@ -59,6 +60,7 @@ const App = () => {
                 { path: "day-details", element: <DayDetails /> },
                 { path: "month-details", element: <MonthDetails /> },
                 { path: "analytics", element: <Analytics /> },
+                { path: "reports", element: <Report /> },
               ],
             },
 

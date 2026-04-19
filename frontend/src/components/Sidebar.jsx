@@ -91,6 +91,15 @@ const Sidebar = (props) => {
             <FaCirclePlus className="inline" />{" "}
             <span className={`${!isOpen ? "hidden" : ""}`}>Add Expense</span>
           </Link>
+          <Link
+            className={`text-white text-lg items-center flex gap-x-4 py-2 ${
+              !isOpen ? "justify-center" : "justify-left"
+            }`}
+            to={`/${user.username}/reports`}
+          >
+            <FaCirclePlus className="inline" />{" "}
+            <span className={`${!isOpen ? "hidden" : ""}`}>Reports</span>
+          </Link>
           <p
             className={`text-white text-lg items-center flex gap-x-4 py-2 cursor-pointer ${
               !isOpen ? "justify-center" : "justify-left"

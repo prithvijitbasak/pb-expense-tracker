@@ -3,43 +3,30 @@ const Expense = require("../models/expense.model");
 
 const getExpensesByDateRange = async (req, res) => {
   try {
-    const { startDateParam, endDateParam } = req.query;
-    
-    const userId = req.user.id; // Extract userId from authMiddleware
+    const { startDateParam, endDateParam, page = 1, limit = 10 } = req.query;
+    const userId = req.user.id;
 
-    if (!userId) {
-      return res.status(401).json({ error: "Unauthorized: User ID not found" });
-    }
-
+    if (!userId) return res.status(401).json({ error: "Unauthorized" });
     if (!startDateParam || !endDateParam) {
-      return res
-        .status(400)
-        .json({ error: "Missing startDate or endDate parameter" });
+        return res.status(400).json({ error: "Missing date parameters" });
     }
 
-    // Convert DD-MM-YYYY to YYYY-MM-DD
+    // Convert strings to numbers to ensure math works correctly
+    const pageNum = parseInt(page);
+    const limitNum = parseInt(limit);
+    const skip = (pageNum - 1) * limitNum;
+
+   
     const startDateParts = startDateParam.split("-");
     const endDateParts = endDateParam.split("-");
-    if (startDateParts.length !== 3 || endDateParts.length !== 3) {
-      return res
-        .status(400)
-        .json({ error: "Invalid date format. Use DD-MM-YYYY" });
-    }
-
-    const formattedStartDate = `${startDateParts[2]}-${startDateParts[1]}-${startDateParts[0]}`; // Convert to YYYY-MM-DD
-    const formattedEndDate = `${endDateParts[2]}-${endDateParts[1]}-${endDateParts[0]}`; // Convert to YYYY-MM-DD
-
+    const formattedStartDate = `${startDateParts[2]}-${startDateParts[1]}-${startDateParts[0]}`;
+    const formattedEndDate = `${endDateParts[2]}-${endDateParts[1]}-${endDateParts[0]}`;
     const startDate = new Date(formattedStartDate);
     startDate.setHours(0, 0, 0, 0);
-
     const endDate = new Date(formattedEndDate);
     endDate.setHours(23, 59, 59, 999);
 
-    // console.log("Start date: ", startDate);
-    // console.log("End date: ", endDate);
-
-    // Fetch total expenses and expense details
-    // 1. Calculate the sum directly in the database (Faster & more scalable)
+    // 1. Get Total Stats (Aggregate)
     const totalStats = await Expense.aggregate([
       {
         $match: {
@@ -50,24 +37,33 @@ const getExpensesByDateRange = async (req, res) => {
       {
         $group: {
           _id: null,
-          total: { $sum: "$amount" },
+          totalAmount: { $sum: "$amount" },
+          totalCount: { $sum: 1 }, // Useful to know total records for UI pagination
         },
       },
     ]);
 
-    const totalExpenses = totalStats.length > 0 ? totalStats[0].total : 0;
-    
+    const totalAmount = totalStats.length > 0 ? totalStats[0].totalAmount : 0;
+    const totalRecords = totalStats.length > 0 ? totalStats[0].totalCount : 0;
 
-    // 2. Fetch the list (consider adding pagination here if the list is long!)
+    // 2. Fetch Paginated List
     const expenses = await Expense.find({
       user: userId,
       date: { $gte: startDate, $lte: endDate },
-    }).select("_id title amount category date notes createdAt updatedAt");
+    })
+      .select("_id title amount category date notes createdAt updatedAt")
+      .sort({ date: -1 }) // Usually best to show newest first
+      .skip(skip)
+      .limit(limitNum);
 
     return res.status(200).json({
-      // Use Number.parseFloat().toFixed(2) or Intl.NumberFormat for the final string
-      totalExpenses: totalExpenses.toFixed(2),
-      count: expenses.length,
+      totalAmount: totalAmount.toFixed(2),
+      pagination: {
+        totalRecords,
+        currentPage: pageNum,
+        totalPages: Math.ceil(totalRecords / limitNum),
+        limit: limitNum
+      },
       expenses,
     });
   } catch (error) {
