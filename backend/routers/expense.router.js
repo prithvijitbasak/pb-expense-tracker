@@ -9,6 +9,7 @@ const expenseReportingController = require("../controllers/expenseReporting.cont
 const authMiddleware = require("../middlewares/auth.middleware");
 const Expense = require("../models/expense.model");
 const { monthAnalytics, yearAnalytics, last7DaysAnalytics } = require("../controllers/analytics.controller");
+const reportsController = require("../controllers/reports.controller");
 
 const router = express.Router();
 
@@ -28,5 +29,6 @@ router.route("/:id").delete(authMiddleware, deleteExpense);
 router.route("/analytics/month").get(authMiddleware, monthAnalytics);
 router.route("/analytics/year").get(authMiddleware, yearAnalytics);
 router.route("/analytics/last7days").get(authMiddleware, last7DaysAnalytics);
+router.route("/reports/date-range").get(authMiddleware, reportsController.getExpensesByDateRange);
 
 module.exports = router;
