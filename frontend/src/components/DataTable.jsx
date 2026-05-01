@@ -90,17 +90,18 @@ export function DataTable({
         </div>
       </div>
 
-      {/* Pagination UI Controls */}
-      <div className="flex items-center justify-between px-2">
-        <div className="text-sm text-muted-foreground">
-          Page {pageIndex} of {pageCount}
-        </div>
-        <div className="flex items-center space-x-2">
+      {pageCount > 1 && (
+        <div className="flex items-center justify-between px-2">
+          <div className="text-sm text-muted-foreground">
+            Page {pageIndex} of {pageCount}
+          </div>
+          <div className="flex items-center space-x-2">
           <Button
             variant="outline"
             size="sm"
             onClick={() => onPageChange(pageIndex - 1)}
             disabled={pageIndex === 1}
+            className="cursor-pointer"
           >
             Previous
           </Button>
@@ -109,11 +110,12 @@ export function DataTable({
             size="sm"
             onClick={() => onPageChange(pageIndex + 1)}
             disabled={pageIndex === pageCount}
+            className="cursor-pointer"
           >
             Next
           </Button>
         </div>
-      </div>
+      </div>)}
     </div>
   )
 }

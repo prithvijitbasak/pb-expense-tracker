@@ -1,16 +1,20 @@
-import { useAuth } from "@/context/AuthContext";
 import { useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { DataTable } from "../day-month-details-page/DataTable";
+import { useQuery } from "@tanstack/react-query";
+import { DataTable } from "../../components/DataTable";
 import DataTableShimmer from "../../components/shimmerUIs/DataTableShimmer";
 import { alphaNumDate } from "../../utils/formatterFunctions";
 import { API } from "@/utils/auth";
+import { formatDtConven, formatInputDate } from "../../utils/formatterFunctions";
+
 
 const Report = () => {
-  const { user } = useAuth();
   const [year] = useState(new Date().getFullYear());
-  const startDate = `01-01-${year}`;
-  const endDate = `31-12-${year}`;
+  const currDate = new Date();
+  
+
+  const [startDate, setStartDate] = useState(formatDtConven(new Date(year, 0, 1)));
+  const [endDate, setEndDate] = useState(formatDtConven(currDate));
+  
 
   const fetchReportData = async (startDate, endDate, page = 1) => {
     const response = await fetch(
@@ -127,24 +131,54 @@ const Report = () => {
   }
 
   const totalPages = data?.pagination?.totalPages || 1;
+  const totalRecords = data?.pagination?.totalRecords || expenses.length;
+  const totalAmount = data?.totalAmount || 0;
+  
 
   return (
     <div className="p-4">
-      <h2 className="text-xl font-semibold">{year} Expense Report</h2>
-      <p>
-        {startDate} to {endDate} |{" "}
-      </p>
-      {isLoading ? (
-        <DataTableShimmer />
-      ) : (
-        <DataTable
-          columns={columns}
-          data={expenses}
-          pageCount={totalPages}
-          pageIndex={page}
-          onPageChange={(newPage) => setPage(newPage)}
+      <div className="flex justify-between align-center mb-4">
+        <div>
+          <h2 className="text-xl font-bold">{year} Expense Report</h2>
+          <p className="font-semibold pt-1.5">
+            {startDate} to {endDate} | Total Records:{" "}
+            <span className="text-red-500 font-bold">{totalRecords}</span>
+          </p>
+        </div>
+        <h3 className="text-xl">
+          Total Amount:{" "}
+          <span className="text-red-700 font-bold">₹{totalAmount}</span>
+        </h3>
+      </div>
+      {/* Two date field for choosing the start date and end date */}
+      <div className="border rounded-lg">
+        <input
+          type="date"
+          value={startDate}
+          onChange={(e) => {setStartDate(formatInputDate(e.target.value))}}
+          className="p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-      )}
+        <input
+          type="date"
+          value={endDate}
+          onChange={(e) => {setEndDate(formatInputDate(e.target.value))}}
+          className="p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+      
+      <div className="pt-4">
+        {isLoading ? (
+          <DataTableShimmer />
+        ) : (
+          <DataTable
+            columns={columns}
+            data={expenses}
+            pageCount={totalPages}
+            pageIndex={page}
+            onPageChange={(newPage) => setPage(newPage)}
+          />
+        )}
+      </div>
     </div>
   );
 };

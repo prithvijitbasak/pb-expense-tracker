@@ -98,10 +98,16 @@ const alphaNumDate = (dateString) => {
   return date;
 };
 
+const formatInputDate = (dateString) => {
+  const [year, month, day] = dateString.split("-");
+  return `${day}-${month}-${year}`;
+}
+
 export {
   formatDateTime,
   formatDtConven,
   toInputDateFormat,
   BritishDate,
   alphaNumDate,
+  formatInputDate
 };

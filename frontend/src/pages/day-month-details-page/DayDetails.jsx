@@ -5,7 +5,7 @@ import UpdateExpenseModal from "../../components/UpdateExpenseModal";
 import DeleteConfirmBox from "../../components/DeleteConfirmBox";
 import useTotalExpense from "../../hooks/useTotalExpense";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { DataTable } from "./DataTable";
+import { DataTable } from "../../components/DataTable";
 import { FaEdit } from "react-icons/fa";
 import DataTableShimmer from "../../components/shimmerUIs/DataTableShimmer";
 import { MdDelete } from "react-icons/md";
@@ -138,6 +138,9 @@ const DayDetails = () => {
       },
     },
   ];
+
+  const startDateParam = "28-04-2026";
+  const endDateParam = "28-04-2026";
 
   const fetchExpenses = async (date) => {
     const response = await fetch(

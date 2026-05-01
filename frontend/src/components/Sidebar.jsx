@@ -8,6 +8,7 @@ import { FaUserCircle } from "react-icons/fa";
 import { useState } from "react";
 import { IoIosAnalytics } from "react-icons/io";
 import { useAuth } from "../context/AuthContext";
+import { TbReportAnalytics } from "react-icons/tb";
 
 const Sidebar = (props) => {
   const { isOpen, handleCloseArrowClick } = props;
@@ -97,7 +98,7 @@ const Sidebar = (props) => {
             }`}
             to={`/${user.username}/reports`}
           >
-            <FaCirclePlus className="inline" />{" "}
+            <TbReportAnalytics  className="inline" />{" "}
             <span className={`${!isOpen ? "hidden" : ""}`}>Reports</span>
           </Link>
           <p
