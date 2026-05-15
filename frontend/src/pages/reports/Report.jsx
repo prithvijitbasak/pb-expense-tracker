@@ -4,17 +4,21 @@ import { DataTable } from "../../components/DataTable";
 import DataTableShimmer from "../../components/shimmerUIs/DataTableShimmer";
 import { alphaNumDate } from "../../utils/formatterFunctions";
 import { API } from "@/utils/auth";
-import { formatDtConven, formatInputDate } from "../../utils/formatterFunctions";
-
+import {
+  formatDtConven,
+  formatInputDate,
+} from "../../utils/formatterFunctions";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import ReportDocument from "./ReportDocument";
 
 const Report = () => {
   const [year] = useState(new Date().getFullYear());
   const currDate = new Date();
-  
 
-  const [startDate, setStartDate] = useState(formatDtConven(new Date(year, 0, 1)));
+  const [startDate, setStartDate] = useState(
+    formatDtConven(new Date(year, 0, 1)),
+  );
   const [endDate, setEndDate] = useState(formatDtConven(currDate));
-  
 
   const fetchReportData = async (startDate, endDate, page = 1) => {
     const response = await fetch(
@@ -133,7 +137,6 @@ const Report = () => {
   const totalPages = data?.pagination?.totalPages || 1;
   const totalRecords = data?.pagination?.totalRecords || expenses.length;
   const totalAmount = data?.totalAmount || 0;
-  
 
   return (
     <div className="p-4">
@@ -150,22 +153,25 @@ const Report = () => {
           <span className="text-red-700 font-bold">₹{totalAmount}</span>
         </h3>
       </div>
-      {/* Two date field for choosing the start date and end date */}
-      <div className="border rounded-lg">
-        <input
-          type="date"
-          value={startDate}
-          onChange={(e) => {setStartDate(formatInputDate(e.target.value))}}
-          className="p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <input
-          type="date"
-          value={endDate}
-          onChange={(e) => {setEndDate(formatInputDate(e.target.value))}}
-          className="p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+
+      <div className="flex justify-end">
+        <PDFDownloadLink
+          document={
+            <ReportDocument
+              expenses={expenses}
+              startDate={startDate}
+              endDate={endDate}
+            />
+          }
+          fileName={`${year}_Expense_Report.pdf`}
+          className="cursor-pointer bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 inline-block"
+        >
+          {({ blob, url, loading, error }) =>
+            loading ? "Generating PDF..." : "Download PDF"
+          }
+        </PDFDownloadLink>
       </div>
-      
+
       <div className="pt-4">
         {isLoading ? (
           <DataTableShimmer />

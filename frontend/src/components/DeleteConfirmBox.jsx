@@ -35,7 +35,7 @@ const DeleteConfirmBox = ({ expenseData, onClose, onDeleted }) => {
               {expenseData.title}
               {`'s `}
             </span>{" "}
-            expense you will not be able to recover the it!
+            expense you will not be able to recover it!
           </p>
           <div className="flex justify-end gap-5">
             <button
