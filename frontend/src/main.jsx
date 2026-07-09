@@ -13,7 +13,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <React.StrictMode>
-        {/* <div>testing</div> */}
         <App />
         <ToastContainer
           position="top-right"
