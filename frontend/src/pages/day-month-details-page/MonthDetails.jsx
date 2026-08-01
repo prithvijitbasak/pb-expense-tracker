@@ -18,6 +18,7 @@ const MonthDetails = () => {
   const [searchParams] = useSearchParams();
   const month = searchParams.get("month");
   const year = searchParams.get("year");
+  const [page, setPage] = useState(1);
   const [openModal, setOpenModal] = useState(false);
   const [selectedExpense, setSelectedExpense] = useState(null);
   const [openDelConfirm, setOpenDelConfirm] = useState(false);
@@ -134,8 +135,8 @@ const MonthDetails = () => {
     },
   ];
 
-  const fetchExpenses = async (month, year) => {
-    const url = `${API}/api/expenses/get-expenses-by-month?month=${month}&year=${year}`;
+  const fetchExpenses = async (month, year, currentPage = 1) => {
+    const url = `${API}/api/expenses/get-expenses-by-month?month=${month}&year=${year}&page=${currentPage}&limit=10`;
 
     const response = await fetch(url, {
       method: "GET",
@@ -147,23 +148,29 @@ const MonthDetails = () => {
     }
 
     const data = await response.json();
-    return data.expenses || [];
+    return data;
   };
 
   const {
-    data: expenses = [],
+    data,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["month-expenses", month, year],
-    queryFn: () => fetchExpenses(month, year),
+    queryKey: ["month-expenses", month, year, page],
+    queryFn: () => fetchExpenses(month, year, page),
     enabled: !!month && !!year,
+    placeholderData: (previousData) => previousData,
   });
+
+  const expenses = data?.expenses || [];
 
   const totalExpense = useTotalExpense("month", {
     month: `${month}`,
     year: `${year}`,
   });
+
+  const totalPages = data?.totalPages || 1;
+  const totalRecords = data?.totalRecords || expenses.length;
 
   if (error) {
     return (
@@ -215,10 +222,20 @@ const MonthDetails = () => {
         </Link>
       </div>
 
+      <div className="mb-4 text-sm text-muted-foreground">
+        Showing page {page} of {totalPages} • Total records: {totalRecords}
+      </div>
+
       {isLoading ? (
         <DataTableShimmer />
       ) : (
-        <DataTable columns={columns} data={expenses} />
+        <DataTable
+          columns={columns}
+          data={expenses}
+          pageCount={totalPages}
+          pageIndex={page}
+          onPageChange={(newPage) => setPage(newPage)}
+        />
       )}
 
       {openModal && selectedExpense && (
@@ -229,7 +246,7 @@ const MonthDetails = () => {
             setSelectedExpense(null);
           }}
           onUpdated={() => {
-            queryClient.invalidateQueries({ queryKey: ["month-expenses", month, year] });
+            queryClient.invalidateQueries({ queryKey: ["month-expenses", month, year, page] });
           }}
         />
       )}
@@ -242,7 +259,7 @@ const MonthDetails = () => {
             setSelectedExpense(null);
           }}
           onDeleted={() => {
-            queryClient.invalidateQueries({ queryKey: ["month-expenses", month, year] });
+            queryClient.invalidateQueries({ queryKey: ["month-expenses", month, year, page] });
           }}
         />
       )}

@@ -57,51 +57,59 @@ const getExpensesByDate = async (req, res) => {
 
 const getExpensesByMonth = async (req, res) => {
   try {
-    const { month, year } = req.query;
-    const userId = req.user.id; // Extract user ID from authMiddleware
+    const { month, year, page = 1, limit = 7 } = req.query;
+    const userId = req.user.id;
 
-    // Check if userId is available
     if (!userId) {
       return res.status(401).json({ error: "Unauthorized! No user ID found" });
     }
 
-    // Validate month and year
     if (!month || !year) {
       return res.status(400).json({ error: "Missing month or year parameter" });
     }
 
-    // Ensure month is between 1 and 12 and year is valid
     const monthNum = parseInt(month, 10);
     const yearNum = parseInt(year, 10);
+    const pageNum = Math.max(1, parseInt(page, 10) || 1);
+    const limitNum = Math.max(1, parseInt(limit, 10) || 7);
 
     if (isNaN(monthNum) || isNaN(yearNum) || monthNum < 1 || monthNum > 12) {
       return res.status(400).json({ error: "Invalid month or year format" });
     }
 
-    // Construct the start and end date for the given month
-    const startDate = new Date(yearNum, monthNum - 1, 1); // First day of the month
-    const endDate = new Date(yearNum, monthNum, 0, 23, 59, 59, 999); // Last day of the month
+    const startDate = new Date(yearNum, monthNum - 1, 1);
+    const endDate = new Date(yearNum, monthNum, 0, 23, 59, 59, 999);
 
-    // Fetch expenses for the given month
-    const expenses = await Expense.find({
-      user: userId,
+    const baseQuery = {
+      user: new mongoose.Types.ObjectId(userId),
       date: { $gte: startDate, $lte: endDate },
-    }).select("_id title amount category date notes createdAt updatedAt");
+    };
 
-    let totalAmount = 0;
-    expenses.forEach((expense) => {
-      totalAmount += expense.amount; 
-      // console.log("Expense Amount:", expense.amount, "Total So Far:", totalAmount);
-    });
+    const totalRecords = await Expense.countDocuments(baseQuery);
 
-    const totalExpenses = Number(totalAmount.toFixed(2)); // Ensure two decimal places
-    
+    const totalExpenseAggregation = await Expense.aggregate([
+      { $match: baseQuery },
+      { $group: { _id: null, totalAmount: { $sum: "$amount" } } },
+    ]);
 
-    // console.log("Total Expenses for the month:", totalExpenses);
+    const totalExpenses = Number(
+      (totalExpenseAggregation[0]?.totalAmount ?? 0).toFixed(2)
+    );
+
+    const expenses = await Expense.find(baseQuery)
+      .select("_id title amount category date notes createdAt updatedAt")
+      .sort({ date: 1 })
+      .skip((pageNum - 1) * limitNum)
+      .limit(limitNum);
+
+    const totalPages = Math.max(1, Math.ceil(totalRecords / limitNum));
 
     return res.status(200).json({
       totalExpenses,
-      expenses, // Return all expense details
+      totalRecords,
+      totalPages,
+      currentPage: pageNum,
+      expenses,
     });
   } catch (error) {
     console.error("Error fetching expenses:", error);
