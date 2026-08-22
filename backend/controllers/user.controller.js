@@ -92,4 +92,40 @@ const updateUser = async (req, res) => {
   }
 };
 
-module.exports = { updateUser, getUserProfile };
+const addUserImage = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No image file provided!" });
+    }
+    const userId = req.user._id;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        image: {
+          data: req.file.buffer,
+          contentType: req.file.mimetype,
+        },
+      },
+      { new: true },
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found!" });
+    }
+
+    updatedUser.image = undefined;
+
+    return res.status(200).json({
+      status: "success",
+      message: "Image uploaded successfully!",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Server error while uploading image!",
+      error: error.message,
+    });
+  }
+};
+
+module.exports = { updateUser, getUserProfile, addUserImage };
