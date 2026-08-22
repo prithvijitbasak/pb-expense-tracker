@@ -1,85 +1,144 @@
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import { AuthContext } from "../context/AuthContext";
 import "../assets/styles/Profile.css";
 import ProfilePageShimmer from "../components/shimmerUIs/ProfilePageShimmer";
 
 const Profile = () => {
   const { user, loading } = useContext(AuthContext);
+  const fileInputRef = useRef(null);
 
-  // 🌀 Show shimmer while loading user data
+  // 1. Trigger the hidden file input
+  const handleImageEditClick = () => {
+    fileInputRef.current.click();
+  };
+
+  // 2. Handle the file selection for upload
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      console.log("Selected new image:", file);
+      // TODO: Send to backend route
+    }
+  };
+
+  // 3. Handle image removal
+  const handleRemoveImage = () => {
+    console.log("Remove image clicked");
+    // TODO: Call your backend API to delete the image, then update AuthContext
+  };
+
   if (loading) {
     return <ProfilePageShimmer />;
   }
 
-  // ⚠️ If not loading but user data missing (e.g. not logged in)
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-gray-600">
+      <div className="min-h-screen flex items-center justify-center text-gray-600 bg-gray-50">
         No user data found. Please log in again.
       </div>
     );
   }
 
+  const hasImage = user.image && user.image.data;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-100 flex items-center justify-center p-6">
       <div className="bg-white/90 backdrop-blur-md shadow-2xl rounded-2xl p-8 max-w-lg w-full border border-gray-200 relative overflow-hidden transition-transform duration-300 hover:scale-[1.01] hover:shadow-3xl">
+        
         {/* Decorative Accent */}
         <div className="absolute top-0 left-0 w-full h-2 bg-[#4caf50] rounded-t-2xl"></div>
 
-        {/* Header */}
-        <div className="text-center mb-8 mt-2">
-          <div className="flex items-center justify-center mb-3">
-            <div className="w-20 h-20 rounded-full bg-[#4caf50]/10 flex items-center justify-center text-[#4caf50] text-3xl font-bold shadow-inner">
-              {user.fullName?.charAt(0)}
-            </div>
+        {/* Header & Profile Picture Section */}
+        <div className="flex flex-col items-center justify-center mb-8 mt-2 relative">
+          
+          <div className="relative group">
+            {/* Larger Image or Fallback Initial (w-40 h-40) */}
+            {hasImage ? (
+              <img
+                src={`data:${user.image.contentType};base64,${user.image.data}`}
+                alt="User Profile"
+                className="w-50 h-50 rounded-full object-cover border-4 border-white shadow-lg"
+              />
+            ) : (
+              <div className="w-40 h-40 rounded-full bg-[#4caf50]/10 flex items-center justify-center text-[#4caf50] text-6xl font-bold shadow-inner border-4 border-white">
+                {user.fullName ? user.fullName.charAt(0).toUpperCase() : "U"}
+              </div>
+            )}
+
+            {/* Remove Image Button (Only shows if an image exists) */}
+            {hasImage && (
+              <button 
+                onClick={handleRemoveImage}
+                className="absolute bottom-2 left-2 bg-red-500 p-2.5 rounded-full text-white shadow-md hover:bg-red-600 hover:scale-110 transition-all cursor-pointer border-2 border-white"
+                title="Remove Profile Picture"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
+            )}
+
+            {/* Edit/Upload Image Button */}
+            <button 
+              onClick={handleImageEditClick}
+              className="absolute bottom-2 right-2 bg-[#4caf50] p-2.5 rounded-full text-white shadow-md hover:bg-[#43a047] hover:scale-110 transition-all cursor-pointer border-2 border-white"
+              title={hasImage ? "Change Profile Picture" : "Upload Profile Picture"}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+              </svg>
+            </button>
+
+            {/* Hidden File Input */}
+            <input 
+              type="file" 
+              ref={fileInputRef} 
+              onChange={handleImageChange}
+              className="hidden" 
+              accept="image/*"
+            />
           </div>
-          <h1 className="text-3xl font-semibold text-[#4caf50]">My Profile</h1>
-          <p className="text-gray-500 text-sm mt-1">
-            Manage and view your personal details
+
+          <h1 className="text-3xl font-semibold text-gray-800 mt-5">{user.fullName}</h1>
+          <p className="text-gray-500 text-sm mt-1 bg-gray-100 px-3 py-1 rounded-full">
+            @{user.username}
           </p>
         </div>
 
-        {/* Profile Details */}
+        {/* Profile Details List */}
         <div className="space-y-4">
           {[
-            { label: "Full Name", value: user.fullName },
-            { label: "Username", value: user.username },
             { label: "Email", value: user.email },
             { label: "Phone", value: user.phone },
+            { label: "Timezone", value: user.timezone },
           ].map((item, index) => (
             <div
               key={index}
               className="flex justify-between items-center bg-gray-50 px-4 py-3 rounded-lg hover:bg-[#4caf50]/5 transition"
             >
               <span className="font-medium text-gray-600">{item.label}:</span>
-              <span className="text-gray-800 truncate max-w-[60%] text-right">
+              <span className="text-gray-800 truncate max-w-[60%] text-right font-medium">
                 {item.value || "—"}
               </span>
             </div>
           ))}
 
-          <div className="flex justify-between items-center bg-gray-50 px-4 py-3 rounded-lg">
-            <span className="font-medium text-gray-600">Are you an admin:</span>
-            <span
-              className={`font-semibold ${
-                user.isAdmin ? "text-[#4caf50]" : "text-red-600"
-              }`}
-            >
-              {user.isAdmin ? "Yes" : "No"}
+          {/* Admin Badge */}
+          <div className="flex justify-between items-center bg-gray-50 px-4 py-3 rounded-lg hover:bg-[#4caf50]/5 transition">
+            <span className="font-medium text-gray-600">Admin Status:</span>
+            <span className={`font-bold ${user.isAdmin ? "text-[#4caf50]" : "text-gray-400"}`}>
+              {user.isAdmin ? "Admin" : "Standard User"}
             </span>
-          </div>
-          <div className="flex justify-between items-center bg-gray-50 px-4 py-3 rounded-lg">
-            <span className="font-medium text-gray-600">Timezone</span>
-            <span className={`font-semibold`}>{user.timezone}</span>
           </div>
         </div>
 
-        {/* Edit Button */}
+        {/* Main Edit Button */}
         <div className="text-center mt-8">
-          <button className="px-6 py-2.5 bg-[#4caf50] text-white rounded-lg hover:bg-[#43a047] transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer">
-            Edit Profile
+          <button className="w-full py-3 bg-[#4caf50] text-white font-medium rounded-lg hover:bg-[#43a047] transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer">
+            Edit Account Details
           </button>
         </div>
+
       </div>
     </div>
   );
