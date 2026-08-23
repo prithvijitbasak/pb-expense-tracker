@@ -114,11 +114,10 @@ const addUserImage = async (req, res) => {
       return res.status(404).json({ message: "User not found!" });
     }
 
-    updatedUser.image = undefined;
-
     return res.status(200).json({
       status: "success",
       message: "Image uploaded successfully!",
+      image: updatedUser.image.toObject(),
     });
   } catch (error) {
     return res.status(500).json({
@@ -128,4 +127,37 @@ const addUserImage = async (req, res) => {
   }
 };
 
-module.exports = { updateUser, getUserProfile, addUserImage };
+const removeUserImage = async (req, res) => {
+  try {
+    const user = req.user;
+
+    if(!user.image?.data) {
+      return res.status(404).json({
+        status: "error",
+        message: "The user does not have any image!",
+      });
+    }
+
+    const userId = req.user._id;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $set: { image: null } },
+      { new: true },
+    );  
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found!" });
+    }
+
+    return res.status(200).json({
+      status: "success",
+      message: "Image deleted successfully!",
+    });
+
+  } catch(error) {
+    console.error(error);
+  }
+}
+
+module.exports = { updateUser, getUserProfile, addUserImage, removeUserImage };
